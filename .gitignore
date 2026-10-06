@@ -1,0 +1,10 @@
+# Geheim: mag nooit online.
+wachtwoord.txt
+token.txt
+
+# Wordt bij elke run opnieuw gemaakt.
+site/
+voorbeeld/
+ai_nieuws.log*
+__pycache__/
+*.tmp

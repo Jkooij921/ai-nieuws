@@ -1,0 +1,92 @@
+name: Editie maken
+
+on:
+  schedule:
+    # GitHub plant in UTC en kent geen zomertijd. Deze vier tijden dekken 08:00 en 20:00
+    # Nederlandse tijd in zomer en winter; het programma maakt elke editie maar één keer.
+    - cron: "0 6,7,18,19 * * *"
+  workflow_dispatch:
+    inputs:
+      nu_maken:
+        description: "Nu een editie maken, ook buiten 08:00 en 20:00"
+        type: boolean
+        default: false
+      claude_testen:
+        description: "Alleen testen of de Claude-sleutel werkt"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: editie
+  cancel-in-progress: false
+
+jobs:
+  editie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.publiceer.outputs.page_url }}
+    env:
+      TZ: Europe/Amsterdam
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Claude Code installeren
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Claude-sleutel testen
+        if: inputs.claude_testen
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          echo "Antwoord alleen met het woord: werkt" | claude -p --safe-mode --tools "" --model haiku
+
+      - name: Editie maken
+        if: ${{ !inputs.claude_testen }}
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GMAIL_APP_WACHTWOORD: ${{ secrets.GMAIL_APP_WACHTWOORD }}
+          MAIL_ADRES: ${{ secrets.MAIL_ADRES }}
+        run: |
+          if [ "${{ inputs.nu_maken }}" = "true" ]; then
+            python ai_nieuws.py
+          else
+            python ai_nieuws.py --gepland
+          fi
+
+      # Ook als het mailen mislukte: de editie zelf moet bewaard blijven.
+      - name: Editie bewaren
+        if: always()
+        run: |
+          git config user.name "AI-nieuws"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add edities begrippen.json gezien.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Editie $(date '+%Y-%m-%d %H:%M')"
+            git pull --rebase
+            git push
+          fi
+
+      - uses: actions/configure-pages@v6
+        if: always() && hashFiles('site/index.html') != ''
+
+      - uses: actions/upload-pages-artifact@v5
+        if: always() && hashFiles('site/index.html') != ''
+        with:
+          path: site
+
+      - id: publiceer
+        if: always() && hashFiles('site/index.html') != ''
+        uses: actions/deploy-pages@v5

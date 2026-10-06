@@ -1,0 +1,206 @@
+{
+ "gemini": {
+  "woord": "Gemini",
+  "uitleg": "Gemini is de AI-assistent van Google.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "model": {
+  "woord": "model",
+  "uitleg": "Een model is het AI-brein achter een assistent, dat leert uit enorme hoeveelheden tekst.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "flash-lite": {
+  "woord": "Flash-Lite",
+  "uitleg": "Flash-Lite is een van de Gemini-modellen van Google.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "strata": {
+  "woord": "Strata",
+  "uitleg": "Strata is een gratis programma waarmee je een groot AI-model op je eigen pc draait.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "open source": {
+  "woord": "open source",
+  "uitleg": "Open source betekent dat de code voor iedereen in te zien en te gebruiken is.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "lokaal draaien": {
+  "woord": "lokaal draaien",
+  "uitleg": "Lokaal draaien betekent dat een AI-model op je eigen computer werkt in plaats van bij een bedrijf op afstand.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "qwen3.8-flash-next": {
+  "woord": "Qwen3.8-Flash-Next",
+  "uitleg": "Qwen3.8-Flash-Next is een groot AI-model dat Strata op een gewone pc laat draaien.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "parameters": {
+  "woord": "parameters",
+  "uitleg": "Parameters zijn de rekenwaarden waaruit een AI-model bestaat, en hoe meer er zijn, hoe groter het model.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "token": {
+  "woord": "token",
+  "uitleg": "Een token is een stukje tekst waarmee een AI rekent, ongeveer driekwart woord.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "videokaart": {
+  "woord": "videokaart",
+  "uitleg": "Een videokaart is een onderdeel van een computer dat zware berekeningen doet, zoals voor games en AI.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "reflection": {
+  "woord": "Reflection",
+  "uitleg": "Reflection is een Amerikaans AI-bedrijf dat modellen bouwt, vooral voor programmeren.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "beam": {
+  "woord": "Beam",
+  "uitleg": "Beam is een nieuw AI-model van Reflection voor programmeren, agents en wetenschappelijk werk.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "apache 2.0": {
+  "woord": "Apache 2.0",
+  "uitleg": "Apache 2.0 is een vrije licentie die mensen mag laten gebruiken en aanpassen wat eronder valt.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "swe-bench verified": {
+  "woord": "SWE-bench Verified",
+  "uitleg": "SWE-bench Verified is een test waarmee je meet hoe goed een AI echte programmeerfouten kan oplossen.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "agent": {
+  "woord": "agent",
+  "uitleg": "Een agent is een AI-programma dat zelfstandig taken uitvoert in plaats van alleen antwoord te geven.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "claude code": {
+  "woord": "Claude Code",
+  "uitleg": "Claude Code is het programma van Anthropic waarmee je door te praten programma's laat bouwen.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "cowork": {
+  "woord": "Cowork",
+  "uitleg": "Cowork is een product van Anthropic waarin Claude werk voor je uitvoert in een afgeschermde omgeving.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "virtuele machine": {
+  "woord": "virtuele machine",
+  "uitleg": "Een virtuele machine is een computer die binnen een andere computer draait, afgeschermd van de rest.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "sandbox": {
+  "woord": "sandbox",
+  "uitleg": "Een sandbox is een afgeschermde ruimte waarin een programma kan werken zonder de rest te raken.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "cloud": {
+  "woord": "cloud",
+  "uitleg": "De cloud zijn computers van een bedrijf op afstand waarop je werk draait in plaats van op je eigen apparaat.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "plugin": {
+  "woord": "plugin",
+  "uitleg": "Een plugin is een uitbreiding die je aan een programma toevoegt, zoals een app op je telefoon.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "claude-mem": {
+  "woord": "claude-mem",
+  "uitleg": "claude-mem is een plugin die Claude Code laat onthouden wat er in eerdere sessies is gebeurd.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "skill": {
+  "woord": "skill",
+  "uitleg": "Een skill is een map met instructies die Claude erbij pakt als een taak erom vraagt.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "mod": {
+  "woord": "mod",
+  "uitleg": "Een mod is een manier om Claude Code aan te passen of uit te breiden.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "mcp": {
+  "woord": "MCP",
+  "uitleg": "MCP is een standaard waarmee een AI zoals Claude met andere programma's kan koppelen.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "invideo": {
+  "woord": "invideo",
+  "uitleg": "invideo is een videobewerkingsprogramma waarvan de editor gratis is.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "freecad": {
+  "woord": "FreeCAD",
+  "uitleg": "FreeCAD is een gratis programma om 3D-ontwerpen te maken.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "vals ai": {
+  "woord": "Vals AI",
+  "uitleg": "Vals AI is een onderzoeksgroep die deze magneetkandidaten deelde.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "antiferromagneet": {
+  "woord": "antiferromagneet",
+  "uitleg": "Een antiferromagneet is een magneet waarvan de kleine magneetjes in het materiaal elkaar opheffen, zodat er buiten geen magnetisch veld is.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "watermerk": {
+  "woord": "watermerk",
+  "uitleg": "Een watermerk is een verborgen kenmerk waaraan je kunt herkennen dat een tekst door AI is gemaakt.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "wikimedia": {
+  "woord": "Wikimedia",
+  "uitleg": "Wikimedia is de organisatie achter onder andere Wikipedia.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "t3 code": {
+  "woord": "T3 Code",
+  "uitleg": "T3 Code is een app waarmee je programmeeragents op je eigen computer kunt aansturen, ook vanaf je telefoon.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "text-to-cad": {
+  "woord": "text-to-cad",
+  "uitleg": "text-to-cad is een plugin waarmee een AI-agent 3D-modellen maakt voor onder andere 3D-printen.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "openmontage": {
+  "woord": "OpenMontage",
+  "uitleg": "OpenMontage is een open systeem waarmee een AI-programmeerassistent video's kan maken.",
+  "editie": "2026-10-06-ochtend",
+  "keer": 1
+ }
+}

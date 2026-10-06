@@ -1,0 +1,259 @@
+{
+ "urls": {
+  "https://www.anthropic.com/news/claude-frontier-academy": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/barclays-scales-claude": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/claude-discovers-novel-enzyme-system": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/accenture-embedded-evaluation": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/life-sciences-verification-program": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/enterprise-frontier-safeguards": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/improving-alignment-security-efforts": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/model-hardware-standard-research-preview": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/expanding-support-for-scientists": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/news/wellbeing-research-grants": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/how-we-contain-claude": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/april-23-postmortem": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/managed-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/claude-code-auto-mode": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/harness-design-long-running-apps": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/eval-awareness-browsecomp": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/infrastructure-noise": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/building-c-compiler": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/advanced-tool-use": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/code-execution-with-mcp": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/claude-code-sandboxing": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/writing-tools-for-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/desktop-extensions": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/multi-agent-research-system": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/claude-code-best-practices": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/claude-think-tool": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/swe-bench-sonnet": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/building-effective-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.anthropic.com/engineering/contextual-retrieval": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/cowork-is-now-claude": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-for-small-business-launches-new-workflows-integrations-and-training-programs": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-in-chrome-generally-available": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/cowork-built-in-browser": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/artifacts-in-claude-code": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-for-foundation-models": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-managed-agents-updates": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/new-in-claude-managed-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/connectors-for-everyday-life": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-managed-agents-memory": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/how-cresta-turned-cx-expertise-into-an-agent-builder-on-the-claude-agent-sdk": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-code-mods": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-for-government-is-now-generally-available": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/how-anthropics-sales-team-rebuilt-inbound-with-claude-managed-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/agents-you-can-coach-how-asana-builds-human-agent-teams-with-claude": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/giving-companies-more-control-over-their-ai-agents-with-nvidia": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/build-plugins-for-claude": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-tag-now-supports-personal-connectors-in-channels": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/how-coderabbit-power-digital-and-thoughtspot-scale-with-snowflake-and-vercel-on-claude-marketplace": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/how-to-prepare-for-ai-driven-code-modernization-projects": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/claude-marketplace": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/working-at-the-frontier-how-balyasny-asset-management-evaluates-and-governs-claude-fable-5": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/projects-redesigned": "2026-10-06T09:26:04.846918+00:00",
+  "https://claude.com/blog/the-ai-native-sdlc-playbook": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/anthropics/claude-code/releases/tag/v2.1.291": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/anthropics/claude-code/releases/tag/v2.1.290": "2026-10-06T09:26:04.846918+00:00",
+  "https://openai.com/index/eu-text-provenance": "2026-10-06T09:26:04.846918+00:00",
+  "https://openai.com/index/new-chatgpt-ads-format-and-measurement": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/blog/tiiuae/falcon-emirati": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.niemanlab.org/2026/10/chatgpt-is-adding-real-cartoonists-signatures-to-fake-new-yorker-cartoons": "2026-10-06T09:26:04.846918+00:00",
+  "https://qlabs.sh/research/dust": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.vals.ai/blogs/room-temperature-magnetic-semiconductors": "2026-10-06T09:26:04.846918+00:00",
+  "https://diff.wikimedia.org/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.techspot.com/news/114091-florida-woman-used-claude-diary-anthropic-reported-shoot.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/Niko1221/Strata": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.techspot.com/news/113937-engineer-claude-code-has-made-job-soul-sucking.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://island-three.gruberbuilds.workers.dev": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/tester-army/e2e": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/thedotmack/claude-mem": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/earthtojake/text-to-cad": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/pingdotgg/t3code": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/Panniantong/Agent-Reach": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/calesthio/OpenMontage": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/caddyserver/caddy": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/cloudflare/cloudflare-os": "2026-10-06T09:26:04.846918+00:00",
+  "https://github.com/msitarzewski/agency-agents": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeCode/comments/1wyrwql/why_61_astra_was_delayed": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyqfa4/realizing_that_your_job_is_forwarding": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeCode/comments/1wyqem9/realizing_that_your_job_is_forwarding": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wymhe2/update_my_human_has_been_nerfed_again_two_months": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyjty8/anthropics_official_agent_skills_guide_6_insights": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyiw3k/you_put_my_what": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyir6l/claude_made_me_a_whiteboard_as_a_desktop": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyi1l8/i_made_a_large_set_of_futuristic_scifi_uis": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyfy3m/i_connected_claude_to_a_video_editor_and_made": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wyflme/is_this_prompt_injection": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeCode/comments/1wye4ix/i_just_wanted_to_try_the_new_claude_code_mods_i": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeAI/comments/1wycuri/opus_55_vs_gpt6_astra_vs_deepseek_v41_flash_vs": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeCode/comments/1wy9mju/how_many_of_you_still_use_claude_code_from": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.reddit.com/r/ClaudeCode/comments/1wy76fh/why_wait_to_be_replaced_when_i_can_replace_myself": "2026-10-06T09:26:04.846918+00:00",
+  "https://simonwillison.net/2026/Oct/5/felix-rieseberg": "2026-10-06T09:26:04.846918+00:00",
+  "https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.latent.space/p/ainews-reflection-beam-501b-a23b": "2026-10-06T09:26:04.846918+00:00",
+  "https://importai.substack.com/p/import-ai-475-swarm-scaling-google": "2026-10-06T09:26:04.846918+00:00",
+  "https://tldr.tech/ai/2026-10-05": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1005177/google-gemini-call-for-me-expansion-rumors": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1005075/nolla-health-acne-ai-prescriptions": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1004933/ai-math-openai-breakthrough-solution": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/news/1004929/wikipedia-openai-rogue-bots-wikimedia-foundation-outage": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1004880/openai-chatgpt-text-watermarks-eu-ai-act": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1004827/openai-sam-altman-vanity-fair-interview-pr": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1004811/openai-altman-bad-things-ai-tradeoff": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/podcast/1004286/senator-adam-schiff-ai-trump-regulation-corruption": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1004672/mac-delete-apple-intelligence-ai-tool": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.theverge.com/ai-artificial-intelligence/1004655/openai-chatgpt-visual-ads": "2026-10-06T09:26:04.846918+00:00",
+  "https://arstechnica.com/security/2026/10/vulnerability-in-agents-from-google-and-others-exposes-structural-flaw-in-mcp": "2026-10-06T09:26:04.846918+00:00",
+  "https://arstechnica.com/apple/2026/10/command-line-tool-quickly-removes-apple-intelligence-from-macos-27": "2026-10-06T09:26:04.846918+00:00",
+  "https://arstechnica.com/ai/2026/10/ai-glasses-face-their-first-major-government-crackdown": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.technologyreview.com/2026/10/05/1145580/connecting-ai-agents-to-enterprise-knowledge": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.technologyreview.com/2026/10/05/1143813/bringing-predictive-analytics-to-the-agentic-ai-era": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.technologyreview.com/2026/10/05/1145682/people-really-hate-ai-so-why-cant-they-get-enough": "2026-10-06T09:26:04.846918+00:00",
+  "https://www.technologyreview.com/2026/10/05/1145413/emtech-future-2026-when-ai-meets-everything": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.05608": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.01780": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.02381": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.02508": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.03391": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.03665": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.03574": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2609.38078": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2609.38879": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2609.39071": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2609.36659": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2610.00531": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2609.34715": "2026-10-06T09:26:04.846918+00:00",
+  "https://huggingface.co/papers/2609.38839": "2026-10-06T09:26:04.846918+00:00",
+  "https://tweakers.net/nieuws/252994/openai-geeft-chatgpt-teksten-in-eu-standaard-onzichtbaar-watermerk.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://tweakers.net/nieuws/252996/google-bouwt-functie-om-ai-naar-vrienden-en-familie-te-laten-bellen.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://tweakers.net/nieuws/252988/huawei-en-qualcomm-sluiten-meerjarige-patentdeal-voor-5g-en-ai.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://tweakers.net/nieuws/252982/gratis-gemini-gebruikers-verliezen-toegang-tot-flash-en-pro-modellen.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://tweakers.net/nieuws/252974/openai-gaat-chatgpt-advertenties-met-afbeeldingen-tonen-voorlopig-alleen-in-vs.html": "2026-10-06T09:26:04.846918+00:00",
+  "https://nos.nl/l/2633750": "2026-10-06T09:26:04.846918+00:00"
+ },
+ "verstuurd": [
+  {
+   "kop": "Gratis Gemini wordt een stuk beperkter",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Groot AI-model draaien op je eigen gaming-pc",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Nieuw Amerikaans AI-model Beam kondigt zich aan",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Claude Code heeft weer een update gekregen",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Cowork van Claude draait voortaan in de cloud",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Geheugen voor Claude Code tussen gesprekken door",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Anthropic legt uit hoe je goede skills schrijft",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Claude bouwde een compleet bureaugadget, inclusief behuizing",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Claude maakte een animatie met een videobewerker",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "AI-agents vonden kandidaten voor nieuw computergeheugen",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Anthropic meldde een dagboekfragment bij de politie",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "OpenAI over watermerken in tekst volgens EU-regels",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Risico's bij AI-agents die met elkaar praten",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Agent van OpenAI actief op Wikimedia-projecten",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Noorwegen wil AI-brillen tijdelijk verbieden",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "T3 Code bestuurt je AI-agents ook vanaf je telefoon",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Plugin laat AI-agent 3D-modellen ontwerpen",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Open systeem maakt van je AI-assistent een videostudio",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "ChatGPT krijgt een nieuw soort advertentie",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Ophef over AI die wiskundeproblemen oplost",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  },
+  {
+   "kop": "Gemini kan misschien bellen of berichten sturen naar familie",
+   "datum": "2026-10-06T09:26:04.846918+00:00"
+  }
+ ],
+ "bronnen": [
+  "Addy Osmani",
+  "Anthropic",
+  "Anthropic engineering",
+  "Ars Technica AI",
+  "Autoriteit Persoonsgegevens",
+  "Ben's Bites",
+  "Claude Code",
+  "Claude blog",
+  "EU AI Act",
+  "GitHub trending",
+  "Google AI",
+  "Google DeepMind",
+  "Hacker News",
+  "Hacker News (Anthropic)",
+  "Hacker News (Claude)",
+  "Hugging Face blog",
+  "Hugging Face papers",
+  "Import AI",
+  "Latent Space",
+  "MIT Technology Review",
+  "Mistral",
+  "NOS Tech",
+  "One Useful Thing",
+  "OpenAI",
+  "Reddit",
+  "Show HN",
+  "Simon Willison",
+  "TLDR AI",
+  "The Verge AI",
+  "Tweakers"
+ ]
+}

@@ -1,0 +1,390 @@
+{
+ "id": "2026-10-06-ochtend",
+ "tijd": "2026-10-06T11:26",
+ "moment": "ochtend",
+ "intro": "Goedemorgen. Google haalt vanaf 9 oktober twee van zijn modellen weg bij de gratis versie van Gemini, en er is een programma waarmee je een groot AI-model op je eigen gaming-pc kunt draaien.",
+ "items": [
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 6,
+   "kop": "Gratis Gemini wordt een stuk beperkter",
+   "uitleg": "Gemini is de AI-assistent van Google, vergelijkbaar met Claude of ChatGPT. Een model is het AI-brein achter zo'n assistent, en Google biedt er meerdere aan, zoals Flash, Pro en Flash-Lite.",
+   "samenvatting": "Google meldt in een bijgewerkt ondersteuningsdocument dat gratis gebruikers van Gemini vanaf 9 oktober geen toegang meer hebben tot de modellen Flash en Pro. Ze houden alleen Flash-Lite over.",
+   "waarom": "Wie Gemini gratis gebruikt, moet vanaf die dag met één model doen.",
+   "bronnen": [
+    {
+     "bron": "Tweakers",
+     "groep": "nl-eu",
+     "url": "https://tweakers.net/nieuws/252982/gratis-gemini-gebruikers-verliezen-toegang-tot-flash-en-pro-modellen.html",
+     "datum": "2026-10-05T18:57:27+02:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 6,
+   "kop": "Groot AI-model draaien op je eigen gaming-pc",
+   "uitleg": "Strata is een gratis programma van Niko1221 met bijna 14.700 sterren op GitHub (een soort waardering door ontwikkelaars). Het laat je een AI-model op je eigen computer draaien, dus zonder internetdienst ertussen. Dat heet lokaal draaien, en open source betekent dat de code voor iedereen openstaat.",
+   "samenvatting": "Strata laat het model Qwen3.8-Flash-Next draaien, een groot model met 125 miljard parameters (de rekenwaarden waaruit een model bestaat). Je hebt een NVIDIA- of AMD-videokaart nodig met minstens 12 GB geheugen, en op een RTX 5070 schrijft het in de snelste uitvoering 94 tokens per seconde, waarbij een token ongeveer driekwart woord is.",
+   "waarom": "Je kunt een slim model gebruiken zonder dat er iets je pc verlaat, al heb je daarvoor wel een stevige computer met 32 GB werkgeheugen en ongeveer 80 GB vrije schijfruimte nodig.",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://github.com/Niko1221/Strata",
+     "datum": "2026-10-04T12:51:53+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49953495",
+     "punten": 916,
+     "sterren": 14690
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 6,
+   "kop": "Nieuw Amerikaans AI-model Beam kondigt zich aan",
+   "uitleg": "Reflection is een AI-bedrijf dat ruim een jaar geleden begon met grote plannen voor programmeren, maar tot nu toe geen model uitbracht. Open betekent hier dat de gewichten, dus de inhoud van het model, vrij te downloaden zijn.",
+   "samenvatting": "Reflection kondigde Beam aan, een model voor alleen tekst met 501 miljard parameters in totaal en 23 miljard die tegelijk actief zijn. Het is bedoeld voor programmeren, agents (AI die zelfstandig taken uitvoert) en wetenschappelijk werk. Het bedrijf zegt 80,9 te scoren op de test SWE-bench Verified, en de volledige gewichten komen deze maand onder de vrije licentie Apache 2.0.",
+   "waarom": "Er komt een Amerikaans open model bij, al zijn volgens de bron enkele andere open modellen, onder meer uit China, nog beter.",
+   "bronnen": [
+    {
+     "bron": "Latent Space",
+     "groep": "curator",
+     "url": "https://www.latent.space/p/ainews-reflection-beam-501b-a23b",
+     "datum": "2026-10-06T06:28:43+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 7,
+   "kop": "Claude Code heeft weer een update gekregen",
+   "uitleg": "Claude Code is het programma van Anthropic waarmee je door te praten programma's laat bouwen. Het wordt vaak bijgewerkt, en dit is versie 2.1.290 van een project met bijna 150.000 sterren op GitHub.",
+   "samenvatting": "Je kunt nu met claude attach en claude logs een sessie openen met maar een deel van de naam. Daarnaast zijn er veel fouten verholpen, onder andere bij geplande taken die na het hervatten van een gesprek niet terugkwamen, en bij lange sessies met honderden afbeeldingen.",
+   "waarom": "Je loopt minder snel tegen haperingen aan, vooral als je lange sessies draait.",
+   "bronnen": [
+    {
+     "bron": "Claude Code",
+     "groep": "lab",
+     "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.290",
+     "datum": "2026-10-05T23:33:17+00:00",
+     "sterren": 149558
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 6,
+   "kop": "Cowork van Claude draait voortaan in de cloud",
+   "uitleg": "Cowork is een product van Anthropic waarin Claude werk voor je uitvoert in een afgeschermde omgeving, een virtuele machine. Dat is een computer in je computer. De oude versie draaide die omgeving op je eigen apparaat.",
+   "samenvatting": "In de nieuwe versie draaien het model en de virtuele machine in de cloud, dus op servers van Anthropic. Elke sessie krijgt een eigen afgeschermde ruimte, een sandbox, en als er een bestand van jouw apparaat nodig is, haalt de desktop-app dat op.",
+   "waarom": "Volgens Anthropic kun je Cowork zo ook vanaf je telefoon gebruiken, loopt het werk door als je laptop dicht gaat en kost het je geen batterij meer.",
+   "bronnen": [
+    {
+     "bron": "Simon Willison",
+     "groep": "curator",
+     "url": "https://simonwillison.net/2026/Oct/5/felix-rieseberg/",
+     "datum": "2026-10-05T23:56:47+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 6,
+   "kop": "Geheugen voor Claude Code tussen gesprekken door",
+   "uitleg": "claude-mem is een plugin, een uitbreiding die je aan een programma toevoegt zoals een app op je telefoon. Hij is gemaakt door thedotmack en heeft bijna 97.000 sterren op GitHub. Zonder zoiets begint Claude Code elk nieuw gesprek zonder te weten wat eerder is gedaan.",
+   "samenvatting": "claude-mem legt vast wat Claude tijdens een sessie doet, perst dat samen met AI en geeft het relevante deel terug aan latere sessies. Je installeert het met één commando, npx claude-mem install, en meldt je daarna aan in je browser.",
+   "waarom": "Claude houdt zo het overzicht over je project, ook nadat je een sessie hebt afgesloten.",
+   "bronnen": [
+    {
+     "bron": "GitHub trending",
+     "groep": "community",
+     "url": "https://github.com/thedotmack/claude-mem",
+     "datum": null,
+     "sterren": 96811
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 7,
+   "kop": "Anthropic legt uit hoe je goede skills schrijft",
+   "uitleg": "Een skill is een map met instructies die Claude erbij pakt als een taak erom vraagt, zoals een handleiding voor één klus. Anthropic heeft de officiële richtlijnen daarvoor bijgewerkt, en een Reddit-gebruiker zette de kern op een rij.",
+   "samenvatting": "Geef een skill een naam met een werkwoord op -ing, zoals processing-pdfs, en schrijf een beschrijving die zegt wat hij doet én wanneer je hem gebruikt. Houd het hoofdbestand SKILL.md onder de 500 regels en test eerst wat Claude zonder de skill doet.",
+   "waarom": "Claude kiest dan vaker de juiste skill uit de vele die beschikbaar zijn.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyjty8/anthropics_official_agent_skills_guide_6_insights/",
+     "datum": "2026-10-05T20:47:25+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 7,
+   "kop": "Claude bouwde een compleet bureaugadget, inclusief behuizing",
+   "uitleg": "Mods zijn nieuwe manieren om Claude Code aan te passen, en een gebruiker op Reddit gebruikte er een om gegevens uit Claude Code te halen.",
+   "samenvatting": "Hij liet de gebruiksgegevens van zijn abonnement tonen op een klein scherm dat via USB is aangesloten. Claude schreef de code en de software op het scherm, en ontwierp met het tekenprogramma FreeCAD ook de behuizing en de standaard, die na het 3D-printen in één keer pasten.",
+   "waarom": "Het laat zien dat je Claude een klus kunt geven die software én een fysiek ontwerp bevat.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeCode/comments/1wye4ix/i_just_wanted_to_try_the_new_claude_code_mods_i/",
+     "datum": "2026-10-05T17:08:59+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 6,
+   "kop": "Claude maakte een animatie met een videobewerker",
+   "uitleg": "MCP is een standaard waarmee Claude met andere programma's kan koppelen, en invideo is een videobewerkingsprogramma waarvan de editor gratis is.",
+   "samenvatting": "Een motion designer (iemand die bewegende beelden ontwerpt) maakte met Claude Opus 5.5 en de invideo Editor MCP in twee of drie opdrachten een animatie. Hij leverde zelf de geluidseffecten, en Claude zette alles in elkaar en liet het synchroon lopen met de beat.",
+   "waarom": "Je kunt Claude dus een ander programma laten bedienen en zo een stuk werk laten doen.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyfy3m/i_connected_claude_to_a_video_editor_and_made/",
+     "datum": "2026-10-05T18:17:56+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 7,
+   "kop": "AI-agents vonden kandidaten voor nieuw computergeheugen",
+   "uitleg": "Vals AI is een onderzoeksgroep die dit werk deelde. Het gaat om antiferromagneten, magneten waarvan de kleine magneetjes in het materiaal elkaar opheffen, zodat er buiten geen magnetisch veld is. Dat maakt ze interessant voor toekomstig computergeheugen.",
+   "samenvatting": "Een team van Claude Opus 5.5 agents vond twee kandidaat-materialen die volgens berekeningen deze eigenschappen hebben. Eén is een nieuw ontworpen stof en de ander is een materiaal dat al in 1999 werd gemaakt.",
+   "waarom": "",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://www.vals.ai/blogs/room-temperature-magnetic-semiconductors",
+     "datum": "2026-10-05T21:00:21+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49970667",
+     "punten": 351
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 7,
+   "kop": "Anthropic meldde een dagboekfragment bij de politie",
+   "uitleg": "Een gesprek met Claude is niet volledig privé, want veiligheidssystemen kunnen berichten markeren en medewerkers kunnen die dan bekijken.",
+   "samenvatting": "Een vrouw in Florida gebruikte Claude als dagboek en schreef daarin dat ze het kantoor van de sheriff wilde aanvallen. Het systeem markeerde dat, een medewerker vond het een geloofwaardige dreiging en meldde het bij de politie, waarna zij een aanklacht kreeg voor een misdrijf. Anthropic zegt gegevens te mogen delen in beperkte noodgevallen.",
+   "waarom": "",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://www.techspot.com/news/114091-florida-woman-used-claude-diary-anthropic-reported-shoot.html",
+     "datum": "2026-10-05T05:37:40+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49961057",
+     "punten": 724
+    }
+   ]
+  }
+ ],
+ "kort": [
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 7,
+   "kop": "OpenAI over watermerken in tekst volgens EU-regels",
+   "zin": "OpenAI legt uit hoe het AI-tekst van een watermerk voorziet volgens Europese regels, en dat onderzoekers als eersten toegang krijgen.",
+   "bronnen": [
+    {
+     "bron": "OpenAI",
+     "groep": "lab",
+     "url": "https://openai.com/index/eu-text-provenance",
+     "datum": "2026-10-05T15:00:00+00:00"
+    },
+    {
+     "bron": "Tweakers",
+     "groep": "nl-eu",
+     "url": "https://tweakers.net/nieuws/252994/openai-geeft-chatgpt-teksten-in-eu-standaard-onzichtbaar-watermerk.html",
+     "datum": "2026-10-06T09:43:42+02:00"
+    },
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1004880/openai-chatgpt-text-watermarks-eu-ai-act",
+     "datum": "2026-10-05T14:08:39-04:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 6,
+   "kop": "Risico's bij AI-agents die met elkaar praten",
+   "zin": "Een nieuw protocol waarmee AI-agents (programma's die zelfstandig taken doen) elkaar aansturen, laat volgens Ars Technica kwaadaardige opdrachten doorsijpelen.",
+   "bronnen": [
+    {
+     "bron": "Ars Technica AI",
+     "groep": "media",
+     "url": "https://arstechnica.com/security/2026/10/vulnerability-in-agents-from-google-and-others-exposes-structural-flaw-in-mcp/",
+     "datum": "2026-10-05T22:26:35+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 6,
+   "kop": "Agent van OpenAI actief op Wikimedia-projecten",
+   "zin": "Op Wikimedia-projecten zijn activiteiten gevonden van een agent van OpenAI die als \"rogue\", dus ongecontroleerd, wordt omschreven.",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://diff.wikimedia.org/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/",
+     "datum": "2026-10-05T17:53:35+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49968105",
+     "punten": 279
+    },
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/news/1004929/wikipedia-openai-rogue-bots-wikimedia-foundation-outage",
+     "datum": "2026-10-05T15:05:19-04:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 5,
+   "kop": "Noorwegen wil AI-brillen tijdelijk verbieden",
+   "zin": "De Noorse regering wil brillen met camera, microfoon en AI-assistent tijdelijk verbieden op drukke openbare plekken, om onderzoek te doen naar regels.",
+   "bronnen": [
+    {
+     "bron": "NOS Tech",
+     "groep": "nl-eu",
+     "url": "https://nos.nl/l/2633750",
+     "datum": "2026-10-05T14:13:59+02:00"
+    },
+    {
+     "bron": "Ars Technica AI",
+     "groep": "media",
+     "url": "https://arstechnica.com/ai/2026/10/ai-glasses-face-their-first-major-government-crackdown/",
+     "datum": "2026-10-05T13:39:30+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 5,
+   "kop": "T3 Code bestuurt je AI-agents ook vanaf je telefoon",
+   "zin": "T3 Code is een app voor telefoon, web en desktop waarmee je programmeeragents zoals Claude Code op je eigen computer kunt aansturen.",
+   "bronnen": [
+    {
+     "bron": "GitHub trending",
+     "groep": "community",
+     "url": "https://github.com/pingdotgg/t3code",
+     "datum": null,
+     "sterren": 25750
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 5,
+   "kop": "Plugin laat AI-agent 3D-modellen ontwerpen",
+   "zin": "De plugin text-to-cad laat een agent zoals Claude Code 3D-modellen maken als STEP-, GLB-, STL- of 3MF-bestand en controleren op maakbaarheid.",
+   "bronnen": [
+    {
+     "bron": "GitHub trending",
+     "groep": "community",
+     "url": "https://github.com/earthtojake/text-to-cad",
+     "datum": null,
+     "sterren": 17644
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 5,
+   "kop": "Open systeem maakt van je AI-assistent een videostudio",
+   "zin": "OpenMontage is een gratis, open systeem met 12 werkstromen waarmee een AI-programmeerassistent video's kan produceren.",
+   "bronnen": [
+    {
+     "bron": "GitHub trending",
+     "groep": "community",
+     "url": "https://github.com/calesthio/OpenMontage",
+     "datum": null,
+     "sterren": 64387
+    }
+   ]
+  },
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 5,
+   "kop": "ChatGPT krijgt een nieuw soort advertentie",
+   "zin": "OpenAI introduceert in ChatGPT een nieuw visueel advertentieformat en breidt de meetmogelijkheden voor adverteerders uit.",
+   "bronnen": [
+    {
+     "bron": "OpenAI",
+     "groep": "lab",
+     "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+     "datum": "2026-10-05T10:00:00+00:00"
+    },
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1004655/openai-chatgpt-visual-ads",
+     "datum": "2026-10-05T09:09:48-04:00"
+    },
+    {
+     "bron": "Tweakers",
+     "groep": "nl-eu",
+     "url": "https://tweakers.net/nieuws/252974/openai-gaat-chatgpt-advertenties-met-afbeeldingen-tonen-voorlopig-alleen-in-vs.html",
+     "datum": "2026-10-05T16:02:52+02:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 5,
+   "kop": "Ophef over AI die wiskundeproblemen oplost",
+   "zin": "AI-bedrijven melden doorbraken bij oude wiskundige vraagstukken, waaronder een van de beroemde Millennium-problemen, en dat levert ook discussie op.",
+   "bronnen": [
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1004933/ai-math-openai-breakthrough-solution",
+     "datum": "2026-10-05T15:28:59-04:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 5,
+   "kop": "Gemini kan misschien bellen of berichten sturen naar familie",
+   "zin": "Google breidt de functie Call for Me van Gemini mogelijk uit zodat je ook vrienden en familie kunt laten bellen of berichten sturen.",
+   "bronnen": [
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1005177/google-gemini-call-for-me-expansion-rumors",
+     "datum": "2026-10-05T19:09:55-04:00"
+    },
+    {
+     "bron": "Tweakers",
+     "groep": "nl-eu",
+     "url": "https://tweakers.net/nieuws/252996/google-bouwt-functie-om-ai-naar-vrienden-en-familie-te-laten-bellen.html",
+     "datum": "2026-10-06T08:08:01+02:00"
+    }
+   ]
+  }
+ ],
+ "probeer": {
+  "titel": "Geef Claude Code een geheugen",
+  "tekst": "Dit installeert iets op je eigen computer, en bij de aanmelding in je browser krijg je 14 dagen gratis proef waarna het terugvalt op je Anthropic-abonnement tenzij je zelf kiest voor betalen. Open Claude Code en zeg: \"Installeer claude-mem voor me met het commando npx claude-mem install en leg uit wat je doet.\" Doe daarna een kort gesprek over een project en start later een nieuwe sessie om te kijken of Claude nog weet waar het over ging.",
+  "url": "https://github.com/thedotmack/claude-mem"
+ },
+ "bekeken": 78,
+ "aantal_bronnen": 30,
+ "fouten": []
+}
