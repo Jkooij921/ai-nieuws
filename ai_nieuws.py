@@ -833,7 +833,10 @@ def main():
     keuzes.add_argument("--voorbeeld", action="store_true", help="proefeditie in de map voorbeeld/, niets mailen of bewaren")
     keuzes.add_argument("--bronnen", action="store_true", help="tonen wat elke bron nu oplevert")
     keuzes.add_argument("--gepland", action="store_true", help="alleen een editie maken als het 08:00 of 20:00 geweest is en die er nog niet is")
+    keuzes.add_argument("--alles", action="store_true", help="met --voorbeeld: doen alsof er nog niets gezien is, om alles te testen")
     args = keuzes.parse_args()
+    if args.alles and not args.voorbeeld:
+        keuzes.error("--alles kan alleen samen met --voorbeeld; anders raakt de lijst met gezien nieuws in de war")
 
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -848,7 +851,7 @@ def main():
     )
 
     cfg = laad_config()
-    staat = laad_staat()
+    staat = {"urls": {}, "verstuurd": [], "bronnen": []} if args.alles else laad_staat()
     nu = datetime.now(timezone.utc)
     lokaal = datetime.now()
     moment = "ochtend" if lokaal.hour < 14 else "avond"

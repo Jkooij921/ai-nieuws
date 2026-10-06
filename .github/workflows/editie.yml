@@ -16,7 +16,7 @@ on:
         type: boolean
         default: false
       proef:
-        description: "Proefeditie maken: alles testen, niets bewaren, publiceren of mailen"
+        description: "Proefeditie maken met al het nieuws van 2 dagen: alles testen, niets bewaren, publiceren of mailen"
         type: boolean
         default: false
 
@@ -65,7 +65,7 @@ jobs:
           MAIL_ADRES: ${{ secrets.MAIL_ADRES }}
         run: |
           if [ "${{ inputs.proef }}" = "true" ]; then
-            python ai_nieuws.py --voorbeeld
+            python ai_nieuws.py --voorbeeld --alles
           elif [ "${{ inputs.nu_maken }}" = "true" ]; then
             python ai_nieuws.py
           else
