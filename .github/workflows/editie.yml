@@ -15,6 +15,10 @@ on:
         description: "Alleen testen of de Claude-sleutel werkt"
         type: boolean
         default: false
+      proef:
+        description: "Proefeditie maken: alles testen, niets bewaren, publiceren of mailen"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -60,7 +64,9 @@ jobs:
           GMAIL_APP_WACHTWOORD: ${{ secrets.GMAIL_APP_WACHTWOORD }}
           MAIL_ADRES: ${{ secrets.MAIL_ADRES }}
         run: |
-          if [ "${{ inputs.nu_maken }}" = "true" ]; then
+          if [ "${{ inputs.proef }}" = "true" ]; then
+            python ai_nieuws.py --voorbeeld
+          elif [ "${{ inputs.nu_maken }}" = "true" ]; then
             python ai_nieuws.py
           else
             python ai_nieuws.py --gepland
