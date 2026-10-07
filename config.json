@@ -17,7 +17,6 @@
     {"naam": "Claude Code", "groep": "lab", "soort": "rss", "url": "https://github.com/anthropics/claude-code/releases.atom"},
     {"naam": "OpenAI", "groep": "lab", "soort": "rss", "url": "https://openai.com/news/rss.xml"},
     {"naam": "Codex (OpenAI)", "groep": "lab", "soort": "rss", "url": "https://github.com/openai/codex/releases.atom", "zonder": "alpha|beta|rc"},
-    {"naam": "ChatGPT release notes", "groep": "lab", "soort": "wijzigingen", "product": "ChatGPT", "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"},
     {"naam": "Claude release notes", "groep": "lab", "soort": "wijzigingen", "product": "Claude", "url": "https://docs.claude.com/en/release-notes/claude-apps"},
     {"naam": "Gemini release notes", "groep": "lab", "soort": "wijzigingen", "product": "Gemini", "url": "https://gemini.google/release-notes/"},
     {"naam": "Google DeepMind", "groep": "lab", "soort": "rss", "url": "https://deepmind.google/blog/rss.xml"},
