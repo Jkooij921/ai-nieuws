@@ -15,8 +15,8 @@ img{max-width:100%}
 header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 24px;padding-top:22px;padding-bottom:16px}
 .merk{font-family:Newsreader,Georgia,serif;font-weight:800;font-size:clamp(42px,6vw,74px);line-height:.95;letter-spacing:-.02em;text-decoration:none}
 .ondertitel{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:18px;color:var(--zacht);margin-top:6px}
-header nav{display:flex;flex-wrap:wrap;gap:6px 20px;font-weight:600;font-size:16px;padding-bottom:6px}
-header nav a{color:var(--zacht);text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent}
+header nav{display:flex;flex-wrap:wrap;gap:0 20px;font-weight:600;font-size:16px}
+header nav a{display:inline-flex;align-items:center;min-height:44px;color:var(--zacht);text-decoration:none;border-bottom:2px solid transparent}
 header nav a:hover{color:var(--inkt)}
 header nav a[aria-current=page]{color:var(--inkt);border-bottom-color:var(--accent)}
 
@@ -134,14 +134,15 @@ main.editie{padding-top:26px}
 
 /* artikelpagina */
 .artikel{max-width:820px;padding-top:24px}
-.kruimel{font-size:14px;color:var(--zacht);margin-bottom:16px}
+.kruimel{font-size:14px;color:var(--zacht);margin-bottom:8px}
+.kruimel a{display:inline-flex;align-items:center;min-height:44px}
 .artikel h1{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:clamp(32px,4.6vw,52px);line-height:1.08;letter-spacing:-.01em;margin:8px 0 14px}
 .artikel .boven{margin-top:16px}
 .uitlegblok{background:var(--vlak);padding:16px 20px;margin:18px 0}
 .uitlegblok p{margin:4px 0 0}
 .artikel .bronnen{font-size:15px;color:var(--zacht)}
 .chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:var(--zacht);margin-top:22px}
-.chip{display:inline-block;padding:6px 12px;border:1px solid var(--inkt);color:var(--inkt);text-decoration:none;font-weight:600}
+.chip{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--inkt);color:var(--inkt);text-decoration:none;font-weight:600}
 .chip:hover{background:var(--inkt);color:#ffffff}
 .verwant,.meerlijst{margin-top:40px}
 .verwant h2,.meerlijst h2{font-family:Newsreader,Georgia,serif;font-size:28px;margin:0 0 6px;border-bottom:1px solid var(--inkt);padding-bottom:8px}

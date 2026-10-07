@@ -450,6 +450,9 @@ def verzamel(cfg, staat, nu):
         eerste_keer = bron["naam"] not in staat["bronnen"]
         nieuw = []
         for bericht in ruw:
+            # Alleen gewone webadressen; een vreemd adres uit een feed komt nooit op de site.
+            if not bericht["url"].lower().startswith(("https://", "http://")):
+                continue
             sleutel = schoon_url(bericht["url"])
             if sleutel in al_gehad:
                 continue

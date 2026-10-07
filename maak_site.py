@@ -139,6 +139,11 @@ def geef_ids(ed):
         item.setdefault("id", f"{ed['id']}-k{nr}")
 
 
+def veilig(url):
+    """Alleen gewone webadressen. Een adres als javascript:... uit een feed wordt een dode link."""
+    return url if isinstance(url, str) and url.lower().startswith(("https://", "http://")) else "#"
+
+
 def artikel_url(site_url, item):
     return f"{site_url}artikel/{item['id']}.html"
 
@@ -164,11 +169,10 @@ def beeld_html(item, verhouding="16 / 10", link=None):
     groot, klein = tegeltekst(item)
     tegel = (f'<div class="tegel" style="aspect-ratio: {verhouding}"><span>{e(groot)}</span>'
              f'<small>{e(klein)}</small></div>')
-    if item.get("beeld"):
-        # onerror: werkt het beeld later niet meer, dan verschijnt alsnog het blok.
+    if item.get("beeld") and veilig(item["beeld"]) != "#":
+        # Werkt het beeld later niet meer, dan zet vroeg.js er alsnog het blok voor in de plaats.
         inhoud = (f'<img src="{e(item["beeld"])}" alt="" loading="lazy" referrerpolicy="no-referrer" '
-                  f'style="aspect-ratio: {verhouding}" data-groot="{e(groot)}" data-klein="{e(klein)}" '
-                  f'onerror="beeldMislukt(this)">')
+                  f'style="aspect-ratio: {verhouding}" data-groot="{e(groot)}" data-klein="{e(klein)}">')
     else:
         inhoud = tegel
     if link:
@@ -184,7 +188,7 @@ def impact_html(item):
 
 
 def bronnen_html(item):
-    links = ", ".join(f'<a href="{e(url)}">{e(naam)}</a>' for naam, url in bronlinks(item["bronnen"]))
+    links = ", ".join(f'<a href="{e(veilig(url))}">{e(naam)}</a>' for naam, url in bronlinks(item["bronnen"]))
     n = aantal_bronnen(item)
     return f'Gemeld door {n} {"bron" if n == 1 else "bronnen"}: {links}'
 
@@ -222,7 +226,7 @@ def kort_html(k, ref):
     namen = ", ".join(naam for naam, _ in bronlinks(k["bronnen"]))
     return (
         f'<li><span class="tijd">{e(tijd)}</span><div>'
-        f'<a href="{e(k["bronnen"][0]["url"])}">{e(k["kop"])}</a>'
+        f'<a href="{e(veilig(k["bronnen"][0]["url"]))}">{e(k["kop"])}</a>'
         f'<p>{e(k["zin"])}</p><span class="meta">{e(RUBRIEKEN[k["rubriek"]]["knop"])} · '
         f'{e(datumregel(k["bronnen"], ref))} · {e(namen)}</span></div></li>'
     )
@@ -258,16 +262,17 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra=""):
         '<!doctype html><html lang="nl"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
         '<meta name="robots" content="noindex, nofollow">'
+        # Beveiliging: alleen scripts van de site zelf, geen formulieren, geen ingesloten pagina's.
+        '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; '
+        'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; '
+        'img-src https: data:; connect-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">'
         f'<title>{e(titel)}</title>'
         '<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         f'<link rel="stylesheet" href="{e(FONTS)}">'
         f'<link rel="stylesheet" href="{basis}stijl.css">{extra}'
         # Al in de kop, want een beeld kan al mislukken voordat site.js geladen is.
-        '<script>function beeldMislukt(b){var t=document.createElement("div");t.className="tegel";'
-        't.style.aspectRatio=b.style.aspectRatio;var g=document.createElement("span");g.textContent=b.dataset.groot||"";'
-        'var k=document.createElement("small");k.textContent=b.dataset.klein||"";t.appendChild(g);t.appendChild(k);'
-        'b.replaceWith(t);}</script></head><body>'
+        f'<script src="{basis}vroeg.js"></script></head><body>'
         f'<div class="utility"><div class="binnen">{bovenregel}</div></div>'
         f'<header class="kop"><div class="binnen"><div><a class="merk" href="{basis}index.html">AI-nieuws</a>'
         '<div class="ondertitel">Het belangrijkste AI-nieuws in gewone taal, twee keer per dag</div></div>'
@@ -340,7 +345,7 @@ def editie_html(ed, begrippen, basis, site_url):
         beeld = beeld_html(bij, "2 / 1") if bij and bij.get("beeld") else ""
         probeer = (f'<section class="probeer{" metbeeld" if beeld else ""}" aria-label="Probeer dit vandaag">{beeld}<div class="tekst">'
                    f'<div class="label">Probeer dit vandaag · ongeveer 10 minuten</div><h2>{e(p["titel"])}</h2>'
-                   f'<p>{e(p["tekst"])}</p><p><a class="knop licht" href="{e(p["url"])}">Bekijk de bron</a></p></div></section>')
+                   f'<p>{e(p["tekst"])}</p><p><a class="knop licht" href="{e(veilig(p["url"]))}">Bekijk de bron</a></p></div></section>')
 
     secties = []
     for naam, stijl in RUBRIEKEN.items():
@@ -426,7 +431,7 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<div class="uitlegblok"><div class="label">Even uitgelegd</div><p>{e(item["uitleg"])}</p></div>'
         f'{waarom}'
         f'<p class="bronnen">{bronnen_html(item)}</p>'
-        f'<p class="acties"><a class="knop" href="{e(item["bronnen"][0]["url"])}">Lees de bron</a>'
+        f'<p class="acties"><a class="knop" href="{e(veilig(item["bronnen"][0]["url"]))}">Lees de bron</a>'
         f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p>'
         f'{f"<p class=chips>Onderwerpen: {chips}</p>" if chips else ""}'
         f'{verwant_html}'
@@ -498,7 +503,7 @@ def leren_html(begrippen, edities):
         if ed.get("probeer"):
             p = ed["probeer"]
             tips.append(f'<div class="tip"><div class="label">{e(editietitel(ed))}</div><h3>{e(p["titel"])}</h3>'
-                        f'<p>{e(p["tekst"])}</p><a href="{e(p["url"])}">Bekijk de bron</a></div>')
+                        f'<p>{e(p["tekst"])}</p><a href="{e(veilig(p["url"]))}">Bekijk de bron</a></div>')
     return (
         '<div class="editiekop binnen"><h1>Begrippen en tips</h1>'
         '<p class="intro">Alle woorden die in de edities zijn uitgelegd, en alle tips om zelf te proberen.</p></div>'
@@ -530,7 +535,8 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
         (doel / map_).mkdir(parents=True, exist_ok=True)
     bron = Path(__file__).resolve().parent
     (doel / "stijl.css").write_text((bron / "stijl.css").read_text(encoding="utf-8"), encoding="utf-8")
-    (doel / "site.js").write_text((bron / "site.js").read_text(encoding="utf-8"), encoding="utf-8")
+    for bestand in ("site.js", "vroeg.js"):
+        (doel / bestand).write_text((bron / bestand).read_text(encoding="utf-8"), encoding="utf-8")
 
     edities = sorted(edities, key=lambda ed: ed["tijd"])
     for ed in edities:

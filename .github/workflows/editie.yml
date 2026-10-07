@@ -40,17 +40,25 @@ jobs:
       url: ${{ steps.publiceer.outputs.page_url }}
     env:
       TZ: Europe/Amsterdam
+      # De keuzes uit de knop "Run workflow", als omgevingsvariabelen in plaats van rechtstreeks in de opdrachten.
+      NU_MAKEN: ${{ inputs.nu_maken }}
+      CLAUDE_TESTEN: ${{ inputs.claude_testen }}
+      PROEF: ${{ inputs.proef }}
     steps:
-      - uses: actions/checkout@v7
+      # Vaste versies (commit-codes) van de onderdelen van GitHub, zodat een latere wijziging daarin niet ongemerkt meedoet.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+        with:
+          # De schrijfrechten blijven niet in de map staan; alleen de stap "Editie bewaren" krijgt ze.
+          persist-credentials: false
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7
         with:
           python-version: "3.12"
 
       - name: Is er een editie nodig?
         id: check
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
             echo "nodig=true" >> "$GITHUB_OUTPUT"
           else
             python ai_nieuws.py --nodig
@@ -65,22 +73,22 @@ jobs:
           pip install --quiet pillow
 
       - name: Claude-sleutel testen
-        if: steps.check.outputs.nodig == 'true' && inputs.claude_testen
+        if: steps.check.outputs.nodig == 'true' && env.CLAUDE_TESTEN == 'true'
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
           echo "Antwoord alleen met het woord: werkt" | claude -p --safe-mode --tools "" --model haiku
 
       - name: Editie maken
-        if: steps.check.outputs.nodig == 'true' && !inputs.claude_testen
+        if: steps.check.outputs.nodig == 'true' && env.CLAUDE_TESTEN != 'true'
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GMAIL_APP_WACHTWOORD: ${{ secrets.GMAIL_APP_WACHTWOORD }}
           MAIL_ADRES: ${{ secrets.MAIL_ADRES }}
         run: |
-          if [ "${{ inputs.proef }}" = "true" ]; then
+          if [ "$PROEF" = "true" ]; then
             python ai_nieuws.py --voorbeeld --alles
-          elif [ "${{ inputs.nu_maken }}" = "true" ]; then
+          elif [ "$NU_MAKEN" = "true" ]; then
             python ai_nieuws.py
           else
             python ai_nieuws.py --gepland
@@ -89,6 +97,8 @@ jobs:
       # Ook als het mailen mislukte: de editie zelf moet bewaard blijven.
       - name: Editie bewaren
         if: always() && steps.check.outputs.nodig == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "AI-nieuws"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -97,17 +107,17 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "Editie $(date '+%Y-%m-%d %H:%M')"
             git pull --rebase
-            git push
+            git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
           fi
 
-      - uses: actions/configure-pages@v6
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6
         if: always() && steps.check.outputs.nodig == 'true' && hashFiles('site/index.html') != ''
 
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5
         if: always() && steps.check.outputs.nodig == 'true' && hashFiles('site/index.html') != ''
         with:
           path: site
 
       - id: publiceer
         if: always() && steps.check.outputs.nodig == 'true' && hashFiles('site/index.html') != ''
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5
