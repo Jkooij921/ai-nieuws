@@ -628,6 +628,18 @@ def vraag_claude(cfg, bericht, schema):
     return json.loads(gevonden.group(0))
 
 
+GEBRUIKERSPOSTS = ("reddit.com", "news.ycombinator.com")
+
+
+def bevestigd(bericht):
+    """Komt dit bericht van een echte nieuwsbron? Een post op Reddit of een tekstpost op Hacker News niet;
+    een Hacker News-link naar een artikel van een nieuwssite of bedrijf wel."""
+    if bericht["groep"] != "community":
+        return True
+    host = urllib.parse.urlsplit(bericht["url"]).netloc.lower()
+    return not any(host == d or host.endswith("." + d) for d in GEBRUIKERSPOSTS)
+
+
 def kies(cfg, berichten, staat):
     """Laat Claude de berichten scoren. Geeft (volledige berichten, korte berichten) terug."""
     nu = datetime.now()
@@ -653,6 +665,14 @@ def kies(cfg, berichten, staat):
             # De eerste hand voorop: daar wijst de kop naar en die tekst wordt samengevat.
             bij.sort(key=lambda b: b["groep"] != "lab")
             onderwerpen.append({**keuze, "berichten": bij})
+    # Iets wat alleen in een bericht op Reddit of Hacker News staat, is (nog) geen nieuws: een gebruiker
+    # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws of onderzoek zijn;
+    # hooguit Kort nieuws. Ervaringen en tools mogen wel, want daar gaat het juist om gebruikers.
+    for o in onderwerpen:
+        if (o["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "Onderzoek en regels")
+                and not any(bevestigd(b) for b in o["berichten"])):
+            log.info("Niet bevestigd, naar Kort nieuws: %s", o["berichten"][0]["titel"])
+            o["score"] = min(o["score"], cfg["minimale_score_kort"])
     onderwerpen.sort(key=lambda o: o["score"], reverse=True)
     for o in onderwerpen:
         log.info("Score %s [%s] %s (%s)", o["score"], o["rubriek"], o["berichten"][0]["titel"], o["reden"])
