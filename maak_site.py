@@ -270,6 +270,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra=""):
         '<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         f'<link rel="stylesheet" href="{e(FONTS)}">'
+        f'<link rel="icon" href="{basis}favicon.svg" type="image/svg+xml">'
         f'<link rel="stylesheet" href="{basis}stijl.css">{extra}'
         # Al in de kop, want een beeld kan al mislukken voordat site.js geladen is.
         f'<script src="{basis}vroeg.js"></script></head><body>'
@@ -535,7 +536,7 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
         (doel / map_).mkdir(parents=True, exist_ok=True)
     bron = Path(__file__).resolve().parent
     (doel / "stijl.css").write_text((bron / "stijl.css").read_text(encoding="utf-8"), encoding="utf-8")
-    for bestand in ("site.js", "vroeg.js"):
+    for bestand in ("site.js", "vroeg.js", "favicon.svg"):
         (doel / bestand).write_text((bron / bestand).read_text(encoding="utf-8"), encoding="utf-8")
 
     edities = sorted(edities, key=lambda ed: ed["tijd"])
