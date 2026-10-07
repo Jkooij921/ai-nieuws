@@ -158,7 +158,7 @@ SCHRIJF_SCHEMA = {
 
 SCHRIJF_OPDRACHT = """Je schrijft de {moment}editie van een persoonlijke AI-nieuwssite in het Nederlands.
 
-De lezer is een leek op het gebied van AI en wil er zo goed mogelijk in worden. De lezer gebruikt vooral Claude en Claude Code, bijna nooit ChatGPT of Gemini, en laat Claude Code programma's bouwen door er gewoon mee te praten, maar kent de vaktaal en de achtergrond niet. Ga ervan uit dat de lezer niets weet: geen producten, geen onderzoeksgroepen, geen vaktermen. Alleen Anthropic, OpenAI, Google, Claude en ChatGPT zijn bekend. Schrijf zoals een vriend die er verstand van heeft het aan tafel uitlegt: luchtig en helder, zonder overdrijving.
+De site is een krant voor mensen met een beetje kennis van AI. Ze gebruiken zelf Claude of ChatGPT en weten wat een chatbot, een AI-model en een prompt is, maar kennen de vaktaal en de achtergrond niet. Ze gebruiken vooral Claude en Claude Code, bijna nooit ChatGPT of Gemini. Bekend zijn: Anthropic, OpenAI, Google, Claude, ChatGPT, chatbot, AI-model en prompt. Alle andere producten, bedrijven, onderzoeksgroepen en vaktermen zijn onbekend. Schrijf zoals een goede krant voor een breed publiek: helder, zakelijk en prettig om te lezen, zonder vakjargon en zonder kinderachtig te worden.
 
 intro: 1 of 2 zinnen die de editie openen. Begin met "{groet}". Noem het opvallendste van deze editie in woorden die een leek snapt, geen opsomming van alles.
 
@@ -189,7 +189,7 @@ begrippen: elk vakwoord dat je in deze editie uitlegt, en elke naam van een tool
 
 Woorden uitleggen:
 - Kun je iets zonder vakwoord zeggen, doe dat dan.
-- Heb je een vakwoord nodig, leg het dan uit in een paar gewone woorden op de plek waar het voor het eerst staat. Denk aan: model, token, parameter, open source, API, agent, plugin, skill, MCP, hook, terminal, prompt, context, sandbox, benchmark, videokaart, lokaal draaien.
+- Heb je een vakwoord nodig, leg het dan uit in een paar gewone woorden op de plek waar het voor het eerst staat. Denk aan: token, parameter, open source, API, agent, plugin, skill, MCP, hook, terminal, context, sandbox, benchmark, videokaart, lokaal draaien. Leg niet uit wat iedereen al weet, zoals wat een chatbot of een AI-model is.
 - Noem een onbekende naam (een tool, een bedrijf, een onderzoeksgroep) altijd samen met wat het is.
 
 Regels:
