@@ -32,6 +32,14 @@ RUBRIEKEN = {
     "Onderzoek en regels": {"knop": "Onderzoek en regels", "klasse": "onderzoek", "waarom": "Waarom het ertoe doet",
                             "uitleg": "Onderzoek, wetten en veiligheid, kort samengevat."},
 }
+# Over wiens AI een bericht gaat. Claude kiest er één bij het schrijven; de lezer filtert erop.
+BEDRIJVEN = ["Anthropic", "OpenAI", "Google", "Microsoft", "Meta", "Mistral", "Anders"]
+PRODUCT = {"Anthropic": "Claude", "OpenAI": "ChatGPT", "Google": "Gemini", "Microsoft": "Copilot",
+           "Meta": "Meta", "Mistral": "Mistral"}
+# De keuzes bovenaan een editie: (code, naam op de knop, uitleg, bedrijven die erbij horen). Overig is de rest.
+MERKFILTERS = [("claude", "Claude", "Alles over Claude, Claude Code en Anthropic.", ("Anthropic",)),
+               ("chatgpt", "ChatGPT", "Alles over ChatGPT, Codex en OpenAI.", ("OpenAI",)),
+               ("overig", "Overig", "Gemini, Copilot, Mistral, Meta en de rest van de AI-wereld.", ())]
 MAILKLEUREN = {"groot": "#C4122F", "modellen": "#C4122F", "tools": "#C4122F", "gebruik": "#C4122F", "onderzoek": "#C4122F"}
 
 DAGEN = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
@@ -131,6 +139,24 @@ def tegeltekst(item):
     return bron["bron"].split(" (")[0], RUBRIEKEN[item["rubriek"]]["knop"]
 
 
+def bedrijf_van(item):
+    """Het bedrijf achter een bericht. Oudere berichten hebben dat veld nog niet; dan raden we het uit de tekst."""
+    if item.get("bedrijf") in BEDRIJVEN:
+        return item["bedrijf"]
+    tekst = " ".join(item.get("onderwerpen", [])) + " " + item["kop"]
+    for bedrijf, woorden in (("Anthropic", ("Claude", "Anthropic")), ("OpenAI", ("OpenAI", "ChatGPT", "Codex", "GPT")),
+                             ("Google", ("Gemini", "Google", "DeepMind", "Gemma")), ("Microsoft", ("Copilot", "Microsoft")),
+                             ("Meta", ("Meta", "Llama")), ("Mistral", ("Mistral",))):
+        if any(re.search(rf"\b{woord}", tekst) for woord in woorden):
+            return bedrijf
+    return "Anders"
+
+
+def merk_van(item):
+    bedrijf = bedrijf_van(item)
+    return next((code for code, _, _, bedrijven in MERKFILTERS if bedrijf in bedrijven), "overig")
+
+
 def geef_ids(ed):
     """Elk bericht een vast adres: <editie>-<nummer>, korte berichten <editie>-k<nummer>."""
     for nr, item in enumerate(ed["items"], 1):
@@ -202,10 +228,13 @@ def kaart(item, ref, basis, site_url, groot=False):
     lede = (f'<p class="lede">{e(item["uitleg"])}</p><p>{e(item["samenvatting"])}</p>' if groot
             else f'<p>{e(item["samenvatting"])}</p>')
     uitgelegd = "" if groot else f'<p><b>Even uitgelegd:</b> {e(item["uitleg"])}</p>'
+    product = PRODUCT.get(bedrijf_van(item))
+    productlabel = f'<span class="product">{e(product)}</span>' if product else ""
     return (
-        f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}">'
+        f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}" '
+        f'data-merk="{merk_van(item)}">'
         f'{beeld_html(item, "16 / 9" if groot else "16 / 10", link)}'
-        f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
+        f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>{productlabel}'
         f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
         f'<{kop}><a href="{e(link)}">{e(item["kop"])}</a></{kop}>'
         f'{lede}'
@@ -225,7 +254,7 @@ def kort_html(k, ref):
     tijd = f"{_datum(min(eerste, key=_datum)).astimezone():%H:%M}" if eerste else "nieuw"
     namen = ", ".join(naam for naam, _ in bronlinks(k["bronnen"]))
     return (
-        f'<li><span class="tijd">{e(tijd)}</span><div>'
+        f'<li data-merk="{merk_van(k)}"><span class="tijd">{e(tijd)}</span><div>'
         f'<a href="{e(veilig(k["bronnen"][0]["url"]))}">{e(k["kop"])}</a>'
         f'<p>{e(k["zin"])}</p><span class="meta">{e(RUBRIEKEN[k["rubriek"]]["knop"])} · '
         f'{e(datumregel(k["bronnen"], ref))} · {e(namen)}</span></div></li>'
@@ -265,7 +294,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra=""):
         # Beveiliging: alleen scripts van de site zelf, geen formulieren, geen ingesloten pagina's.
         '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; '
         'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; '
-        'img-src https: data:; connect-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">'
+        'img-src \'self\' https: data:; connect-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">'
         f'<title>{e(titel)}</title>'
         '<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -361,7 +390,20 @@ def editie_html(ed, begrippen, basis, site_url):
     kort = ""
     if ed["kort"]:
         kort = (f'<section class="sectie kortnieuws" id="kort"><div class="kopregel"><h2>Kort nieuws</h2>'
-                f'<span>Kleiner nieuws in één zin</span></div><ul>{"".join(kort_html(k, ref) for k in ed["kort"])}</ul></section>')
+                f'<span>Kleiner nieuws in één zin</span></div>'
+                f'<p class="geenkort" hidden>Over deze AI staat geen kort nieuws in deze editie.</p>'
+                f'<ul>{"".join(kort_html(k, ref) for k in ed["kort"])}</ul></section>')
+
+    # De keuze welke AI je wilt zien. Werkt samen met de onderwerpen op de filterbalk.
+    alles_bij_elkaar = items + ed["kort"]
+    merkknoppen = '<button type="button" data-merk="alle" aria-pressed="true">Alle AI</button>' + "".join(
+        f'<button type="button" data-merk="{code}" data-naam="{e(naam)}" data-uitleg="{e(uitleg)}" aria-pressed="false">'
+        f'{e(naam)} <span>{sum(1 for i in alles_bij_elkaar if merk_van(i) == code)}</span></button>'
+        for code, naam, uitleg, _ in MERKFILTERS
+    )
+    merken = (f'<div class="merken"><span class="merkvraag">Welke AI wil je zien?</span>'
+              f'<div class="merkknoppen" role="group" aria-label="Kies een AI">{merkknoppen}</div>'
+              f'<span class="merkuitleg">Je keuze wordt onthouden op dit apparaat.</span></div>')
 
     voet = f"Gekozen uit {ed['bekeken']} nieuwe berichten uit {ed['aantal_bronnen']} bronnen."
     if ed.get("fouten"):
@@ -370,7 +412,7 @@ def editie_html(ed, begrippen, basis, site_url):
     return (
         f'<div class="editiekop binnen"><div class="label">{e(ed["moment"].capitalize())}editie</div>'
         f'<h1>{e(dagtitel(editiedag(ed)).capitalize())}</h1><p class="intro">{e(ed["intro"])}</p>'
-        f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten.</p></div>'
+        f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten.</p>{merken}</div>'
         f'<div class="tabbalk" data-totaal="{len(items)}" data-ids="{e(",".join(i["id"] for i in items))}"><div class="binnen">'
         f'<div class="tabs" role="group" aria-label="Kies een onderwerp">{tabbalk}</div>'
         f'<div class="voortgang"><span class="voortgangtekst">0 van {len(items)} gelezen</span>'
@@ -381,6 +423,7 @@ def editie_html(ed, begrippen, basis, site_url):
         f'{"20:00" if ed["moment"] == "ochtend" else "08:00"}.</span></div>'
         f'<div id="alles">{opening}{probeer}{"".join(secties)}</div>'
         f'<section id="gefilterd" hidden><div class="kopregel"><h2></h2></div><p class="filteruitleg"></p>'
+        f'<p class="geenresultaat" hidden>Over deze keuze staat niets in deze editie. Kies een ander onderwerp of een andere AI.</p>'
         f'<div class="raster">{alle_kaarten}</div></section>'
         f'{kort}{quiz_html(ed.get("quiz"))}'
         f'<p class="editievoet">{e(voet)}</p></main>'

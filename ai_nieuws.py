@@ -34,7 +34,7 @@ from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
-from maak_site import (RUBRIEKEN, artikel_url, bronlinks, dagtitel, datumregel, editiedag, geef_ids,
+from maak_site import (BEDRIJVEN, RUBRIEKEN, artikel_url, bronlinks, dagtitel, datumregel, editiedag, geef_ids,
                        schrijf_site, wanneer)
 
 MAP = Path(__file__).resolve().parent
@@ -129,9 +129,10 @@ SCHRIJF_SCHEMA = {
                     "uitleg": {"type": "string"},
                     "samenvatting": {"type": "string"},
                     "waarom": {"type": "string"},
+                    "bedrijf": {"type": "string", "enum": BEDRIJVEN},
                     "onderwerpen": {"type": "array", "items": {"type": "string"}},
                 },
-                "required": ["nr", "kop", "uitleg", "samenvatting", "waarom", "onderwerpen"],
+                "required": ["nr", "kop", "uitleg", "samenvatting", "waarom", "bedrijf", "onderwerpen"],
             },
         },
         "quiz": {
@@ -151,8 +152,9 @@ SCHRIJF_SCHEMA = {
             "type": "array",
             "items": {
                 "type": "object",
-                "properties": {"nr": {"type": "integer"}, "kop": {"type": "string"}, "zin": {"type": "string"}},
-                "required": ["nr", "kop", "zin"],
+                "properties": {"nr": {"type": "integer"}, "kop": {"type": "string"}, "zin": {"type": "string"},
+                               "bedrijf": {"type": "string", "enum": BEDRIJVEN}},
+                "required": ["nr", "kop", "zin", "bedrijf"],
             },
         },
         "probeer": {
@@ -174,7 +176,7 @@ SCHRIJF_SCHEMA = {
 
 SCHRIJF_OPDRACHT = """Je schrijft de {moment}editie van een persoonlijke AI-nieuwssite in het Nederlands.
 
-De site is een krant voor mensen met een beetje kennis van AI. Ze gebruiken zelf Claude of ChatGPT en weten wat een chatbot, een AI-model en een prompt is, maar kennen de vaktaal en de achtergrond niet. Ze gebruiken vooral Claude en Claude Code, bijna nooit ChatGPT of Gemini. Bekend zijn: Anthropic, OpenAI, Google, Claude, ChatGPT, chatbot, AI-model en prompt. Alle andere producten, bedrijven, onderzoeksgroepen en vaktermen zijn onbekend. Schrijf zoals een goede krant voor een breed publiek: helder, zakelijk en prettig om te lezen, zonder vakjargon en zonder kinderachtig te worden.
+De site is een krant voor mensen met een beetje kennis van AI. Ze gebruiken zelf ChatGPT, Claude, Gemini of Copilot en weten wat een chatbot, een AI-model en een prompt is, maar kennen de vaktaal en de achtergrond niet. Bekend zijn: Anthropic, OpenAI, Google, Microsoft, Claude, ChatGPT, Gemini, Copilot, chatbot, AI-model en prompt. Alle andere producten, bedrijven, onderzoeksgroepen en vaktermen zijn onbekend. Schrijf zoals een goede krant voor een breed publiek: helder, zakelijk en prettig om te lezen, zonder vakjargon en zonder kinderachtig te worden.
 
 intro: 1 of 2 zinnen die de editie openen. Begin met "{groet}". Noem het opvallendste van deze editie in woorden die een leek snapt, geen opsomming van alles.
 
@@ -188,17 +190,19 @@ items: één per onderwerp uit "onderwerpen".
   - Zo gebruik je AI: 2 korte zinnen. Wat is de aanpak en hoe werkt die.
   - Onderzoek en regels: 1 of 2 korte zinnen.
 - waarom: 1 zin. Bij Het grote nieuws: waarom dit ertoe doet. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft. Bij Onderzoek en regels: een lege tekst.
+- bedrijf: over wiens AI het bericht vooral gaat. Anthropic (Claude, Claude Code), OpenAI (ChatGPT, Codex, GPT), Google (Gemini, DeepMind), Microsoft (Copilot), Meta (Llama), Mistral, of Anders. Gaat het over meerdere bedrijven tegelijk of over AI in het algemeen, kies dan Anders. De lezer filtert hierop.
 - onderwerpen: 1 tot 3 onderwerpen waar het bericht over gaat, van specifiek naar algemeen, bijvoorbeeld ["Claude Mythos", "Anthropic"] of ["Claude Code"] of ["Mistral", "Open modellen"]. Hiermee vindt de site eerdere berichten over hetzelfde. Gebruik een onderwerp uit "bekende_onderwerpen" als het past, en schrijf het dan precies zo. Bedenk alleen een nieuw onderwerp als geen bekend onderwerp past. Een onderwerp is een product, model, bedrijf of vast thema (zoals "AI-beveiliging" of "AI Act"), nooit een los woord als "nieuws", "AI" of "update".
 
 kort: één per bericht uit "korte_berichten", voor de rubriek "Kort nieuws".
 - nr: het nummer uit "korte_berichten".
 - kop: hooguit 8 woorden, te begrijpen zonder voorkennis.
 - zin: 1 zin van hooguit 25 woorden. Wat is het en wat is er nieuw. Ook hier geen onuitgelegde vaktermen.
+- bedrijf: zoals bij items.
 
-probeer: één ding dat de lezer vandaag in ongeveer 10 minuten kan uitproberen, op basis van een van de onderwerpen. Liefst uit Nieuwe tools of Zo gebruik je AI, en iets wat een leek kan. De lezer gaat dit echt doen, dus kies alleen iets wat zeker veilig is: een functie die in Claude of Claude Code zit, iets van Anthropic zelf, of een tool met minstens 5.000 sterren op GitHub. Moet er iets geïnstalleerd worden, zeg er dan bij dat het op de eigen computer draait.
+probeer: één ding dat de lezer vandaag in ongeveer 10 minuten kan uitproberen, op basis van een van de onderwerpen. Liefst uit Nieuwe tools of Zo gebruik je AI, en iets wat een leek kan. De lezer gaat dit echt doen, dus kies alleen iets wat zeker veilig is: een functie die in ChatGPT, Claude, Gemini of Copilot zit, iets van een van die bedrijven zelf, of een tool met minstens 5.000 sterren op GitHub. Moet er iets geïnstalleerd worden, zeg er dan bij dat het op de eigen computer draait.
 - nr: het nummer van dat onderwerp. Leent geen enkel onderwerp zich ervoor, geef dan nr 0.
 - titel: hooguit 6 woorden.
-- tekst: 2 tot 4 korte zinnen die een leek kan volgen. Moet er iets geïnstalleerd of uitgevoerd worden, geef de lezer dan een zin die die letterlijk aan Claude Code kan geven, tussen aanhalingstekens, en laat Claude Code het werk doen. Noem alleen commando's, instellingen en namen die letterlijk in de brontekst staan.
+- tekst: 2 tot 4 korte zinnen die een leek kan volgen. Moet er iets geïnstalleerd of uitgevoerd worden, geef de lezer dan een zin die die letterlijk aan een AI-assistent als Claude Code of ChatGPT kan geven, tussen aanhalingstekens, en laat die het werk doen. Noem alleen commando's, instellingen en namen die letterlijk in de brontekst staan.
 
 quiz: 3 meerkeuzevragen over de berichten in "onderwerpen", als nieuwsquiz voor de lezer.
 - vraag: kort en duidelijk, over het belangrijkste feit van een bericht. Elke vraag over een ander bericht.
@@ -778,7 +782,7 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     items = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": lang[nr]["kop"], "uitleg": lang[nr]["uitleg"],
          "samenvatting": lang[nr]["samenvatting"], "waarom": lang[nr]["waarom"], "bronnen": _bronnen(o),
-         "beeld": o.get("beeld", ""),
+         "beeld": o.get("beeld", ""), "bedrijf": lang[nr].get("bedrijf", "Anders"),
          "onderwerpen": [t.strip() for t in lang[nr].get("onderwerpen", []) if t.strip()][:3]}
         for nr, o in enumerate(gekozen, 1) if nr in lang
     ]
@@ -790,7 +794,8 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     ][:3]
     kortjes = {k["nr"]: k for k in antwoord.get("kort", [])}
     korte = [
-        {"rubriek": o["rubriek"], "score": o["score"], "kop": kortjes[nr]["kop"], "zin": kortjes[nr]["zin"], "bronnen": _bronnen(o)}
+        {"rubriek": o["rubriek"], "score": o["score"], "kop": kortjes[nr]["kop"], "zin": kortjes[nr]["zin"],
+         "bedrijf": kortjes[nr].get("bedrijf", "Anders"), "bronnen": _bronnen(o)}
         for nr, o in enumerate(kort, 1) if nr in kortjes
     ]
     probeer = antwoord.get("probeer") or {}

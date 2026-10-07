@@ -47,40 +47,101 @@
     if (open) markeer(kaart.getAttribute('data-id'));
   });
 
-  // Filters op onderwerp. Het gekozen filter komt in het adres, zodat je het kunt delen.
+  // Twee filters die samenwerken: een onderwerp (de filterbalk) en een AI (de knoppen bovenaan).
+  // Het onderwerp komt in het adres, zodat je het kunt delen; de gekozen AI wordt op dit apparaat onthouden.
+  var MERKSLEUTEL = 'ai-nieuws-merk';
   var tabs = document.querySelectorAll('.tabs button');
-  function kies(filter, scrollen) {
-    var knop = document.querySelector('.tabs button[data-filter="' + filter + '"]');
-    if (!knop) { filter = 'alles'; knop = document.querySelector('.tabs button[data-filter="alles"]'); }
-    if (!knop) return;
-    tabs.forEach(function (t) { t.setAttribute('aria-pressed', t === knop ? 'true' : 'false'); });
+  var merkknoppen = document.querySelectorAll('.merkknoppen button');
+  var filter = 'alles';
+  var merk = 'alle';
+  try { merk = localStorage.getItem(MERKSLEUTEL) || 'alle'; } catch (fout) { /* privévenster */ }
+  if (!document.querySelector('.merkknoppen button[data-merk="' + merk + '"]')) merk = 'alle';
+
+  function past(el) { return merk === 'alle' || el.getAttribute('data-merk') === merk; }
+
+  function toon(scrollen) {
+    var tab = document.querySelector('.tabs button[data-filter="' + filter + '"]') ||
+      document.querySelector('.tabs button[data-filter="alles"]');
+    if (!tab) return;
+    filter = tab.getAttribute('data-filter');
+    var merkknop = document.querySelector('.merkknoppen button[data-merk="' + merk + '"]');
+    tabs.forEach(function (t) { t.setAttribute('aria-pressed', t === tab ? 'true' : 'false'); });
+    merkknoppen.forEach(function (k) { k.setAttribute('aria-pressed', k === merkknop ? 'true' : 'false'); });
+
     var rubriek = ['alles', 'kort', 'quiz'].indexOf(filter) < 0;
+    var metMerk = merk !== 'alle';
     var alles = document.getElementById('alles');
     var gefilterd = document.getElementById('gefilterd');
     var kort = document.getElementById('kort');
     var quiz = document.getElementById('quiz');
-    if (alles) alles.hidden = filter !== 'alles';
-    if (kort) kort.hidden = !(filter === 'alles' || filter === 'kort');
-    if (quiz) quiz.hidden = !(filter === 'alles' || filter === 'quiz');
+    if (alles) alles.hidden = !(filter === 'alles' && !metMerk);
+    if (quiz) quiz.hidden = !((filter === 'alles' && !metMerk) || filter === 'quiz');
+    if (kort) {
+      kort.hidden = !(filter === 'alles' || filter === 'kort');
+      var korteZichtbaar = 0;
+      kort.querySelectorAll('li').forEach(function (li) { li.hidden = !past(li); if (!li.hidden) korteZichtbaar++; });
+      kort.querySelector('.geenkort').hidden = korteZichtbaar > 0;
+    }
     if (gefilterd) {
-      gefilterd.hidden = !rubriek;
-      if (rubriek) {
-        gefilterd.querySelector('h2').textContent = knop.getAttribute('data-titel');
-        gefilterd.querySelector('.filteruitleg').textContent = knop.getAttribute('data-uitleg');
-        gefilterd.querySelectorAll('.kaart').forEach(function (k) { k.hidden = k.getAttribute('data-rubriek') !== filter; });
+      var toonGefilterd = rubriek || (filter === 'alles' && metMerk);
+      gefilterd.hidden = !toonGefilterd;
+      if (toonGefilterd) {
+        var aantal = 0;
+        gefilterd.querySelectorAll('.kaart').forEach(function (k) {
+          var zichtbaar = (!rubriek || k.getAttribute('data-rubriek') === filter) && past(k);
+          k.hidden = !zichtbaar;
+          if (zichtbaar) aantal++;
+        });
+        var titel = [];
+        var uitleg = '';
+        if (metMerk) { titel.push(merkknop.getAttribute('data-naam')); uitleg = merkknop.getAttribute('data-uitleg'); }
+        if (rubriek) {
+          titel.push(tab.getAttribute('data-titel'));
+          uitleg = tab.getAttribute('data-uitleg') + (metMerk ? ' Alleen over ' + merkknop.getAttribute('data-naam') + '.' : '');
+        }
+        gefilterd.querySelector('h2').textContent = titel.join(' · ');
+        gefilterd.querySelector('.filteruitleg').textContent = uitleg;
+        gefilterd.querySelector('.geenresultaat').hidden = aantal > 0;
       }
     }
+
+    // De aantallen op de filterbalk tellen alleen wat bij de gekozen AI past.
+    var kaarten = gefilterd ? gefilterd.querySelectorAll('.kaart') : [];
+    var korte = kort ? kort.querySelectorAll('li') : [];
+    tabs.forEach(function (t) {
+      var f = t.getAttribute('data-filter');
+      var getal = t.querySelector('span');
+      if (!getal || f === 'quiz') return;
+      var n = 0;
+      if (f === 'alles' || f === 'kort') korte.forEach(function (li) { if (past(li)) n++; });
+      if (f !== 'kort') kaarten.forEach(function (k) { if ((f === 'alles' || k.getAttribute('data-rubriek') === f) && past(k)) n++; });
+      getal.textContent = n;
+    });
+
     if (history.replaceState) history.replaceState(null, '', filter === 'alles' ? location.pathname : '#' + filter);
     if (scrollen) {
       var balk = document.querySelector('.tabbalk');
       if (balk && window.scrollY > balk.offsetTop) window.scrollTo({ top: balk.offsetTop, behavior: 'smooth' });
     }
   }
-  tabs.forEach(function (t) { t.addEventListener('click', function () { kies(t.getAttribute('data-filter'), true); }); });
-  document.querySelectorAll('[data-kies]').forEach(function (k) {
-    k.addEventListener('click', function () { kies(k.getAttribute('data-kies'), true); });
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { filter = t.getAttribute('data-filter'); toon(true); });
   });
-  if (tabs.length && location.hash) kies(location.hash.slice(1), false);
+  document.querySelectorAll('[data-kies]').forEach(function (k) {
+    k.addEventListener('click', function () { filter = k.getAttribute('data-kies'); toon(true); });
+  });
+  merkknoppen.forEach(function (k) {
+    k.addEventListener('click', function () {
+      merk = k.getAttribute('data-merk');
+      try { localStorage.setItem(MERKSLEUTEL, merk); } catch (fout) { /* privévenster: dan niet onthouden */ }
+      toon(false);
+    });
+  });
+  if (tabs.length) {
+    if (location.hash) filter = location.hash.slice(1);
+    toon(false);
+  }
 
   // Een artikelpagina openen telt als gelezen.
   var artikel = document.querySelector('[data-artikel]');
