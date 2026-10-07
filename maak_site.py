@@ -8,7 +8,9 @@
   site/archief.html              alle edities en weken
   site/leren.html                begrippen en tips
   site/zoeken.html, zoek.json    zoeken in alle berichten
+  site/zo-maken-we-dit.html      dat alles met AI geschreven is, hoe we kiezen en welke bronnen
   site/stijl.css, site.js        opmaak en de knoppen (filters, lees meer, quiz, gelezen)
+  site/deel.png                  het plaatje bij een gedeelde link zonder eigen beeld
 """
 import html
 import json
@@ -193,6 +195,40 @@ def deel_link(item, site_url):
     return "https://wa.me/?text=" + urllib.parse.quote(tekst)
 
 
+def inkorten(tekst, lengte=200):
+    """Tekst afkappen op een heel woord, voor de korte omschrijving bij een gedeelde link."""
+    if len(tekst) <= lengte:
+        return tekst
+    return tekst[:lengte].rsplit(" ", 1)[0].rstrip(",.:") + "…"
+
+
+def deel_tags(deel, site_url):
+    """Wat WhatsApp en andere apps tonen als iemand een link deelt: kop, eerste zinnen en een beeld.
+
+    Zonder eigen beeld komt deel.png, het plaatje met de naam van de site. Dat geldt ook voor WebP en AVIF,
+    want die toont WhatsApp niet altijd.
+    """
+    beeld = deel.get("beeld") if veilig(deel.get("beeld")) != "#" else None
+    if beeld and urllib.parse.urlparse(beeld).path.lower().endswith((".webp", ".avif", ".svg")):
+        beeld = None
+    tags = [("name", "description", inkorten(deel["tekst"])),
+            ("property", "og:site_name", "AI-nieuws"), ("property", "og:locale", "nl_NL"),
+            ("property", "og:type", deel["soort"]), ("property", "og:title", deel["titel"]),
+            ("property", "og:description", inkorten(deel["tekst"]))]
+    if deel.get("tijd"):
+        tags.append(("property", "article:published_time", deel["tijd"]))
+    if site_url:
+        tags.append(("property", "og:url", deel["url"]))
+    if beeld:
+        tags.append(("property", "og:image", beeld))
+    elif site_url:
+        tags += [("property", "og:image", f"{site_url}deel.png"), ("property", "og:image:width", "1200"),
+                 ("property", "og:image:height", "630")]
+    if beeld or site_url:
+        tags.append(("name", "twitter:card", "summary_large_image"))
+    return "".join(f'<meta {soort}="{naam}" content="{e(inhoud)}">' for soort, naam, inhoud in tags)
+
+
 # ---------------------------------------------------------------- stukjes pagina
 
 VINK = ('<svg class="vink" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
@@ -270,7 +306,8 @@ def kort_html(k, ref):
     )
 
 
-def quiz_html(quiz):
+def quiz_html(quiz, ed, site_url):
+    """De nieuwsquiz. Na de laatste vraag kun je je score delen, met een link naar de quiz van deze editie."""
     if not quiz:
         return ""
     vragen = []
@@ -281,15 +318,19 @@ def quiz_html(quiz):
             f'<div class="opties">{opties}</div><p class="antwoord" hidden></p>'
             f'<p class="toelichting" hidden>{e(v["uitleg"])}</p></li>'
         )
+    titel = f"AI-nieuwsquiz, {ed['moment']}editie {dagtitel(editiedag(ed))}"
     return (
-        f'<section class="quiz" id="quiz" data-aantal="{len(quiz)}"><div class="kopregel"><h2>Nieuwsquiz</h2>'
+        f'<section class="quiz" id="quiz" data-aantal="{len(quiz)}" data-titel="{e(titel)}" '
+        f'data-url="{e(site_url)}edities/{e(ed["id"])}.html#quiz"><div class="kopregel"><h2>Nieuwsquiz</h2>'
         f'<span>{len(quiz)} vragen over deze editie</span></div>'
         f'<p class="quizuitleg">Hoe goed heb je gelezen? Klik op het antwoord dat volgens jou klopt.</p>'
-        f'<ol>{"".join(vragen)}</ol><p class="score" hidden></p></section>'
+        f'<ol>{"".join(vragen)}</ol><p class="score" hidden></p>'
+        f'<p class="quizdeel" hidden><a class="knop" href="#" target="_blank" rel="noopener">Deel je score via WhatsApp</a>'
+        f'<span>Je vrienden krijgen dezelfde vragen.</span></p></section>'
     )
 
 
-def pagina(titel, basis, actief, inhoud, bovenregel, extra=""):
+def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_url=""):
     huidig = ' aria-current="page"'
     links = "".join(
         f'<a href="{basis}{doel}"{huidig if naam == actief else ""}>{naam}</a>'
@@ -304,7 +345,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra=""):
         '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; '
         'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; '
         'img-src \'self\' https: data:; connect-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">'
-        f'<title>{e(titel)}</title>'
+        f'<title>{e(titel)}</title>{deel_tags(deel, site_url) if deel else ""}'
         '<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         f'<link rel="stylesheet" href="{e(FONTS)}">'
@@ -312,13 +353,15 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra=""):
         f'<link rel="stylesheet" href="{basis}stijl.css">{extra}'
         # Al in de kop, want een beeld kan al mislukken voordat site.js geladen is.
         f'<script src="{basis}vroeg.js"></script></head><body>'
-        f'<div class="utility"><div class="binnen">{bovenregel}</div></div>'
+        f'<div class="utility"><div class="binnen">{bovenregel}'
+        f'<a class="ailabel" href="{basis}zo-maken-we-dit.html">Geschreven met AI</a></div></div>'
         f'<header class="kop"><div class="binnen"><div><a class="merk" href="{basis}index.html">AI-nieuws</a>'
         '<div class="ondertitel">Het belangrijkste AI-nieuws in gewone taal, twee keer per dag</div></div>'
         f'<nav aria-label="Hoofdmenu">{links}</nav></div></header>'
         f'{inhoud}'
         '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude). Dat kan fouten opleveren, dus lees bij twijfel de bron. '
-        'De beelden komen van de bronnen zelf. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard.</div></footer>'
+        'De beelden komen van de bronnen zelf. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
+        f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></div></footer>'
         f'<script src="{basis}site.js"></script></body></html>'
     )
 
@@ -331,6 +374,7 @@ def bovenregel_editie(ed):
 
 
 ALGEMENE_BOVENREGEL = '<span>Elke dag om 08:00 en 20:00 een nieuwe editie</span>'
+OMSCHRIJVING = "Het belangrijkste AI-nieuws in gewone taal, elke dag om 08:00 en 20:00."
 
 
 # ---------------------------------------------------------------- pagina's
@@ -421,7 +465,7 @@ def editie_html(ed, begrippen, basis, site_url):
     return (
         f'<div class="editiekop binnen"><div class="label">{e(ed["moment"].capitalize())}editie</div>'
         f'<h1>{e(dagtitel(editiedag(ed)).capitalize())}</h1><p class="intro">{e(ed["intro"])}</p>'
-        f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten.</p>{merken}</div>'
+        f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten en geschreven met AI.</p>{merken}</div>'
         f'<div class="tabbalk" data-totaal="{len(items)}" data-ids="{e(",".join(i["id"] for i in items))}"><div class="binnen">'
         f'<div class="tabs" role="group" aria-label="Kies een onderwerp">{tabbalk}</div>'
         f'<div class="voortgang"><span class="voortgangtekst">0 van {len(items)} gelezen</span>'
@@ -434,7 +478,7 @@ def editie_html(ed, begrippen, basis, site_url):
         f'<section id="gefilterd" hidden><div class="kopregel"><h2></h2></div><p class="filteruitleg"></p>'
         f'<p class="geenresultaat" hidden>Over deze keuze staat niets in deze editie. Kies een ander onderwerp of een andere AI.</p>'
         f'<div class="raster">{alle_kaarten}</div></section>'
-        f'{kort}{quiz_html(ed.get("quiz"))}'
+        f'{kort}{quiz_html(ed.get("quiz"), ed, site_url)}'
         f'<p class="editievoet">{e(voet)}</p></main>'
     )
 
@@ -480,6 +524,8 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
         f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
         f'<h1>{e(item["kop"])}</h1>'
+        f'<p class="byline">Geschreven met AI (Claude) op basis van de bronnen hieronder · '
+        f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></p>'
         f'<p class="lede">{e(item["samenvatting"])}</p>'
         f'<div class="uitlegblok"><div class="label">Even uitgelegd</div><p>{e(item["uitleg"])}</p></div>'
         f'{waarom}'
@@ -578,10 +624,64 @@ def zoeken_html():
     )
 
 
+# Hoe de groepen uit config.json op de pagina Zo maken we dit heten, in deze volgorde.
+GROEPEN = [("lab", "De AI-bedrijven zelf"), ("nl-eu", "Nederlandse en Vlaamse nieuwssites en instanties"),
+           ("media", "Internationale nieuwssites"), ("curator", "Kenners die AI op de voet volgen"),
+           ("onderzoek", "Onderzoek"), ("community", "Gesprekken van gebruikers")]
+
+
+def werkwijze_html(bronnen):
+    """De pagina Zo maken we dit: dat de berichten met AI geschreven zijn, hoe we kiezen en waar het nieuws vandaan komt."""
+    per_groep = {}
+    for bron in bronnen or []:
+        namen = per_groep.setdefault(bron.get("groep"), [])
+        naam = bron["naam"].split(" (")[0]
+        if naam not in namen:
+            namen.append(naam)
+    lijst = "".join(f'<div class="begrip"><dt>{e(label)}</dt><dd>{e(", ".join(per_groep[groep]))}</dd></div>'
+                    for groep, label in GROEPEN if per_groep.get(groep))
+    aantal = f"{len(bronnen)} bronnen" if bronnen else "tientallen bronnen"
+    return (
+        '<div class="editiekop binnen"><h1>Zo maken we dit</h1>'
+        '<p class="intro">AI-nieuws zet elke dag om 08:00 en 20:00 het belangrijkste AI-nieuws op een rij, in gewone taal. '
+        'Hier lees je hoe dat gaat.</p></div>'
+        '<main class="binnen werkwijze">'
+        '<section class="sectie"><div class="kopregel"><h2>Geschreven met AI</h2></div>'
+        f'<p>Een computerprogramma haalt twee keer per dag het nieuws op uit {aantal}. Claude, de AI van het bedrijf Anthropic, '
+        'kiest daaruit de belangrijkste berichten en schrijft ze in gewone taal.</p>'
+        '<p>Er leest geen redacteur mee voordat een editie online komt. Daardoor kan er een fout in een bericht staan. '
+        'Bij elk bericht staan daarom de bronnen. Twijfel je, lees dan de bron.</p></section>'
+        '<section class="sectie"><div class="kopregel"><h2>Hoe we kiezen</h2></div><ul>'
+        '<li>Elk bericht krijgt een score van 1 tot 10: hoeveel heb je eraan? Vanaf een 6 krijgt het een heel bericht met uitleg. '
+        'Een 5 wordt een korte vermelding onder Kort nieuws. De rest valt weg.</li>'
+        '<li>Nieuws over Claude en ChatGPT gaat voor, daarna Gemini. Andere AI’s komen er alleen in bij groot nieuws.</li>'
+        '<li>Extra aandacht gaat naar praktische tips, AI in Nederland en Vlaanderen, en wat AI doet met banen, privacy en ethiek.</li>'
+        '<li>Het impact-label laat zien hoe belangrijk een bericht is: groot (score 9 of 10), middel (7 of 8) of klein (6).</li>'
+        '<li>Gemeld door laat zien hoeveel bronnen over hetzelfde nieuws schreven. Meer bronnen betekent meestal groter nieuws.</li>'
+        '</ul></section>'
+        '<section class="sectie"><div class="kopregel"><h2>Wat er niet in komt</h2></div><ul>'
+        '<li>Reclame en verkooppraatjes.</li>'
+        '<li>Geruchten. Wat alleen op Reddit staat, is pas nieuws als een bedrijf of een nieuwssite het bevestigt.</li>'
+        '<li>Onbekende programma’s. Een tool komt er alleen in als hij van een groot AI-bedrijf is of al door veel mensen gebruikt wordt.</li>'
+        '<li>Nieuws over geld, zoals investeringen en beurskoersen, tenzij het verandert wat jij kunt gebruiken.</li>'
+        '</ul></section>'
+        f'<section class="sectie"><div class="kopregel"><h2>Waar het nieuws vandaan komt</h2></div><dl class="begrippen">{lijst}</dl></section>'
+        '<section class="sectie"><div class="kopregel"><h2>Beelden en privacy</h2></div>'
+        '<p>De beelden komen van de bronnen zelf: het plaatje dat een site opgeeft voor als je een link deelt. '
+        'Heeft een bericht geen goed beeld, dan staat er een zwart blok met de naam van de bron.</p>'
+        '<p>De site zet geen cookies en houdt niet bij wat je leest. Wat je gelezen hebt en welke AI je kiest, '
+        'staat alleen in je eigen browser.</p></section>'
+        '</main>'
+    )
+
+
 # ---------------------------------------------------------------- schrijven
 
-def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
-    """Schrijft alle pagina's opnieuw. Geeft het pad naar de voorpagina terug."""
+def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None):
+    """Schrijft alle pagina's opnieuw. Geeft het pad naar de voorpagina terug.
+
+    `bronnen` is de lijst uit config.json, voor de pagina Zo maken we dit.
+    """
     doel = Path(doel)
     weken = weken or []
     for map_ in ("edities", "artikel", "onderwerp", "week"):
@@ -590,6 +690,7 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
     (doel / "stijl.css").write_text((bron / "stijl.css").read_text(encoding="utf-8"), encoding="utf-8")
     for bestand in ("site.js", "vroeg.js", "favicon.svg"):
         (doel / bestand).write_text((bron / bestand).read_text(encoding="utf-8"), encoding="utf-8")
+    (doel / "deel.png").write_bytes((bron / "deel.png").read_bytes())
 
     edities = sorted(edities, key=lambda ed: ed["tijd"])
     for ed in edities:
@@ -597,15 +698,23 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
     alle = [(item, ed) for ed in edities for item in ed["items"]]
     index = {item["id"]: (item, ed) for item, ed in alle}
 
-    def schrijf(pad, titel, basis, actief, inhoud, bovenregel=ALGEMENE_BOVENREGEL):
-        (doel / pad).write_text(pagina(titel, basis, actief, inhoud, bovenregel), encoding="utf-8")
+    def schrijf(pad, titel, basis, actief, inhoud, bovenregel=ALGEMENE_BOVENREGEL, deel=None):
+        # Wat een app toont bij een gedeelde link. Zonder eigen tekst of beeld: de omschrijving en het plaatje van de site.
+        deel = {"titel": titel, "tekst": OMSCHRIJVING, "soort": "website", **(deel or {}),
+                "url": site_url + ("" if pad == "index.html" else pad)}
+        (doel / pad).write_text(pagina(titel, basis, actief, inhoud, bovenregel, deel=deel, site_url=site_url),
+                                encoding="utf-8")
 
     for ed in edities:
+        beste = next((i for i in sorted(ed["items"], key=lambda i: -i["score"]) if i.get("beeld")), None)
         schrijf(f"edities/{ed['id']}.html", f"AI-nieuws, {editietitel(ed)}", "../", None,
-                editie_html(ed, begrippen, "../", site_url), bovenregel_editie(ed))
+                editie_html(ed, begrippen, "../", site_url), bovenregel_editie(ed),
+                {"tekst": ed.get("intro") or OMSCHRIJVING, "beeld": beste["beeld"] if beste else None})
         for item in ed["items"]:
             schrijf(f"artikel/{item['id']}.html", f"{item['kop']} | AI-nieuws", "../", None,
-                    artikel_html(item, ed, alle, "../", site_url), bovenregel_editie(ed))
+                    artikel_html(item, ed, alle, "../", site_url), bovenregel_editie(ed),
+                    {"titel": item["kop"], "tekst": item["samenvatting"], "beeld": item.get("beeld"),
+                     "soort": "article", "tijd": datetime.fromisoformat(ed["tijd"]).astimezone().isoformat()})
     if edities:
         laatste = edities[-1]
         schrijf("index.html", "AI-nieuws", "", "Vandaag", editie_html(laatste, begrippen, "", site_url), bovenregel_editie(laatste))
@@ -617,14 +726,16 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
         for onderwerp in item.get("onderwerpen", []):
             per_onderwerp.setdefault(onderwerp, []).append((item, ed))
     for naam, lijst in per_onderwerp.items():
-        schrijf(f"onderwerp/{slug(naam)}.html", f"{naam} | AI-nieuws", "../", None, onderwerp_html(naam, lijst, "../", site_url))
+        schrijf(f"onderwerp/{slug(naam)}.html", f"{naam} | AI-nieuws", "../", None, onderwerp_html(naam, lijst, "../", site_url),
+                deel={"tekst": f"Alle berichten over {naam} op AI-nieuws, het nieuwste eerst."})
 
     weken = sorted(weken, key=lambda w: w["id"])
     for week in weken:
         schrijf(f"week/{week['id']}.html", f"De week in AI, week {week['id']} | AI-nieuws", "../", "De week",
-                week_html(week, index, "../", site_url))
+                week_html(week, index, "../", site_url), deel={"tekst": week.get("intro") or OMSCHRIJVING})
     if weken:
-        schrijf("week/index.html", "De week in AI | AI-nieuws", "../", "De week", week_html(weken[-1], index, "../", site_url))
+        schrijf("week/index.html", "De week in AI | AI-nieuws", "../", "De week", week_html(weken[-1], index, "../", site_url),
+                deel={"tekst": weken[-1].get("intro") or OMSCHRIJVING})
     else:
         schrijf("week/index.html", "De week in AI | AI-nieuws", "../", "De week",
                 '<div class="editiekop binnen"><div class="label">De week in AI</div><h1>Elke zondagavond</h1>'
@@ -633,6 +744,8 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url=""):
     schrijf("archief.html", "Archief | AI-nieuws", "", "Archief", archief_html(edities, weken, ""))
     schrijf("leren.html", "Begrippen en tips | AI-nieuws", "", "Begrippen en tips", leren_html(begrippen, edities))
     schrijf("zoeken.html", "Zoeken | AI-nieuws", "", "Zoeken", zoeken_html())
+    schrijf("zo-maken-we-dit.html", "Zo maken we dit | AI-nieuws", "", None, werkwijze_html(bronnen),
+            deel={"tekst": "Hoe AI-nieuws met AI het belangrijkste AI-nieuws kiest en schrijft, en waar het nieuws vandaan komt."})
     zoek = [
         {"id": item["id"], "kop": item["kop"], "samenvatting": item["samenvatting"],
          "rubriek": RUBRIEKEN[item["rubriek"]]["knop"], "datum": dagtitel(editiedag(ed)).capitalize(),

@@ -6,8 +6,10 @@ Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de beric
 
 ## De site
 
-- **Vandaag:** de nieuwste editie. Bovenaan een keuze welke AI je wilt zien (Alle AI, Claude, ChatGPT, Overig; onthouden op je apparaat) en filters per onderwerp: Groot nieuws, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws en de Quiz. Elk bericht heeft een beeld van de bron, een impact-label, het aantal bronnen en "Lees meer". Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen.
+- **Vandaag:** de nieuwste editie. Bovenaan een keuze welke AI je wilt zien (Alle AI, Claude, ChatGPT, Overig; onthouden op je apparaat) en filters per onderwerp: Groot nieuws, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws en de Quiz. Elk bericht heeft een beeld van de bron, een impact-label, het aantal bronnen en "Lees meer". Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen. Na de quiz kun je je score delen via WhatsApp, met een link naar dezelfde quiz.
 - **Een pagina per bericht** (`artikel/`): de hele uitleg, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Eerder over …" met eerdere berichten over hetzelfde onderwerp.
+- **Geschreven met AI:** bovenaan elke pagina en onder elke kop staat dat de berichten met AI geschreven zijn (dat moet sinds 2 augustus 2026 volgens de Europese AI-verordening, artikel 50). Het label linkt naar **Zo maken we dit** (`zo-maken-we-dit.html`): hoe we kiezen, wat er niet in komt en welke bronnen, automatisch uit `config.json`.
+- **Delen:** elke pagina geeft WhatsApp en andere apps een kop, een korte tekst en een beeld voor de voorvertoning. Zonder bruikbaar beeld komt `deel.png`, het plaatje met de naam van de site.
 - **Onderwerpen** (`onderwerp/`): alle berichten over bijvoorbeeld Claude Code of Mistral bij elkaar. Claude geeft elk bericht 1 tot 3 onderwerpen en hergebruikt bestaande namen.
 - **De week:** elke zondagavond de 10 belangrijkste berichten van de week.
 - **Archief, Begrippen en tips, Zoeken:** alle edities, alle uitgelegde woorden, en zoeken in alle berichten.

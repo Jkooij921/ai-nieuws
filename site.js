@@ -147,12 +147,14 @@
   var artikel = document.querySelector('[data-artikel]');
   if (artikel) markeer(artikel.getAttribute('data-artikel'));
 
-  // Nieuwsquiz
+  // Nieuwsquiz. Na de laatste vraag: je score, en een knop om die te delen via WhatsApp,
+  // met per vraag een groen of rood blokje zoals bij Wordle en een link naar dezelfde quiz.
   document.querySelectorAll('.quiz').forEach(function (quiz) {
     var aantal = +quiz.getAttribute('data-aantal');
     var beantwoord = 0;
     var goed = 0;
-    quiz.querySelectorAll('.vraag').forEach(function (vraag) {
+    var uitslag = [];
+    quiz.querySelectorAll('.vraag').forEach(function (vraag, nummer) {
       var juist = +vraag.getAttribute('data-goed');
       var knoppen = vraag.querySelectorAll('.opties button');
       knoppen.forEach(function (knop) {
@@ -170,11 +172,18 @@
           }
           antwoord.hidden = false;
           vraag.querySelector('.toelichting').hidden = false;
+          uitslag[nummer] = keuze === juist;
           beantwoord++;
           if (beantwoord === aantal) {
             var score = quiz.querySelector('.score');
             score.textContent = 'Je score: ' + goed + ' van de ' + aantal + ' goed.';
             score.hidden = false;
+            var blokjes = uitslag.map(function (g) { return g ? '🟩' : '🟥'; }).join('');
+            var tekst = quiz.getAttribute('data-titel') + '\n' + blokjes + ' ' + goed + ' van de ' + aantal + ' goed\n' +
+              'Kun jij het beter? ' + quiz.getAttribute('data-url');
+            var deel = quiz.querySelector('.quizdeel');
+            deel.querySelector('a').href = 'https://wa.me/?text=' + encodeURIComponent(tekst);
+            deel.hidden = false;
           }
         });
       });
