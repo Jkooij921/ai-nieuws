@@ -46,7 +46,7 @@ Pas een van deze bestanden aan, zet de wijziging op GitHub, en de volgende editi
 | `rubrieken` | Hoogste aantal berichten met uitleg per rubriek. `0` zet een rubriek uit. |
 | `venster_uren` | Hoe ver terug er wordt gekeken. Standaard `48`. Niets komt twee keer. |
 | `model` | Het Claude-model: `sonnet`, `opus` of `haiku`. |
-| `bronnen` | De lijst met bronnen. `"filter": true` laat alleen berichten met een AI-woord door. |
+| `bronnen` | De lijst met bronnen. `"filter": true` laat alleen berichten met een AI-woord door, `"zonder"` slaat titels over (zoals proefversies). Soort `wijzigingen` is voor release notes zonder losse links: het programma onthoudt de pagina in `gezien.json` en geeft alleen door wat er sinds de vorige keer bij kwam. |
 
 ## Geheime instellingen
 

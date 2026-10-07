@@ -12,6 +12,7 @@ Actions start dit om 08:00 en 20:00 (.github/workflows/editie.yml).
 """
 import argparse
 import gzip
+import hashlib
 import html
 import json
 import logging
@@ -434,6 +435,34 @@ def lees_pagina(bron, sinds):
     ]
 
 
+def lees_wijzigingen(bron, staat):
+    """Een pagina met release notes, zonder losse links per update: wat er sinds de vorige keer bij is gekomen.
+
+    De zinnen van het bovenste deel van de pagina worden onthouden in gezien.json. De eerste keer wordt
+    alleen onthouden; daarna wordt alles wat nieuw is één bericht, met een eigen sleutel per wijziging.
+    """
+    data, tekenset = haal_op(bron["url"])
+    stuk = platte_tekst(ontcijfer(data, tekenset))[:8000]
+    zinnen = [z.strip() for z in re.split(r"(?<=[.!?])\s+", stuk) if len(z.strip()) > 20]
+    paginas = staat.setdefault("paginas", {})
+    vorige = set(paginas.get(bron["naam"], []))
+    paginas[bron["naam"]] = zinnen
+    if not vorige:
+        return []
+    nieuw = [z for z in zinnen if z not in vorige]
+    # Een paar losse woorden die anders zijn (een datum, een teller) is nog geen nieuwe update.
+    if sum(len(z) for z in nieuw) < 150:
+        return []
+    tekst = " ".join(nieuw)[:3000]
+    return [{
+        "titel": f"Nieuw in de release notes van {bron['product']}",
+        "url": bron["url"],
+        "sleutel": f"{schoon_url(bron['url'])}#{hashlib.sha1(tekst.encode()).hexdigest()[:10]}",
+        "datum": datetime.now(timezone.utc),
+        "tekst": tekst,
+    }]
+
+
 LEZERS = {"rss": lees_feed, "hackernews": lees_hackernews, "hf_papers": lees_hf_papers, "pagina": lees_pagina}
 
 
@@ -449,7 +478,10 @@ def verzamel(cfg, staat, nu):
         # Een bron mag een eigen venster hebben: papers verzamelen hun stemmen in dagen.
         sinds = nu - timedelta(hours=bron.get("venster_uren", cfg["venster_uren"]))
         try:
-            ruw = LEZERS[bron["soort"]](bron, sinds)
+            if bron["soort"] == "wijzigingen":
+                ruw = lees_wijzigingen(bron, staat)
+            else:
+                ruw = LEZERS[bron["soort"]](bron, sinds)
         except Exception as fout:
             log.warning("Bron %s mislukt: %s", bron["naam"], fout)
             fouten.append(bron["naam"])
@@ -460,7 +492,10 @@ def verzamel(cfg, staat, nu):
             # Alleen gewone webadressen; een vreemd adres uit een feed komt nooit op de site.
             if not bericht["url"].lower().startswith(("https://", "http://")):
                 continue
-            sleutel = schoon_url(bericht["url"])
+            sleutel = bericht.get("sleutel") or schoon_url(bericht["url"])
+            # Bijvoorbeeld proefversies (alpha, beta) van een programma overslaan.
+            if bron.get("zonder") and re.search(bron["zonder"], bericht["titel"], re.I):
+                continue
             if sleutel in al_gehad:
                 continue
             if bericht["datum"] is None:
