@@ -1,4 +1,4 @@
-// AI-nieuws: filters, Lees meer, gelezen-vinkjes, nieuwsquiz en zoeken.
+// AI-nieuws: filters, gelezen-vinkjes, nieuwsquiz en zoeken.
 // Wat je gelezen hebt, staat alleen in de localStorage van je eigen browser.
 (function () {
   var SLEUTEL = 'ai-nieuws-gelezen';
@@ -35,17 +35,9 @@
     if (klaar) klaar.hidden = !(ids.length && aantal === ids.length);
   }
 
-  // Lees meer: klapt de uitleg open en telt het bericht als gelezen.
-  document.addEventListener('click', function (gebeurtenis) {
-    var knop = gebeurtenis.target.closest('.leesmeer');
-    if (!knop) return;
-    var kaart = knop.closest('.kaart');
-    var open = knop.getAttribute('aria-expanded') !== 'true';
-    kaart.querySelector('.meer').hidden = !open;
-    knop.setAttribute('aria-expanded', open ? 'true' : 'false');
-    knop.textContent = open ? 'Minder tonen' : 'Lees meer';
-    if (open) markeer(kaart.getAttribute('data-id'));
-  });
+  // Terug van een bericht: de browser toont de editie soms uit zijn geheugen, zonder dit script opnieuw te draaien.
+  // Dan alsnog de vinkjes en de voortgang bijwerken.
+  window.addEventListener('pageshow', function (gebeurtenis) { if (gebeurtenis.persisted) toonGelezen(); });
 
   // Twee filters die samenwerken: een onderwerp (de filterbalk) en een AI (de knoppen bovenaan).
   // Het onderwerp komt in het adres, zodat je het kunt delen; de gekozen AI wordt op dit apparaat onthouden.
@@ -141,6 +133,17 @@
   if (tabs.length) {
     if (location.hash) filter = location.hash.slice(1);
     toon(false);
+  }
+
+  // Past de filterbalk niet op het scherm, dan vervaagt de rechterkant: een teken dat je kunt schuiven.
+  var tabrij = document.querySelector('.tabs');
+  if (tabrij) {
+    var meer = function () {
+      tabrij.toggleAttribute('data-meer', tabrij.scrollLeft + tabrij.clientWidth < tabrij.scrollWidth - 4);
+    };
+    tabrij.addEventListener('scroll', meer, { passive: true });
+    window.addEventListener('resize', meer);
+    meer();
   }
 
   // Een artikelpagina openen telt als gelezen.

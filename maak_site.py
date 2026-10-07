@@ -231,11 +231,14 @@ def deel_tags(deel, site_url):
 
 # ---------------------------------------------------------------- stukjes pagina
 
+# Achter een link naar een andere site: een pijltje, en voor schermlezers de woorden erbij.
+EXTERN = '<span class="extern" aria-hidden="true">↗</span><span class="sr"> (naar de bron)</span>'
+
 VINK = ('<svg class="vink" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
         'stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"></path></svg>')
 
 
-def beeld_html(item, verhouding="16 / 10", link=None):
+def beeld_html(item, verhouding="16 / 10"):
     """Het beeld van een bericht, of een zwart blok met de bron als er geen (werkend) beeld is."""
     groot, klein = tegeltekst(item)
     tegel = (f'<div class="tegel" style="aspect-ratio: {verhouding}"><span>{e(groot)}</span>'
@@ -246,8 +249,6 @@ def beeld_html(item, verhouding="16 / 10", link=None):
                   f'style="aspect-ratio: {verhouding}" data-groot="{e(groot)}" data-klein="{e(klein)}">')
     else:
         inhoud = tegel
-    if link:
-        return f'<a class="beeld" href="{e(link)}" tabindex="-1" aria-hidden="true">{inhoud}</a>'
     return f'<div class="beeld">{inhoud}</div>'
 
 
@@ -265,28 +266,28 @@ def bronnen_html(item):
 
 
 def kaart(item, ref, basis, site_url, groot=False):
+    """Een bericht in een editie. De hele kaart is één link naar de pagina van het bericht, zoals bij andere nieuwssites.
+
+    De kop is de echte link; via CSS (a::after) is de hele kaart aanklikbaar. Eerst het nieuws, dan waarom het ertoe doet.
+    """
     stijl = RUBRIEKEN[item["rubriek"]]
     link = f"{basis}artikel/{item['id']}.html"
     n = aantal_bronnen(item)
-    waarom = f'<p><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>' if item.get("waarom") else ""
     kop = "h1" if groot else "h3"
-    lede = (f'<p class="lede">{e(item["uitleg"])}</p><p>{e(item["samenvatting"])}</p>' if groot
-            else f'<p>{e(item["samenvatting"])}</p>')
-    uitgelegd = "" if groot else f'<p><b>Even uitgelegd:</b> {e(item["uitleg"])}</p>'
+    lede = f'<p class="lede">{e(item["samenvatting"])}</p>' if groot else f'<p>{e(item["samenvatting"])}</p>'
+    waarom = (f'<p class="waarom"><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>'
+              if groot and item.get("waarom") else "")
     product = PRODUCT.get(bedrijf_van(item))
     productlabel = f'<span class="product">{e(product)}</span>' if product else ""
     return (
         f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}" '
         f'data-merk="{merk_van(item)}">'
-        f'{beeld_html(item, "16 / 9" if groot else "16 / 10", link)}'
+        f'{beeld_html(item, "16 / 9" if groot else "16 / 10")}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>{productlabel}'
         f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
-        f'<{kop}><a href="{e(link)}">{e(item["kop"])}</a></{kop}>'
-        f'{lede}'
-        f'<div class="meer" hidden>{uitgelegd}{waarom}<p class="bronnen">{bronnen_html(item)}</p>'
-        f'<p class="acties"><a class="knop" href="{e(link)}">Hele bericht en eerder nieuws</a>'
-        f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p></div>'
-        f'<div class="onder"><button type="button" class="leesmeer" aria-expanded="false">Lees meer</button>'
+        f'<{kop}><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></{kop}>'
+        f'{lede}{waarom}'
+        f'<div class="onder"><span class="leesverder" aria-hidden="true">Lees het bericht <span class="pijl">→</span></span>'
         f'<span>{max(1, round(len((item["uitleg"] + " " + item["samenvatting"] + " " + item.get("waarom", "")).split()) / 200))} min'
         f' · {n} {"bron" if n == 1 else "bronnen"}</span>'
         f'<span class="gelezen" hidden>{VINK}Gelezen</span></div>'
@@ -298,9 +299,10 @@ def kort_html(k, ref):
     eerste = [b for b in k["bronnen"] if b["datum"]]
     tijd = f"{_datum(min(eerste, key=_datum)).astimezone():%H:%M}" if eerste else "nieuw"
     namen = ", ".join(naam for naam, _ in bronlinks(k["bronnen"]))
+    # Kort nieuws heeft geen eigen pagina: de link gaat naar de bron. Het pijltje zegt dat vooraf.
     return (
         f'<li data-merk="{merk_van(k)}"><span class="tijd">{e(tijd)}</span><div>'
-        f'<a href="{e(veilig(k["bronnen"][0]["url"]))}">{e(k["kop"])}</a>'
+        f'<a class="kaartlink" href="{e(veilig(k["bronnen"][0]["url"]))}">{e(k["kop"])}{EXTERN}</a>'
         f'<p>{e(k["zin"])}</p><span class="meta">{e(RUBRIEKEN[k["rubriek"]]["knop"])} · '
         f'{e(datumregel(k["bronnen"], ref))} · {e(namen)}</span></div></li>'
     )
@@ -428,7 +430,7 @@ def editie_html(ed, begrippen, basis, site_url):
         beeld = beeld_html(bij, "2 / 1") if bij and bij.get("beeld") else ""
         probeer = (f'<section class="probeer{" metbeeld" if beeld else ""}" aria-label="Probeer dit vandaag">{beeld}<div class="tekst">'
                    f'<div class="label">Probeer dit vandaag · ongeveer 10 minuten</div><h2>{e(p["titel"])}</h2>'
-                   f'<p>{e(p["tekst"])}</p><p><a class="knop licht" href="{e(veilig(p["url"]))}">Bekijk de bron</a></p></div></section>')
+                   f'<p>{e(p["tekst"])}</p><p><a class="knop licht" href="{e(veilig(p["url"]))}">Bekijk de bron{EXTERN}</a></p></div></section>')
 
     secties = []
     for naam, stijl in RUBRIEKEN.items():
@@ -519,7 +521,7 @@ def artikel_html(item, ed, alle, basis, site_url):
     return (
         f'<main class="artikel binnen" data-artikel="{e(item["id"])}">'
         f'<nav class="kruimel" aria-label="Waar je bent"><a href="{basis}edities/{e(ed["id"])}.html">{e(editietitel(ed))}</a>'
-        f' › <span>{e(stijl["knop"])}</span></nav>'
+        f' › <a href="{basis}edities/{e(ed["id"])}.html#{stijl["klasse"]}">{e(stijl["knop"])}</a></nav>'
         f'{beeld_html(item, "16 / 9")}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
         f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
@@ -530,7 +532,7 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<div class="uitlegblok"><div class="label">Even uitgelegd</div><p>{e(item["uitleg"])}</p></div>'
         f'{waarom}'
         f'<p class="bronnen">{bronnen_html(item)}</p>'
-        f'<p class="acties"><a class="knop" href="{e(veilig(item["bronnen"][0]["url"]))}">Lees de bron</a>'
+        f'<p class="acties"><a class="knop" href="{e(veilig(item["bronnen"][0]["url"]))}">Lees de bron{EXTERN}</a>'
         f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p>'
         f'{f"<p class=chips>Onderwerpen: {chips}</p>" if chips else ""}'
         f'{verwant_html}'
@@ -555,10 +557,10 @@ def week_html(week, index, basis, site_url):
         item, ed = index[item_id]
         link = f"{basis}artikel/{item['id']}.html"
         rijen.append(
-            f'<li data-id="{e(item["id"])}"><span class="nummer">{nr}</span>{beeld_html(item, "16 / 10", link)}'
+            f'<li data-id="{e(item["id"])}"><span class="nummer">{nr}</span>{beeld_html(item, "16 / 10")}'
             f'<div><div class="boven"><span class="rubriek">{e(RUBRIEKEN[item["rubriek"]]["knop"])}</span>'
             f'<span>{e(dagtitel(editiedag(ed)).capitalize())}</span>{impact_html(item)}</div>'
-            f'<h3><a href="{e(link)}">{e(item["kop"])}</a></h3><p>{e(item["samenvatting"])}</p></div></li>'
+            f'<h3><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></h3><p>{e(item["samenvatting"])}</p></div></li>'
         )
     weeknr = week["id"].split("-W")[1].lstrip("0")
     return (f'<div class="editiekop binnen"><div class="label">De week in AI · week {e(weeknr)}</div>'

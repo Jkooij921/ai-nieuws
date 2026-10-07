@@ -180,12 +180,21 @@ SCHRIJF_OPDRACHT = """Je schrijft de {moment}editie van een persoonlijke AI-nieu
 
 De site is een krant voor mensen met een beetje kennis van AI. Ze gebruiken zelf ChatGPT, Claude, Gemini of Copilot en weten wat een chatbot, een AI-model en een prompt is, maar kennen de vaktaal en de achtergrond niet. Bekend zijn: Anthropic, OpenAI, Google, Microsoft, Claude, ChatGPT, Gemini, Copilot, chatbot, AI-model en prompt. Alle andere producten, bedrijven, onderzoeksgroepen en vaktermen zijn onbekend. Schrijf zoals een goede krant voor een breed publiek: helder, zakelijk en prettig om te lezen, zonder vakjargon en zonder kinderachtig te worden.
 
-intro: 1 of 2 zinnen die de editie openen. Begin met "{groet}". Noem het opvallendste van deze editie in woorden die een leek snapt, geen opsomming van alles.
+Zo schrijf je een bericht dat mensen willen lezen:
+- Het belangrijkste eerst. De kop en de eerste zin van de samenvatting vertellen samen het nieuws. Wie alleen die twee leest, weet wat er gebeurd is en wat er voor de lezer verandert. Daarna pas de details.
+- Begin met het nieuws zelf, niet met wie het meldt. Niet: "OpenAI heeft aangekondigd dat ChatGPT een nieuwe functie krijgt." Wel: "Wie ChatGPT gebruikt, kan voortaan ..." De eerste woorden van een zin dragen de informatie.
+- Maak het concreet. Liever één voorbeeld, één getal of één situatie uit de tekst dan een algemene bewering. Niet "het model is veel beter", maar wat het nu kan wat eerst niet kon. Geef een getal houvast: "twee keer zo snel als het vorige model", "voor 20 dollar per maand".
+- Maak het persoonlijk. Laat zien wat het betekent voor iemand op het werk, op school of thuis. Spreek de lezer aan met je.
+- Schrijf kort en actief. Gemiddeld 12 tot 15 woorden per zin, nooit meer dan 20. Eén gedachte per zin. Zeg wie wat doet ("Google brengt ... uit", niet "Er wordt door Google ... uitgebracht"). Kies gewone woorden: gebruiken in plaats van implementeren, maken in plaats van genereren, uitbrengen in plaats van lanceren.
+- Geen persberichttaal. Geen woorden als revolutionair, baanbrekend, game changer, naadloos, krachtig of next level. Neem de lof van een bedrijf niet over. Zegt een bedrijf zelf dat iets beter of sneller is, schrijf dan "volgens Anthropic" of "volgens OpenAI".
+- Wissel af. Begin niet elk bericht op dezelfde manier.
+
+intro: 1 of 2 zinnen die de editie openen. Begin met "{groet}". Noem het opvallendste van deze editie concreet en in woorden die een leek snapt, geen opsomming van alles.
 
 items: één per onderwerp uit "onderwerpen".
-- kop: hooguit 10 woorden, te begrijpen zonder voorkennis. Geen vaktermen in de kop. Feitelijk, geen clickbait.
+- kop: hooguit 10 woorden, te begrijpen zonder voorkennis, ook los in een WhatsApp-bericht. Zeg wie wat doet en wat er verandert, met een werkwoord. Zet het belangrijkste woord vooraan, meestal de naam van de AI of het bedrijf. Geen vaktermen, geen vraag, geen woordgrap, geen clickbait die meer belooft dan het bericht. Niet "Grote update voor Claude", wel "Claude kan nu ... " met wat er echt nieuw is.
 - uitleg: 1 of 2 zinnen achtergrond, zodat de lezer snapt waar het over gaat voordat het nieuws komt. Wat is het product, het bedrijf, het probleem of het begrip waar het om draait? Voorbeeld van de toon: "Een plugin is een uitbreiding die je aan een programma toevoegt, zoals een app op je telefoon." Bestaat iets al langer en is nu alleen een deel nieuw, zeg dan in de uitleg wat er al was, zodat de lezer niet denkt dat het oud nieuws is. Doe dat alleen als de brontekst het zegt. Gaat het om een tool, skill of plugin, noem dan wie hem maakte (als de tekst dat zegt) en hoeveel sterren hij op GitHub heeft (github_sterren, afgerond, bijvoorbeeld "bijna 97.000 sterren").
-- samenvatting: wat er nu nieuw is, afhankelijk van de rubriek:
+- samenvatting: wat er nu nieuw is. De eerste zin is het nieuws in één zin: iets wat de lezer nog niet weet. Dit is wat de lezer als eerste ziet, dus de uitleg hierboven mag je hier niet nodig hebben. Lengte per rubriek:
   - Het grote nieuws: 2 of 3 korte zinnen. Wat is er gebeurd en wie deed het.
   - Nieuwe modellen: 2 of 3 korte zinnen. Van wie is het model, wat kan het beter dan eerdere modellen, en kun je het al gebruiken.
   - Nieuwe tools: 2 korte zinnen. Wat doet het en hoe gebruik je het.
@@ -193,7 +202,7 @@ items: één per onderwerp uit "onderwerpen".
   - AI in Nederland: 2 of 3 korte zinnen. Wie in Nederland of Vlaanderen doet wat, en wat verandert er.
   - Maatschappij: 2 korte zinnen. Wat is er gebeurd of ontdekt, en wie raakt het.
   Bij Zo gebruik je AI maak je het concreet: wat deed iemand precies, met welke AI, en hoe doe je het zelf.
-- waarom: 1 zin. Bij Het grote nieuws, AI in Nederland en Maatschappij: waarom dit ertoe doet, voor gewone mensen. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft.
+- waarom: 1 directe zin over het gevolg, zonder herhaling van de samenvatting. Bij Het grote nieuws, AI in Nederland en Maatschappij: waarom dit ertoe doet, voor gewone mensen. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft.
 - bedrijf: over wiens AI het bericht vooral gaat. Anthropic (Claude, Claude Code), OpenAI (ChatGPT, Codex, GPT), Google (Gemini, DeepMind), Microsoft (Copilot), Meta (Llama), Mistral, of Anders. Gaat het over meerdere bedrijven tegelijk of over AI in het algemeen, kies dan Anders. De lezer filtert hierop.
 - onderwerpen: 1 tot 3 onderwerpen waar het bericht over gaat, van specifiek naar algemeen, bijvoorbeeld ["Claude Mythos", "Anthropic"] of ["Claude Code"] of ["Mistral", "Open modellen"]. Hiermee vindt de site eerdere berichten over hetzelfde. Gebruik een onderwerp uit "bekende_onderwerpen" als het past, en schrijf het dan precies zo. Bedenk alleen een nieuw onderwerp als geen bekend onderwerp past. Een onderwerp is een product, model, bedrijf of vast thema (zoals "AI-beveiliging" of "AI Act"), nooit een los woord als "nieuws", "AI" of "update".
 

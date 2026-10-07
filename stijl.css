@@ -49,6 +49,7 @@ header nav a[aria-current=page]{color:var(--inkt);border-bottom-color:var(--acce
 .tabbalk{position:sticky;top:0;z-index:5;background:#ffffff;border-top:3px solid var(--inkt);border-bottom:1px solid var(--lijn)}
 .tabbalk .binnen{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 20px}
 .tabs{display:flex;gap:0;overflow-x:auto;flex:1 1 640px;min-width:0;scrollbar-width:none}
+.tabs[data-meer]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 56px),transparent)}
 .tabs button{flex:none;min-height:48px;padding:0 9px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;color:#444444;font:600 15px Archivo,sans-serif;cursor:pointer;white-space:nowrap}
 .tabs button span{color:#777777;font-weight:500}
 .tabs button:hover{color:var(--inkt)}
@@ -70,8 +71,10 @@ main.editie{padding-top:26px}
 .zij .kaart h3{font-size:26px}
 
 /* berichtkaart */
-.kaart{min-width:0}
-.beeld{display:block}
+.kaart{min-width:0;position:relative}
+/* De kop is de link; zijn ::after ligt over de hele kaart, zodat je overal kunt tikken. */
+.kaartlink::after{content:"";position:absolute;inset:0;z-index:1}
+.beeld{display:block;overflow:hidden}
 .beeld img{display:block;width:100%;object-fit:cover;background:#EDEDEA}
 .tegel{background:var(--tegel);color:#ffffff;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px}
 .tegel span{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:28px;line-height:1}
@@ -89,15 +92,16 @@ main.editie{padding-top:26px}
 .kaart p{margin:0 0 10px;font-size:16px}
 .kaart.groot p{font-size:17px}
 .lede,.kaart .lede{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.5;color:#333333}
-.meer .bronnen{font-size:14px;color:var(--zacht)}
 .acties{display:flex;flex-wrap:wrap;gap:10px}
-.knop{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--inkt);background:var(--inkt);color:#ffffff;font:700 14px Archivo,sans-serif;text-decoration:none;cursor:pointer}
+.knop{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--inkt);background:var(--inkt);color:#ffffff;font:700 14px Archivo,sans-serif;text-decoration:none;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
 .knop.licht{background:#ffffff;color:var(--inkt)}
-.knop:hover{opacity:.88}
-.onder{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:14px;color:var(--zacht)}
-.leesmeer{min-height:44px;padding:0 14px;border:1px solid var(--inkt);background:#ffffff;color:var(--inkt);font:700 14px Archivo,sans-serif;cursor:pointer}
-.leesmeer[aria-expanded=true]{background:var(--inkt);color:#ffffff}
+.onder{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:4px;font-size:14px;color:var(--zacht)}
+.leesverder{font-weight:700;color:var(--inkt)}
+.pijl{display:inline-block;transition:transform .2s ease}
 .gelezen{display:inline-flex;align-items:center;gap:5px;color:var(--inkt);font-weight:600}
+/* Een link naar een andere site krijgt een pijltje. .sr is tekst die alleen een schermlezer voorleest. */
+.extern{margin-left:5px;font-family:Archivo,sans-serif;font-weight:700}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* uitgelegd en probeer dit */
 .uitgelegd{background:var(--vlak);padding:18px 20px}
@@ -122,7 +126,7 @@ main.editie{padding-top:26px}
 
 /* kort nieuws */
 .kortnieuws ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:0 36px}
-.kortnieuws li{display:flex;gap:16px;border-bottom:1px solid var(--lijn);padding:14px 0}
+.kortnieuws li{display:flex;gap:16px;border-bottom:1px solid var(--lijn);padding:14px 0;position:relative}
 .kortnieuws .tijd{flex:none;width:52px;font-weight:800;font-size:14px;color:var(--accent);padding-top:3px}
 .kortnieuws a{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:19px;line-height:1.25;text-decoration:none}
 .kortnieuws a:hover{text-decoration:underline}
@@ -139,7 +143,6 @@ main.editie{padding-top:26px}
 .vraagtekst span{color:var(--accent)}
 .opties{display:flex;flex-direction:column;gap:8px;max-width:760px}
 .opties button{text-align:left;min-height:48px;padding:10px 16px;border:1px solid var(--inkt);background:#ffffff;color:var(--inkt);font:500 16px/1.4 Archivo,sans-serif;cursor:pointer}
-.opties button:hover:not(:disabled){background:#FAFAF8}
 .opties button:disabled{cursor:default}
 .opties button.goed{background:#E6F4EA;border-color:#1E7B3A;color:#0F4D22;font-weight:700}
 .opties button.fout{background:#FBE9EA;border-color:var(--accent);color:#7A0B1D}
@@ -179,7 +182,7 @@ main.editie{padding-top:26px}
 
 /* de week in AI */
 .weeklijst{list-style:none;margin:10px 0 0;padding:0}
-.weeklijst li{display:grid;grid-template-columns:48px 260px 1fr;gap:20px;align-items:start;border-bottom:1px solid var(--lijn);padding:22px 0}
+.weeklijst li{display:grid;grid-template-columns:48px 260px 1fr;gap:20px;align-items:start;border-bottom:1px solid var(--lijn);padding:22px 0;position:relative}
 .weeklijst .nummer{font-family:Newsreader,Georgia,serif;font-weight:800;font-size:44px;line-height:1;color:var(--accent)}
 .weeklijst h3{font-family:Newsreader,Georgia,serif;font-size:24px;line-height:1.2;margin:6px 0}
 .weeklijst h3 a{text-decoration:none}
@@ -212,6 +215,34 @@ main.editie{padding-top:26px}
 .werkwijze .sectie p{margin:14px 0 0}
 .werkwijze ul{margin:14px 0 0;padding-left:20px}
 .werkwijze li{margin:0 0 8px}
+
+/* Met het toetsenbord: de rand om de hele kaart, niet alleen om de kop. */
+@supports selector(:has(a)){
+  .kaartlink:focus-visible{outline:none}
+  .kaart:has(.kaartlink:focus-visible),.kortnieuws li:has(.kaartlink:focus-visible),.weeklijst li:has(.kaartlink:focus-visible){outline:3px solid var(--accent);outline-offset:4px}
+}
+
+/* Hover, alleen met een muis. Op een telefoon blijft een hover-effect anders hangen na het tikken. */
+@media (hover:hover){
+  .beeld img,.beeld .tegel{transition:transform .35s ease,filter .35s ease}
+  .kaart:hover .beeld img,.kaart:hover .beeld .tegel,.weeklijst li:hover .beeld img,.weeklijst li:hover .tegel,
+  .verwant li a:hover img,.verwant li a:hover .tegel{transform:scale(1.035);filter:brightness(.94)}
+  .kaartlink,.verwant b,.meerlijst b,.archief .editie b,.zoekresultaten a{transition:color .15s}
+  .kaart:hover .kaartlink,.weeklijst li:hover .kaartlink,.kortnieuws li:hover .kaartlink,
+  .verwant li a:hover b,.meerlijst li a:hover b,.archief .editie:hover b,.zoekresultaten a:hover{
+    color:var(--accent);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+  .kaart:hover .pijl{transform:translateX(5px)}
+  .kaart:hover .leesverder{color:var(--accent)}
+  .knop:hover{background:var(--accent);border-color:var(--accent);color:#ffffff}
+  .knop.licht:hover{background:var(--inkt);border-color:var(--inkt);color:#ffffff}
+  .tabs button,.merkknoppen button,header nav a{transition:background-color .15s,border-color .15s,color .15s}
+  .tabs button:not([aria-pressed=true]):hover{border-bottom-color:#BDBDB8}
+  .merkknoppen button:not([aria-pressed=true]):hover{background:var(--vlak)}
+  header nav a:not([aria-current=page]):hover{border-bottom-color:#BDBDB8}
+  .opties button{transition:box-shadow .15s}
+  .opties button:hover:not(:disabled){box-shadow:inset 5px 0 0 var(--accent)}
+  .tekstknop:hover,.kruimel a:hover,.colofon a:hover,.uitgelegd a:hover,.byline a:hover,.bronnen a:hover,.tip a:hover{color:var(--accent)}
+}
 
 @media (max-width:480px){
   .merken{display:grid;gap:8px}
