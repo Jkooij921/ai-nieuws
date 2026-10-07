@@ -64,7 +64,8 @@ STANDAARD = {
     "minimale_score": 6,
     "minimale_score_kort": 5,
     "min_sterren": 500,
-    "rubrieken": {"Het grote nieuws": 3, "Nieuwe modellen": 3, "Nieuwe tools": 4, "Zo gebruik je AI": 4, "Onderzoek en regels": 2},
+    "rubrieken": {"Het grote nieuws": 3, "Nieuwe modellen": 2, "Nieuwe tools": 3, "Zo gebruik je AI": 4,
+                  "AI in Nederland": 3, "Maatschappij": 3},
     "venster_uren": 48,
     "max_per_bron": 25,
     "model": "sonnet",
@@ -188,8 +189,10 @@ items: één per onderwerp uit "onderwerpen".
   - Nieuwe modellen: 2 of 3 korte zinnen. Van wie is het model, wat kan het beter dan eerdere modellen, en kun je het al gebruiken.
   - Nieuwe tools: 2 korte zinnen. Wat doet het en hoe gebruik je het.
   - Zo gebruik je AI: 2 korte zinnen. Wat is de aanpak en hoe werkt die.
-  - Onderzoek en regels: 1 of 2 korte zinnen.
-- waarom: 1 zin. Bij Het grote nieuws: waarom dit ertoe doet. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft. Bij Onderzoek en regels: een lege tekst.
+  - AI in Nederland: 2 of 3 korte zinnen. Wie in Nederland of Vlaanderen doet wat, en wat verandert er.
+  - Maatschappij: 2 korte zinnen. Wat is er gebeurd of ontdekt, en wie raakt het.
+  Bij Zo gebruik je AI maak je het concreet: wat deed iemand precies, met welke AI, en hoe doe je het zelf.
+- waarom: 1 zin. Bij Het grote nieuws, AI in Nederland en Maatschappij: waarom dit ertoe doet, voor gewone mensen. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft.
 - bedrijf: over wiens AI het bericht vooral gaat. Anthropic (Claude, Claude Code), OpenAI (ChatGPT, Codex, GPT), Google (Gemini, DeepMind), Microsoft (Copilot), Meta (Llama), Mistral, of Anders. Gaat het over meerdere bedrijven tegelijk of over AI in het algemeen, kies dan Anders. De lezer filtert hierop.
 - onderwerpen: 1 tot 3 onderwerpen waar het bericht over gaat, van specifiek naar algemeen, bijvoorbeeld ["Claude Mythos", "Anthropic"] of ["Claude Code"] of ["Mistral", "Open modellen"]. Hiermee vindt de site eerdere berichten over hetzelfde. Gebruik een onderwerp uit "bekende_onderwerpen" als het past, en schrijf het dan precies zo. Bedenk alleen een nieuw onderwerp als geen bekend onderwerp past. Een onderwerp is een product, model, bedrijf of vast thema (zoals "AI-beveiliging" of "AI Act"), nooit een los woord als "nieuws", "AI" of "update".
 
@@ -670,10 +673,10 @@ def kies(cfg, berichten, staat):
             bij.sort(key=lambda b: b["groep"] != "lab")
             onderwerpen.append({**keuze, "berichten": bij})
     # Iets wat alleen in een bericht op Reddit of Hacker News staat, is (nog) geen nieuws: een gebruiker
-    # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws of onderzoek zijn;
-    # hooguit Kort nieuws. Ervaringen en tools mogen wel, want daar gaat het juist om gebruikers.
+    # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws, Nederlands nieuws of
+    # maatschappijnieuws zijn; hooguit Kort nieuws. Ervaringen en tools mogen wel, want daar gaat het juist om gebruikers.
     for o in onderwerpen:
-        if (o["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "Onderzoek en regels")
+        if (o["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "AI in Nederland", "Maatschappij")
                 and not any(bevestigd(b) for b in o["berichten"])):
             log.info("Niet bevestigd, naar Kort nieuws: %s", o["berichten"][0]["titel"])
             o["score"] = min(o["score"], cfg["minimale_score_kort"])

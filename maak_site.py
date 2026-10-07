@@ -28,10 +28,14 @@ RUBRIEKEN = {
     "Nieuwe tools": {"knop": "Tools", "klasse": "tools", "waarom": "Wat heb je eraan",
                      "uitleg": "Programma’s, uitbreidingen en functies die je zelf kunt gebruiken."},
     "Zo gebruik je AI": {"knop": "Zo gebruik je AI", "klasse": "gebruik", "waarom": "Wat heb je eraan",
-                         "uitleg": "Slimme toepassingen en ervaringen van mensen die iets met AI bouwen."},
-    "Onderzoek en regels": {"knop": "Onderzoek en regels", "klasse": "onderzoek", "waarom": "Waarom het ertoe doet",
-                            "uitleg": "Onderzoek, wetten en veiligheid, kort samengevat."},
+                         "uitleg": "Praktische tips en concrete voorbeelden: hoe mensen AI gebruiken op werk, op school en thuis."},
+    "AI in Nederland": {"knop": "Nederland", "klasse": "nederland", "waarom": "Waarom het ertoe doet",
+                        "uitleg": "AI bij Nederlandse en Vlaamse bedrijven, overheid, onderwijs en zorg."},
+    "Maatschappij": {"knop": "Maatschappij", "klasse": "maatschappij", "waarom": "Waarom het ertoe doet",
+                     "uitleg": "Wat AI doet met banen, privacy en ethiek, en de regels en het onderzoek daarachter."},
 }
+# Rubrieken die een andere naam kregen; oudere edities worden bij het inlezen omgezet.
+OUDE_RUBRIEKEN = {"Onderzoek en regels": "Maatschappij"}
 # Over wiens AI een bericht gaat. Claude kiest er één bij het schrijven; de lezer filtert erop.
 BEDRIJVEN = ["Anthropic", "OpenAI", "Google", "Microsoft", "Meta", "Mistral", "Anders"]
 PRODUCT = {"Anthropic": "Claude", "OpenAI": "ChatGPT", "Google": "Gemini", "Microsoft": "Copilot",
@@ -158,11 +162,16 @@ def merk_van(item):
 
 
 def geef_ids(ed):
-    """Elk bericht een vast adres: <editie>-<nummer>, korte berichten <editie>-k<nummer>."""
+    """Elk bericht een vast adres: <editie>-<nummer>, korte berichten <editie>-k<nummer>.
+
+    Zet ook rubrieken die een andere naam kregen om naar de nieuwe naam.
+    """
     for nr, item in enumerate(ed["items"], 1):
         item.setdefault("id", f"{ed['id']}-{nr}")
     for nr, item in enumerate(ed["kort"], 1):
         item.setdefault("id", f"{ed['id']}-k{nr}")
+    for item in ed["items"] + ed["kort"]:
+        item["rubriek"] = OUDE_RUBRIEKEN.get(item["rubriek"], item["rubriek"])
 
 
 def veilig(url):

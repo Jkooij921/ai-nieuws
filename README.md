@@ -6,7 +6,7 @@ Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de beric
 
 ## De site
 
-- **Vandaag:** de nieuwste editie. Bovenaan filters per onderwerp: Groot nieuws, Modellen, Tools, Zo gebruik je AI, Onderzoek en regels, Kort nieuws en de Quiz. Elk bericht heeft een beeld van de bron, een impact-label, het aantal bronnen en "Lees meer". Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen.
+- **Vandaag:** de nieuwste editie. Bovenaan een keuze welke AI je wilt zien (Alle AI, Claude, ChatGPT, Overig; onthouden op je apparaat) en filters per onderwerp: Groot nieuws, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws en de Quiz. Elk bericht heeft een beeld van de bron, een impact-label, het aantal bronnen en "Lees meer". Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen.
 - **Een pagina per bericht** (`artikel/`): de hele uitleg, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Eerder over …" met eerdere berichten over hetzelfde onderwerp.
 - **Onderwerpen** (`onderwerp/`): alle berichten over bijvoorbeeld Claude Code of Mistral bij elkaar. Claude geeft elk bericht 1 tot 3 onderwerpen en hergebruikt bestaande namen.
 - **De week:** elke zondagavond de 10 belangrijkste berichten van de week.
