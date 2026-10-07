@@ -14,11 +14,11 @@ Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op.
 
 ## Hoe het werkt
 
-1. GitHub start `.github/workflows/editie.yml` vier keer per dag. GitHub plant alleen in UTC; zo zijn 08:00 en 20:00 in zomer- en wintertijd allebei gedekt. Het programma maakt elke editie maar één keer.
-2. `ai_nieuws.py` haalt het nieuws op, laat Claude kiezen en schrijven, maakt de site en mailt.
+1. GitHub start `.github/workflows/editie.yml` twee keer per uur in de uren na 08:00 en 20:00. Elke run kijkt eerst welke editie er als laatste had moeten zijn (08:00 of 20:00). Bestaat die al, dan stopt de run na een paar seconden.
+2. Ontbreekt de editie, dan haalt `ai_nieuws.py` het nieuws op, laat Claude kiezen en schrijven, maakt de site en mailt.
 3. De editie, de begrippen en de lijst met gezien nieuws worden bewaard in deze repository. De site gaat naar GitHub Pages.
 
-GitHub kan tot ongeveer een half uur later starten dan gepland.
+GitHub start geplande runs soms te laat of slaat er een over. Daarom wordt er vaak gekeken: een gemiste editie komt bij de volgende run alsnog, meestal binnen een half uur na 08:00 of 20:00.
 
 ## Wat erin komt
 
