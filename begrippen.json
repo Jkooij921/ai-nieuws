@@ -45,7 +45,7 @@
   "woord": "parameters",
   "uitleg": "Parameters zijn de rekenwaarden waaruit een AI-model bestaat, en hoe meer er zijn, hoe groter het model.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "token": {
   "woord": "token",
@@ -135,7 +135,7 @@
   "woord": "skill",
   "uitleg": "Een skill is een map met instructies die Claude erbij pakt als een taak erom vraagt.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "mod": {
   "woord": "mod",
@@ -225,7 +225,7 @@
   "woord": "Mistral",
   "uitleg": "Een AI-bedrijf dat naar eigen zeggen in Europa traint en werkt en eigen taalmodellen maakt.",
   "editie": "2026-10-07-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "open-weight": {
   "woord": "open-weight",
@@ -243,7 +243,7 @@
   "woord": "API",
   "uitleg": "Een technische toegangsdeur waarmee programma's een AI-model kunnen gebruiken zonder de chat te openen.",
   "editie": "2026-10-07-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "google deepmind": {
   "woord": "Google DeepMind",
@@ -261,7 +261,7 @@
   "woord": "terminal",
   "uitleg": "Een tekstvenster op je computer waarin je opdrachten typt in plaats van te klikken.",
   "editie": "2026-10-07-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "crypto miner": {
   "woord": "crypto miner",
@@ -279,7 +279,7 @@
   "woord": "GitHub",
   "uitleg": "Een website waar programmeurs hun code delen, waar sterren een soort waardering zijn.",
   "editie": "2026-10-07-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "semianalysis": {
   "woord": "SemiAnalysis",
@@ -297,6 +297,102 @@
   "woord": "Import AI",
   "uitleg": "Een nieuwsbrief over AI-onderzoek.",
   "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "open-weight model": {
+  "woord": "open-weight model",
+  "uitleg": "Een open-weight model is een AI-model waarvan de bestanden openbaar zijn, zodat iedereen het kan gebruiken en aanpassen.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "beta": {
+  "woord": "beta",
+  "uitleg": "Een beta is een testversie die al open is voor gebruikers, maar nog niet af is.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "chatgpt for teens": {
+  "woord": "ChatGPT for Teens",
+  "uitleg": "ChatGPT for Teens is een versie van ChatGPT voor tieners, met extra beveiligingen en pauzemeldingen.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "synthid": {
+  "woord": "SynthID",
+  "uitleg": "SynthID is een onzichtbaar watermerk waarmee Google en partners AI-beelden, video en audio markeren.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "codex": {
+  "woord": "Codex",
+  "uitleg": "Codex is het hulpmiddel van OpenAI dat code schrijft en aanpast.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "mcp-server": {
+  "woord": "MCP-server",
+  "uitleg": "Een MCP-server is een koppeling waarmee een AI-tool met andere programma's en diensten kan werken.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "context": {
+  "woord": "context",
+  "uitleg": "De context is het gesprek en de informatie die een AI bij elke vraag opnieuw meekrijgt.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "tess": {
+  "woord": "TESS",
+  "uitleg": "TESS is een telescoop van NASA die sterren in de gaten houdt om planeten te vinden.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "ai-agent": {
+  "woord": "AI-agent",
+  "uitleg": "Een AI-agent is een AI die zelfstandig taken uitvoert.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "avg": {
+  "woord": "AVG",
+  "uitleg": "De AVG is de Europese privacywet die regelt hoe bedrijven met persoonsgegevens omgaan.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "gerechtvaardigd belang": {
+  "woord": "gerechtvaardigd belang",
+  "uitleg": "Een gerechtvaardigd belang is een grond in de AVG om gegevens te verwerken zonder altijd toestemming te vragen.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "common sense media": {
+  "woord": "Common Sense Media",
+  "uitleg": "Common Sense Media is een Amerikaanse organisatie die apps en media beoordeelt op veiligheid voor jongeren.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "preprint": {
+  "woord": "preprint",
+  "uitleg": "Een preprint is een wetenschappelijk artikel dat nog niet door andere onderzoekers is gecontroleerd.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "internet watch foundation": {
+  "woord": "Internet Watch Foundation",
+  "uitleg": "De Internet Watch Foundation is een organisatie die online beelden van kindermisbruik opspoort.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "muse": {
+  "woord": "Muse",
+  "uitleg": "Muse is een AI-app van Meta die taken zelfstandig uitvoert.",
+  "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "grok bot": {
+  "woord": "Grok Bot",
+  "uitleg": "Grok Bot is een AI-assistent van het AI-onderdeel van SpaceX.",
+  "editie": "2026-10-07-avond",
   "keer": 1
  }
 }
