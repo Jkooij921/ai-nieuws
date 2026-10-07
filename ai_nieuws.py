@@ -34,7 +34,8 @@ from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
-from maak_site import MAILKLEUREN, RUBRIEKEN, bronlinks, dagtitel, datumregel, editiedag, schrijf_site, wanneer
+from maak_site import (RUBRIEKEN, artikel_url, bronlinks, dagtitel, datumregel, editiedag, geef_ids,
+                       schrijf_site, wanneer)
 
 MAP = Path(__file__).resolve().parent
 CONFIG = MAP / "config.json"
@@ -43,6 +44,7 @@ WACHTWOORD = MAP / "wachtwoord.txt"
 GEZIEN = MAP / "gezien.json"
 BEGRIPPEN = MAP / "begrippen.json"
 EDITIES = MAP / "edities"
+WEKEN = MAP / "weken"
 SITE = MAP / "site"
 VOORBEELD = MAP / "voorbeeld"
 
@@ -127,8 +129,22 @@ SCHRIJF_SCHEMA = {
                     "uitleg": {"type": "string"},
                     "samenvatting": {"type": "string"},
                     "waarom": {"type": "string"},
+                    "onderwerpen": {"type": "array", "items": {"type": "string"}},
                 },
-                "required": ["nr", "kop", "uitleg", "samenvatting", "waarom"],
+                "required": ["nr", "kop", "uitleg", "samenvatting", "waarom", "onderwerpen"],
+            },
+        },
+        "quiz": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "vraag": {"type": "string"},
+                    "opties": {"type": "array", "items": {"type": "string"}},
+                    "goed": {"type": "integer"},
+                    "uitleg": {"type": "string"},
+                },
+                "required": ["vraag", "opties", "goed", "uitleg"],
             },
         },
         "kort": {
@@ -153,7 +169,7 @@ SCHRIJF_SCHEMA = {
             },
         },
     },
-    "required": ["intro", "items", "kort", "probeer", "begrippen"],
+    "required": ["intro", "items", "kort", "probeer", "begrippen", "quiz"],
 }
 
 SCHRIJF_OPDRACHT = """Je schrijft de {moment}editie van een persoonlijke AI-nieuwssite in het Nederlands.
@@ -172,8 +188,9 @@ items: één per onderwerp uit "onderwerpen".
   - Zo gebruik je AI: 2 korte zinnen. Wat is de aanpak en hoe werkt die.
   - Onderzoek en regels: 1 of 2 korte zinnen.
 - waarom: 1 zin. Bij Het grote nieuws: waarom dit ertoe doet. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft. Bij Onderzoek en regels: een lege tekst.
+- onderwerpen: 1 tot 3 onderwerpen waar het bericht over gaat, van specifiek naar algemeen, bijvoorbeeld ["Claude Mythos", "Anthropic"] of ["Claude Code"] of ["Mistral", "Open modellen"]. Hiermee vindt de site eerdere berichten over hetzelfde. Gebruik een onderwerp uit "bekende_onderwerpen" als het past, en schrijf het dan precies zo. Bedenk alleen een nieuw onderwerp als geen bekend onderwerp past. Een onderwerp is een product, model, bedrijf of vast thema (zoals "AI-beveiliging" of "AI Act"), nooit een los woord als "nieuws", "AI" of "update".
 
-kort: één per bericht uit "korte_berichten", voor de rubriek "Snel nog even".
+kort: één per bericht uit "korte_berichten", voor de rubriek "Kort nieuws".
 - nr: het nummer uit "korte_berichten".
 - kop: hooguit 8 woorden, te begrijpen zonder voorkennis.
 - zin: 1 zin van hooguit 25 woorden. Wat is het en wat is er nieuw. Ook hier geen onuitgelegde vaktermen.
@@ -182,6 +199,13 @@ probeer: één ding dat de lezer vandaag in ongeveer 10 minuten kan uitproberen,
 - nr: het nummer van dat onderwerp. Leent geen enkel onderwerp zich ervoor, geef dan nr 0.
 - titel: hooguit 6 woorden.
 - tekst: 2 tot 4 korte zinnen die een leek kan volgen. Moet er iets geïnstalleerd of uitgevoerd worden, geef de lezer dan een zin die die letterlijk aan Claude Code kan geven, tussen aanhalingstekens, en laat Claude Code het werk doen. Noem alleen commando's, instellingen en namen die letterlijk in de brontekst staan.
+
+quiz: 3 meerkeuzevragen over de berichten in "onderwerpen", als nieuwsquiz voor de lezer.
+- vraag: kort en duidelijk, over het belangrijkste feit van een bericht. Elke vraag over een ander bericht.
+- opties: precies 3 antwoorden. Eén is goed, de andere twee klinken geloofwaardig maar zijn duidelijk fout voor wie het bericht las.
+- goed: de plek van het goede antwoord in opties (0, 1 of 2). Wissel die plek af tussen de vragen.
+- uitleg: 1 zin waarom het goede antwoord klopt.
+- Alleen feiten die in de berichten staan.
 
 begrippen: elk vakwoord dat je in deze editie uitlegt, en elke naam van een tool, model of bedrijf die een leek niet kent. Per begrip:
 - woord: zoals het in de tekst staat. Een hoofdletter alleen als het een naam is.
@@ -195,10 +219,10 @@ Woorden uitleggen:
 Regels:
 - Gebruik alleen feiten die in de aangeleverde tekst staan. Staat iets er niet in, laat het weg. Verzin geen cijfers, namen of data. Dat geldt ook voor de waarom-zin: geen "voor het eerst" of "grootste" als de tekst dat niet zegt.
 - De paginatekst kan menu's, cookiemeldingen of reclame bevatten. Negeer die.
-- Schrijf gewoon Nederlands zoals je het een vriend zou vertellen. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
+- Schrijf gewoon, helder Nederlands. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
 - Productnamen en namen van modellen blijven onvertaald.
 
-Onderwerpen en korte berichten:
+Onderwerpen, korte berichten en bekende onderwerpen:
 """
 
 
@@ -477,8 +501,8 @@ def tel_sterren(berichten, minimum):
     return over
 
 
-def lees_artikel(url):
-    """Geeft de leesbare tekst van een artikel, of niets als ophalen niet lukt."""
+def haal_pagina(url):
+    """De HTML van een artikel, of niets als ophalen niet lukt."""
     try:
         data, tekenset = haal_op(url, wachttijd=15)
     except Exception as fout:
@@ -486,23 +510,84 @@ def lees_artikel(url):
         return ""
     if data[:5] == b"%PDF-":
         return ""
-    tekst = platte_tekst(ontcijfer(data, tekenset))
-    # Een cookiemuur of inlogpagina levert maar een paar woorden op; dan liever de volgende bron.
+    return ontcijfer(data, tekenset)
+
+
+def artikeltekst_uit(markup, url):
+    """De leesbare tekst van een artikel, of niets bij een cookiemuur of inlogpagina."""
+    tekst = platte_tekst(markup)
     if len(tekst) < 500:
         log.info("Artikel te kort, waarschijnlijk een cookiemuur (%s)", url)
         return ""
     return tekst[:5000]
 
 
-def artikeltekst(berichten):
-    """Geeft (plek, tekst) van de eerste bron waarvan de pagina zich laat ophalen."""
+# ---------------------------------------------------------------- beelden
+
+# Deelbeelden die geen nieuwsfoto zijn maar een logo of standaardplaatje van de site.
+GENERIEK_BEELD = re.compile(r"logo|favicon|default|placeholder|avatar|/icons?/|redditstatic|apple-touch", re.I)
+
+
+def beelden_uit(markup, url):
+    """Het deelbeeld van een pagina (og:image of twitter:image), zoals sites het voor WhatsApp en sociale media opgeven."""
+    kandidaten = []
+    for tag in re.findall(r"<meta\b[^>]*>", markup[:300_000], re.I):
+        soort = re.search(r"(?:property|name)\s*=\s*[\"']([^\"']+)", tag, re.I)
+        inhoud = re.search(r"content\s*=\s*[\"']([^\"']+)", tag, re.I)
+        if soort and inhoud and soort.group(1).lower() in (
+            "og:image", "og:image:url", "og:image:secure_url", "twitter:image", "twitter:image:src"
+        ):
+            kandidaten.append(urllib.parse.urljoin(url, html.unescape(inhoud.group(1).strip())))
+    return list(dict.fromkeys(kandidaten))
+
+
+def beeldmaat(data):
+    """(breedte, hoogte) van een plaatje, of None als het niet te lezen is."""
+    try:
+        from PIL import Image
+        import io
+        return Image.open(io.BytesIO(data)).size
+    except Exception:
+        return None
+
+
+def beeld_geschikt(url):
+    """Een goed nieuwsbeeld: geen logo, breed genoeg en ongeveer liggend."""
+    if GENERIEK_BEELD.search(url):
+        return False
+    try:
+        data, _ = haal_op(url, wachttijd=10, opnieuw=False)
+    except Exception:
+        return False
+    maat = beeldmaat(data)
+    if maat is None:
+        # Zonder Pillow of bij een onbekend formaat: vertrouw de site.
+        return len(data) > 5_000
+    breedte, hoogte = maat
+    return breedte >= 600 and hoogte > 0 and 1.2 <= breedte / hoogte <= 2.6
+
+
+def verrijk(berichten):
+    """Haalt voor een onderwerp de artikeltekst en het beste beeld op.
+
+    Geeft (plek van de bron met tekst, tekst, beeld-adres) terug. De eerste hand staat
+    vooraan, dus het beeld van het lab zelf wint van dat van een nieuwssite.
+    """
+    plek_tekst, tekst, beeld = -1, "", ""
     for plek, bericht in enumerate(berichten[:3]):
-        if bericht.get("volledig"):
-            return plek, ""
-        tekst = lees_artikel(bericht["url"])
-        if tekst:
-            return plek, tekst
-    return -1, ""
+        markup = haal_pagina(bericht["url"])
+        if markup and not tekst and not bericht.get("volledig"):
+            tekst = artikeltekst_uit(markup, bericht["url"])
+            if tekst:
+                plek_tekst = plek
+        if markup and not beeld:
+            beeld = next((b for b in beelden_uit(markup, bericht["url"]) if beeld_geschikt(b)), "")
+        if not beeld and bericht.get("repo"):
+            # GitHub maakt voor elk project een nette kaart met naam, beschrijving en sterren.
+            beeld = f"https://opengraph.githubassets.com/1/{bericht['repo']}"
+        if beeld and (tekst or bericht.get("volledig")):
+            break
+    return plek_tekst, tekst, beeld
 
 
 # ---------------------------------------------------------------- Claude
@@ -592,10 +677,22 @@ def kies(cfg, berichten, staat):
     return gekozen, kort
 
 
-def schrijf_editie(cfg, gekozen, kort, moment):
-    """Haalt de artikelen op en laat Claude de editie schrijven. Geeft het antwoord van Claude terug."""
+def schrijf_editie(cfg, gekozen, kort, moment, bekend):
+    """Haalt de artikelen en beelden op en laat Claude de editie schrijven. Geeft het antwoord van Claude terug.
+
+    Het gekozen beeld komt in elk onderwerp onder "beeld".
+    """
     with ThreadPoolExecutor(max_workers=6) as pool:
-        teksten = list(pool.map(lambda o: artikeltekst(o["berichten"]), gekozen))
+        verrijkt = list(pool.map(lambda o: verrijk(o["berichten"]), gekozen))
+    # Hetzelfde plaatje bij twee verschillende berichten is het standaardplaatje van een site, geen nieuwsfoto.
+    tellingen = {}
+    for _, _, beeld in verrijkt:
+        if beeld:
+            tellingen[beeld] = tellingen.get(beeld, 0) + 1
+    for onderwerp, (_, _, beeld) in zip(gekozen, verrijkt):
+        onderwerp["beeld"] = beeld if tellingen.get(beeld) == 1 else ""
+    log.info("Beelden gevonden voor %s van de %s berichten", sum(1 for o in gekozen if o["beeld"]), len(gekozen))
+    teksten = [(plek, tekst) for plek, tekst, _ in verrijkt]
     nu = datetime.now()
     onderwerpen = []
     for nr, (onderwerp, (plek_pagina, pagina)) in enumerate(zip(gekozen, teksten), 1):
@@ -617,8 +714,19 @@ def schrijf_editie(cfg, gekozen, kort, moment):
 
     groet = "Goedemorgen." if moment == "ochtend" else "Goedenavond."
     opdracht = SCHRIJF_OPDRACHT.format(moment=moment, groet=groet)
-    inhoud = json.dumps({"onderwerpen": onderwerpen, "korte_berichten": korte}, ensure_ascii=False)
+    inhoud = json.dumps({"onderwerpen": onderwerpen, "korte_berichten": korte, "bekende_onderwerpen": bekend},
+                        ensure_ascii=False)
     return vraag_claude(cfg, opdracht + inhoud, SCHRIJF_SCHEMA)
+
+
+def bekende_onderwerpen(edities, hoeveel=80):
+    """De onderwerpen van eerdere berichten, het vaakst gebruikte eerst, zodat Claude ze hergebruikt."""
+    teller = {}
+    for ed in edities:
+        for item in ed["items"]:
+            for onderwerp in item.get("onderwerpen", []):
+                teller[onderwerp] = teller.get(onderwerp, 0) + 1
+    return [o for o, _ in sorted(teller.items(), key=lambda paar: -paar[1])][:hoeveel]
 
 
 # ---------------------------------------------------------------- editie
@@ -646,9 +754,17 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     lang = {i["nr"]: i for i in antwoord.get("items", [])}
     items = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": lang[nr]["kop"], "uitleg": lang[nr]["uitleg"],
-         "samenvatting": lang[nr]["samenvatting"], "waarom": lang[nr]["waarom"], "bronnen": _bronnen(o)}
+         "samenvatting": lang[nr]["samenvatting"], "waarom": lang[nr]["waarom"], "bronnen": _bronnen(o),
+         "beeld": o.get("beeld", ""),
+         "onderwerpen": [t.strip() for t in lang[nr].get("onderwerpen", []) if t.strip()][:3]}
         for nr, o in enumerate(gekozen, 1) if nr in lang
     ]
+    # Alleen vragen die kloppen: precies drie antwoorden en een goed antwoord dat bestaat.
+    quiz = [
+        {"vraag": v["vraag"], "opties": v["opties"], "goed": v["goed"], "uitleg": v["uitleg"]}
+        for v in antwoord.get("quiz", [])
+        if len(v.get("opties", [])) == 3 and v.get("goed") in (0, 1, 2)
+    ][:3]
     kortjes = {k["nr"]: k for k in antwoord.get("kort", [])}
     korte = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": kortjes[nr]["kop"], "zin": kortjes[nr]["zin"], "bronnen": _bronnen(o)}
@@ -661,7 +777,7 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
         probeer = None
     return {
         "id": None, "tijd": tijd.isoformat(timespec="minutes"), "datum": datum.isoformat(), "moment": moment,
-        "intro": antwoord.get("intro", "").strip(), "items": items, "kort": korte, "probeer": probeer,
+        "intro": antwoord.get("intro", "").strip(), "items": items, "kort": korte, "probeer": probeer, "quiz": quiz,
         "bekeken": bekeken, "aantal_bronnen": aantal_bronnen, "fouten": fouten,
     }
 
@@ -688,10 +804,48 @@ def laad_edities():
     edities = []
     for pad in EDITIES.glob("*.json"):
         try:
-            edities.append(json.loads(pad.read_text(encoding="utf-8")))
+            ed = json.loads(pad.read_text(encoding="utf-8"))
         except ValueError:
             log.warning("Editie %s is onleesbaar en wordt overgeslagen", pad.name)
+            continue
+        geef_ids(ed)
+        edities.append(ed)
     return edities
+
+
+WEEK_SCHEMA = {"type": "object", "properties": {"intro": {"type": "string"}}, "required": ["intro"]}
+
+
+def maak_week(cfg, edities, dag):
+    """De week in AI: de 10 belangrijkste berichten van maandag tot en met `dag`."""
+    maandag = dag - timedelta(days=dag.weekday())
+    berichten = [item for ed in edities if maandag <= editiedag(ed) <= dag for item in ed["items"]]
+    if not berichten:
+        return None
+    # Het belangrijkste eerst; bij gelijke score wint wat door meer bronnen gemeld werd.
+    berichten.sort(key=lambda i: (i["score"], len(i["bronnen"])), reverse=True)
+    top = berichten[:10]
+    lijst = [{"kop": i["kop"], "samenvatting": i["samenvatting"]} for i in top]
+    vraag = (
+        "Schrijf de opening van 'De week in AI', het weekoverzicht van een Nederlandse AI-nieuwssite voor lezers met "
+        "een beetje kennis van AI. 2 of 3 zinnen over wat deze week opviel, in helder Nederlands zonder vakjargon. "
+        "Gebruik alleen wat in de berichten staat. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.\n\n"
+        f"De belangrijkste berichten van deze week:\n{json.dumps(lijst, ensure_ascii=False)}"
+    )
+    intro = vraag_claude(cfg, vraag, WEEK_SCHEMA).get("intro", "").strip()
+    jaar, weeknr, _ = dag.isocalendar()
+    return {"id": f"{jaar}-W{weeknr:02d}", "van": maandag.isoformat(), "tot": dag.isoformat(),
+            "intro": intro, "items": [i["id"] for i in top]}
+
+
+def laad_weken():
+    weken = []
+    for pad in sorted(WEKEN.glob("*.json")):
+        try:
+            weken.append(json.loads(pad.read_text(encoding="utf-8")))
+        except ValueError:
+            log.warning("Week %s is onleesbaar en wordt overgeslagen", pad.name)
+    return weken
 
 
 def laad_begrippen():
@@ -722,8 +876,11 @@ def bewaar_json(pad, data):
 
 # ---------------------------------------------------------------- mail
 
-def bouw_mail(ed, site_url):
-    """Een korte mail: de vijf belangrijkste berichten en een link naar de rest. Geeft (onderwerp, tekst, html)."""
+def bouw_mail(ed, site_url, week=None):
+    """Een korte mail in de stijl van de site: de vijf belangrijkste berichten en een link naar de rest.
+
+    Geeft (onderwerp, tekst, html). Met `week` (zondagavond) komt er een verwijzing naar De week in AI bij.
+    """
     e = html.escape
     datum, moment = dagtitel(editiedag(ed)), ed["moment"]
     tijd = datetime.fromisoformat(ed["tijd"])
@@ -744,40 +901,53 @@ def bouw_mail(ed, site_url):
         delen.append(f"nog {rest} berichten")
     if ed.get("probeer"):
         delen.append("de tip van vandaag")
-    verwijzing = f"Op de site staan {' en '.join(delen)}." if delen else ""
+    if ed.get("quiz"):
+        delen.append("de nieuwsquiz")
+    verwijzing = f"Op de site staan {', '.join(delen[:-1]) + ' en ' + delen[-1] if len(delen) > 1 else delen[0]}." if delen else ""
 
+    serif = "Georgia,'Times New Roman',serif"
     plat = [f"AI-nieuws, {datum}, {moment}", "", intro, ""]
     blokken = []
-    for item in top:
-        url = item["bronnen"][0]["url"]
-        kleur = MAILKLEUREN[RUBRIEKEN[item["rubriek"]]["klasse"]]
+    for nr, item in enumerate(top):
+        url = artikel_url(site_url, item) if site_url else item["bronnen"][0]["url"]
         regel = datumregel(item["bronnen"], tijd)
+        beeld = ""
+        if nr == 0 and item.get("beeld"):
+            beeld = (f'<a href="{e(url)}"><img src="{e(item["beeld"])}" alt="" width="560" '
+                     'style="display:block;width:100%;height:auto;margin:0 0 12px;border:0"></a>')
         blokken.append(
-            f'<div style="margin:0 0 24px">'
-            f'<div style="font-size:12px;font-weight:bold;letter-spacing:0.5px;text-transform:uppercase;color:{kleur}">{e(item["rubriek"])}</div>'
-            f'<h3 style="font-size:18px;line-height:1.3;margin:3px 0 2px"><a href="{e(url)}" style="color:#111111;text-decoration:none">{e(item["kop"])}</a></h3>'
+            f'<div style="margin:0 0 26px">{beeld}'
+            f'<div style="font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#C4122F">{e(item["rubriek"])}</div>'
+            f'<h3 style="font-family:{serif};font-size:21px;line-height:1.25;margin:4px 0 4px"><a href="{e(url)}" style="color:#141414;text-decoration:none">{e(item["kop"])}</a></h3>'
             f'<div style="margin:0 0 8px;font-size:13px;color:#666666">{e(regel)}</div>'
-            f'<p style="margin:0 0 8px;padding-left:10px;border-left:3px solid #e4e4e7;font-size:14px;line-height:1.5;color:#555555">{e(item["uitleg"])}</p>'
             f'<p style="margin:0;font-size:15px;line-height:1.55;color:#222222">{e(item["samenvatting"])}</p>'
             f'</div>'
         )
-        plat += [f"[{item['rubriek']}] {item['kop']}", f"({regel})", f"Achtergrond: {item['uitleg']}", item["samenvatting"], url, ""]
+        plat += [f"[{item['rubriek']}] {item['kop']}", f"({regel})", item["samenvatting"], url, ""]
     if verwijzing:
         plat.append(f"{verwijzing} {site_url}")
+    if week:
+        plat.append(f"Ook nieuw: De week in AI, de 10 belangrijkste berichten van deze week. {site_url}week/{week['id']}.html")
 
     knop = ""
     if verwijzing:
         knop = (
-            '<div style="background:#f4f4f5;border-radius:8px;padding:16px;font-size:14px;line-height:1.5;color:#333333">'
-            f'{e(verwijzing)}<br><a href="{e(site_url)}" style="display:inline-block;margin-top:10px;padding:10px 16px;'
-            'background:#111111;color:#ffffff;border-radius:6px;text-decoration:none;font-weight:bold">Lees de hele editie</a></div>'
+            '<div style="border-top:3px solid #141414;padding:16px 0 0;font-size:15px;line-height:1.5;color:#333333">'
+            f'{e(verwijzing)}<br><a href="{e(site_url)}" style="display:inline-block;margin-top:12px;padding:12px 18px;'
+            'background:#141414;color:#ffffff;text-decoration:none;font-weight:bold">Lees de hele editie</a></div>'
+        )
+    if week:
+        knop += (
+            '<div style="margin-top:22px;background:#F3F3F0;padding:16px 18px;font-size:15px;line-height:1.5">'
+            f'<b>Ook nieuw: De week in AI.</b> De 10 belangrijkste berichten van deze week op een rij. '
+            f'<a href="{e(site_url)}week/{e(week["id"])}.html" style="color:#C4122F;font-weight:bold">Lees de week</a></div>'
         )
     opmaak = (
-        '<!doctype html><html lang="nl"><body style="margin:0;padding:0;background:#f4f4f5">'
-        '<div style="max-width:600px;margin:0 auto;padding:24px 20px;background:#ffffff;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111111">'
-        f'<div style="font-size:13px;color:#666666">{e(datum)}, {e(moment)}</div>'
-        '<h1 style="font-size:24px;margin:2px 0 10px">AI-nieuws</h1>'
-        f'<p style="margin:0 0 26px;font-size:16px;line-height:1.55;color:#222222">{e(intro)}</p>'
+        '<!doctype html><html lang="nl"><body style="margin:0;padding:0;background:#f4f4f2">'
+        '<div style="max-width:600px;margin:0 auto;padding:26px 22px;background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#141414">'
+        f'<div style="font-size:13px;color:#666666">{e(datum.capitalize())}, {e(moment)}editie</div>'
+        f'<h1 style="font-family:{serif};font-size:34px;line-height:1;margin:4px 0 14px">AI-nieuws</h1>'
+        f'<p style="font-family:{serif};margin:0 0 26px;font-size:18px;line-height:1.5;color:#333333">{e(intro)}</p>'
         f'{"".join(blokken)}{knop}'
         '</div></body></html>'
     )
@@ -848,6 +1018,8 @@ def main():
     keuzes.add_argument("--gepland", action="store_true", help="de laatste vaste editie (08:00 of 20:00) maken, als die er nog niet is")
     keuzes.add_argument("--nodig", action="store_true", help="alleen kijken of de laatste vaste editie nog ontbreekt (voor GitHub)")
     keuzes.add_argument("--alles", action="store_true", help="met --voorbeeld: doen alsof er nog niets gezien is, om alles te testen")
+    keuzes.add_argument("--week", action="store_true", help="ook De week in AI maken (gebeurt vanzelf op zondagavond)")
+    keuzes.add_argument("--alleen-site", action="store_true", help="geen nieuws ophalen, alleen de site opnieuw maken uit de bewaarde edities")
     args = keuzes.parse_args()
     if args.alles and not args.voorbeeld:
         keuzes.error("--alles kan alleen samen met --voorbeeld; anders raakt de lijst met gezien nieuws in de war")
@@ -870,6 +1042,12 @@ def main():
     lokaal = datetime.now()
     datum, moment = lokaal.date(), ("ochtend" if lokaal.hour < 14 else "avond")
 
+    if args.alleen_site:
+        doel = VOORBEELD if args.voorbeeld else SITE
+        voorpagina = schrijf_site(doel, laad_edities(), laad_begrippen(), laad_weken(), cfg["site_url"])
+        log.info("Site opnieuw gemaakt: %s", voorpagina)
+        return 0
+
     if args.gepland or args.nodig:
         # GitHub start geplande runs soms uren te laat of slaat ze over. Daarom kijkt het programma
         # welke editie er als laatste had moeten zijn, en maakt die alsnog als hij ontbreekt.
@@ -883,7 +1061,7 @@ def main():
             return 0
         if not ontbreekt:
             log.info("Geen editie nodig om %s; alleen de site wordt opnieuw gemaakt.", f"{lokaal:%H:%M}")
-            schrijf_site(SITE, laad_edities(), laad_begrippen())
+            schrijf_site(SITE, laad_edities(), laad_begrippen(), laad_weken(), cfg["site_url"])
             return 0
 
     # Net na het aanzetten van de pc is er soms nog geen internet.
@@ -913,7 +1091,8 @@ def main():
     wachtwoord = lees_wachtwoord()
     try:
         gekozen, kort = kies(cfg, berichten, staat) if berichten else ([], [])
-        antwoord = schrijf_editie(cfg, gekozen, kort, moment) if gekozen or kort else {}
+        bekend = bekende_onderwerpen(laad_edities())
+        antwoord = schrijf_editie(cfg, gekozen, kort, moment, bekend) if gekozen or kort else {}
     except Exception as fout:
         log.exception("Kiezen of schrijven mislukt")
         if wachtwoord and cfg["mail_aan"] and not args.voorbeeld:
@@ -927,14 +1106,26 @@ def main():
     begrippen = laad_begrippen()
     ed = stel_samen(lokaal, datum, moment, gekozen, kort, antwoord, len(berichten), len(telling), fouten)
     ed["id"] = nieuw_id(datum, moment, edities)
+    geef_ids(ed)
     leeg = not ed["items"] and not ed["kort"]
     if not leeg:
         edities.append(ed)
         voeg_begrippen_toe(begrippen, antwoord.get("begrippen", []), ed["id"])
-    onderwerp, plat, opmaak = bouw_mail(ed, cfg["site_url"])
+
+    # Zondagavond komt er De week in AI bij: de 10 belangrijkste berichten van maandag tot en met vandaag.
+    weken = laad_weken()
+    week = None
+    if args.week or (moment == "avond" and datum.weekday() == 6):
+        try:
+            week = maak_week(cfg, edities, datum)
+        except Exception:
+            log.exception("De week in AI is mislukt; de editie gaat gewoon door")
+        if week:
+            weken = [w for w in weken if w["id"] != week["id"]] + [week]
+    onderwerp, plat, opmaak = bouw_mail(ed, cfg["site_url"], week)
 
     if args.voorbeeld:
-        voorpagina = schrijf_site(VOORBEELD, edities, begrippen)
+        voorpagina = schrijf_site(VOORBEELD, edities, begrippen, weken, cfg["site_url"])
         (VOORBEELD / "mail.html").write_text(opmaak, encoding="utf-8")
         log.info("Proefeditie geschreven: %s (%s)", voorpagina, onderwerp)
         return 0
@@ -944,7 +1135,10 @@ def main():
         EDITIES.mkdir(exist_ok=True)
         bewaar_json(EDITIES / f"{ed['id']}.json", ed)
         bewaar_json(BEGRIPPEN, begrippen)
-    schrijf_site(SITE, edities, begrippen)
+    if week:
+        WEKEN.mkdir(exist_ok=True)
+        bewaar_json(WEKEN / f"{week['id']}.json", week)
+    schrijf_site(SITE, edities, begrippen, weken, cfg["site_url"])
     stempel = nu.isoformat()
     for sleutel in basis + [b["sleutel"] for b in berichten]:
         staat["urls"][sleutel] = stempel

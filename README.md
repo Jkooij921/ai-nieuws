@@ -6,11 +6,17 @@ Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de beric
 
 ## De site
 
-- **Vandaag:** de nieuwste editie, in rubrieken: Het grote nieuws, Nieuwe modellen, Nieuwe tools, Zo gebruik je AI, Onderzoek en regels, en Snel nog even. Met elke editie één tip onder "Probeer dit vandaag".
-- **Archief:** alle eerdere edities.
-- **Leren:** alle woorden die ooit zijn uitgelegd, met een zoekvak, en alle tips.
+- **Vandaag:** de nieuwste editie. Bovenaan filters per onderwerp: Groot nieuws, Modellen, Tools, Zo gebruik je AI, Onderzoek en regels, Kort nieuws en de Quiz. Elk bericht heeft een beeld van de bron, een impact-label, het aantal bronnen en "Lees meer". Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen.
+- **Een pagina per bericht** (`artikel/`): de hele uitleg, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Eerder over …" met eerdere berichten over hetzelfde onderwerp.
+- **Onderwerpen** (`onderwerp/`): alle berichten over bijvoorbeeld Claude Code of Mistral bij elkaar. Claude geeft elk bericht 1 tot 3 onderwerpen en hergebruikt bestaande namen.
+- **De week:** elke zondagavond de 10 belangrijkste berichten van de week.
+- **Archief, Begrippen en tips, Zoeken:** alle edities, alle uitgelegde woorden, en zoeken in alle berichten.
 
-Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op.
+Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op. Wat iemand gelezen heeft, staat alleen in de eigen browser.
+
+## Beelden
+
+Net als nieuwsaggregators gebruikt de site het deelbeeld dat de bron zelf opgeeft (og:image, het plaatje dat je ook ziet als je een link in WhatsApp deelt). Een beeld valt weg als het een logo is, smaller dan 600 pixels, niet ongeveer liggend, of hetzelfde als bij een ander bericht (dan is het het standaardplaatje van een site). Heeft een bericht geen goed beeld maar wel een GitHub-project, dan komt de GitHub-kaart van dat project. Anders een zwart blok met de naam van de bron. Werkt een beeld later niet meer, dan verschijnt dat blok vanzelf.
 
 ## Hoe het werkt
 
@@ -63,6 +69,7 @@ Op GitHub: tabblad **Actions**, **Editie maken**, **Run workflow**.
 Op de pc:
 
 - `python ai_nieuws.py --voorbeeld`: proefeditie in `voorbeeld\index.html`, niets wordt bewaard of gemaild.
+- `python ai_nieuws.py --alleen-site --voorbeeld`: de site opnieuw maken uit de bewaarde edities, in `voorbeeld\`. Handig na een wijziging in `maak_site.py`, `stijl.css` of `site.js`.
 - `python ai_nieuws.py --bronnen`: per bron hoeveel nieuwe berichten er zijn.
 
 ## Als het niet werkt

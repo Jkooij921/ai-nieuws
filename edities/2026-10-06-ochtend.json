@@ -18,6 +18,12 @@
      "url": "https://tweakers.net/nieuws/252982/gratis-gemini-gebruikers-verliezen-toegang-tot-flash-en-pro-modellen.html",
      "datum": "2026-10-05T18:57:27+02:00"
     }
+   ],
+   "id": "2026-10-06-ochtend-1",
+   "beeld": "",
+   "onderwerpen": [
+    "Gemini",
+    "Google"
    ]
   },
   {
@@ -37,6 +43,12 @@
      "punten": 916,
      "sterren": 14690
     }
+   ],
+   "id": "2026-10-06-ochtend-2",
+   "beeld": "https://opengraph.githubassets.com/1/Niko1221/Strata",
+   "onderwerpen": [
+    "Qwen",
+    "Open modellen"
    ]
   },
   {
@@ -53,6 +65,12 @@
      "url": "https://www.latent.space/p/ainews-reflection-beam-501b-a23b",
      "datum": "2026-10-06T06:28:43+00:00"
     }
+   ],
+   "id": "2026-10-06-ochtend-3",
+   "beeld": "https://substackcdn.com/image/youtube/w_728,c_limit/DIu7xA898go",
+   "onderwerpen": [
+    "Reflection Beam",
+    "Open modellen"
    ]
   },
   {
@@ -70,6 +88,11 @@
      "datum": "2026-10-05T23:33:17+00:00",
      "sterren": 149558
     }
+   ],
+   "id": "2026-10-06-ochtend-4",
+   "beeld": "https://opengraph.githubassets.com/2ca36a122ab7f3d21337558d28cc0578e463fce12e959a50538bb3927b02654c/anthropics/claude-code/releases/tag/v2.1.290",
+   "onderwerpen": [
+    "Claude Code"
    ]
   },
   {
@@ -86,6 +109,12 @@
      "url": "https://simonwillison.net/2026/Oct/5/felix-rieseberg/",
      "datum": "2026-10-05T23:56:47+00:00"
     }
+   ],
+   "id": "2026-10-06-ochtend-5",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude Cowork",
+    "Anthropic"
    ]
   },
   {
@@ -103,6 +132,12 @@
      "datum": null,
      "sterren": 96811
     }
+   ],
+   "id": "2026-10-06-ochtend-6",
+   "beeld": "https://repository-images.githubusercontent.com/1048065319/62ccff98-4c97-4bab-97b7-ed6e1995cfba",
+   "onderwerpen": [
+    "claude-mem",
+    "Claude Code"
    ]
   },
   {
@@ -119,6 +154,12 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyjty8/anthropics_official_agent_skills_guide_6_insights/",
      "datum": "2026-10-05T20:47:25+00:00"
     }
+   ],
+   "id": "2026-10-06-ochtend-7",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude Skills",
+    "Anthropic"
    ]
   },
   {
@@ -135,6 +176,12 @@
      "url": "https://www.reddit.com/r/ClaudeCode/comments/1wye4ix/i_just_wanted_to_try_the_new_claude_code_mods_i/",
      "datum": "2026-10-05T17:08:59+00:00"
     }
+   ],
+   "id": "2026-10-06-ochtend-8",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude",
+    "Anthropic"
    ]
   },
   {
@@ -151,6 +198,12 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyfy3m/i_connected_claude_to_a_video_editor_and_made/",
      "datum": "2026-10-05T18:17:56+00:00"
     }
+   ],
+   "id": "2026-10-06-ochtend-9",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude Opus 5.5",
+    "Anthropic"
    ]
   },
   {
@@ -169,6 +222,12 @@
      "discussie": "https://news.ycombinator.com/item?id=49970667",
      "punten": 351
     }
+   ],
+   "id": "2026-10-06-ochtend-10",
+   "beeld": "https://www.vals.ai/blogs/2026-10-04-room-temperature-magnetic-semiconductors/hero.png",
+   "onderwerpen": [
+    "Claude Opus 5.5",
+    "AI voor wetenschap"
    ]
   },
   {
@@ -187,6 +246,12 @@
      "discussie": "https://news.ycombinator.com/item?id=49961057",
      "punten": 724
     }
+   ],
+   "id": "2026-10-06-ochtend-11",
+   "beeld": "https://www.techspot.com/images2/news/bigimage/2026/10/2026-10-04-image-9.jpg",
+   "onderwerpen": [
+    "Anthropic",
+    "AI-veiligheid"
    ]
   }
  ],
@@ -215,7 +280,8 @@
      "url": "https://www.theverge.com/ai-artificial-intelligence/1004880/openai-chatgpt-text-watermarks-eu-ai-act",
      "datum": "2026-10-05T14:08:39-04:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k1"
   },
   {
    "rubriek": "Onderzoek en regels",
@@ -229,7 +295,8 @@
      "url": "https://arstechnica.com/security/2026/10/vulnerability-in-agents-from-google-and-others-exposes-structural-flaw-in-mcp/",
      "datum": "2026-10-05T22:26:35+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k2"
   },
   {
    "rubriek": "Onderzoek en regels",
@@ -251,7 +318,8 @@
      "url": "https://www.theverge.com/news/1004929/wikipedia-openai-rogue-bots-wikimedia-foundation-outage",
      "datum": "2026-10-05T15:05:19-04:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k3"
   },
   {
    "rubriek": "Onderzoek en regels",
@@ -271,7 +339,8 @@
      "url": "https://arstechnica.com/ai/2026/10/ai-glasses-face-their-first-major-government-crackdown/",
      "datum": "2026-10-05T13:39:30+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k4"
   },
   {
    "rubriek": "Nieuwe tools",
@@ -286,7 +355,8 @@
      "datum": null,
      "sterren": 25750
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k5"
   },
   {
    "rubriek": "Nieuwe tools",
@@ -301,7 +371,8 @@
      "datum": null,
      "sterren": 17644
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k6"
   },
   {
    "rubriek": "Nieuwe tools",
@@ -316,7 +387,8 @@
      "datum": null,
      "sterren": 64387
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k7"
   },
   {
    "rubriek": "Het grote nieuws",
@@ -342,7 +414,8 @@
      "url": "https://tweakers.net/nieuws/252974/openai-gaat-chatgpt-advertenties-met-afbeeldingen-tonen-voorlopig-alleen-in-vs.html",
      "datum": "2026-10-05T16:02:52+02:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k8"
   },
   {
    "rubriek": "Onderzoek en regels",
@@ -356,7 +429,8 @@
      "url": "https://www.theverge.com/ai-artificial-intelligence/1004933/ai-math-openai-breakthrough-solution",
      "datum": "2026-10-05T15:28:59-04:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k9"
   },
   {
    "rubriek": "Nieuwe tools",
@@ -376,7 +450,8 @@
      "url": "https://tweakers.net/nieuws/252996/google-bouwt-functie-om-ai-naar-vrienden-en-familie-te-laten-bellen.html",
      "datum": "2026-10-06T08:08:01+02:00"
     }
-   ]
+   ],
+   "id": "2026-10-06-ochtend-k10"
   }
  ],
  "probeer": {

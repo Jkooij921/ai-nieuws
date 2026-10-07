@@ -31,6 +31,12 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzfw5f/mythos_is_now_available_cvp/",
      "datum": "2026-10-06T22:12:48+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-1",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude Mythos",
+    "Anthropic"
    ]
   },
   {
@@ -47,6 +53,13 @@
      "url": "https://www.anthropic.com/news/cyber-verification-program",
      "datum": null
     }
+   ],
+   "id": "2026-10-07-ochtend-2",
+   "beeld": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20Lock&backgroundColor=heather",
+   "onderwerpen": [
+    "Claude Mythos",
+    "AI-beveiliging",
+    "Anthropic"
    ]
   },
   {
@@ -83,6 +96,12 @@
      "url": "https://simonwillison.net/2026/Oct/6/hn-49982139/",
      "datum": "2026-10-06T18:20:58+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-3",
+   "beeld": "https://mistral.ai/cms-media/api/media/file/cover-mistral-sovereign%20copie.webp",
+   "onderwerpen": [
+    "Mistral",
+    "Open modellen"
    ]
   },
   {
@@ -105,6 +124,12 @@
      "url": "https://simonwillison.net/2026/Oct/6/hn-49983751/",
      "datum": "2026-10-06T20:37:53+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-4",
+   "beeld": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/embeddinggemma2-banner_169.width-1300.png",
+   "onderwerpen": [
+    "EmbeddingGemma",
+    "Google"
    ]
   },
   {
@@ -122,6 +147,11 @@
      "datum": "2026-10-06T18:59:30+00:00",
      "sterren": 149660
     }
+   ],
+   "id": "2026-10-07-ochtend-5",
+   "beeld": "https://opengraph.githubassets.com/62ddbc248d3fda7cedceec7966946c6e8487ea9492943545b0c5fccdc33c5438/anthropics/claude-code/releases/tag/v2.1.292",
+   "onderwerpen": [
+    "Claude Code"
    ]
   },
   {
@@ -138,6 +168,12 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzkpu9/claude_tells_ben_thompson_his_mac_mini_is/",
      "datum": "2026-10-07T02:04:19+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-6",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude",
+    "AI-beveiliging"
    ]
   },
   {
@@ -154,6 +190,11 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wz61i4/i_used_claude_code_to_turn_a_1989_dos_game_i/",
      "datum": "2026-10-06T15:48:18+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-7",
+   "beeld": "",
+   "onderwerpen": [
+    "Claude Code"
    ]
   },
   {
@@ -170,6 +211,12 @@
      "url": "https://simonwillison.net/2026/Oct/6/scrimshaw-jukebox/",
      "datum": "2026-10-06T15:17:39+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-8",
+   "beeld": "https://static.simonwillison.net/static/2026/scrimshaw-card.jpg",
+   "onderwerpen": [
+    "Claude Opus 5.5",
+    "Anthropic"
    ]
   },
   {
@@ -198,6 +245,12 @@
      "url": "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
      "datum": "2026-10-07T04:55:44+00:00"
     }
+   ],
+   "id": "2026-10-07-ochtend-9",
+   "beeld": "https://images.ctfassets.net/kftzwdyauwt9/3430T8Aum4BAOFwLEnHQmC/bbc034e46bc5766dc6569183e87fa6df/ai-progress-in-mathematics-social.png?w=1600&h=900&fit=fill",
+   "onderwerpen": [
+    "OpenAI",
+    "AI voor wetenschap"
    ]
   },
   {
@@ -222,6 +275,12 @@
      "discussie": "https://news.ycombinator.com/item?id=49975345",
      "punten": 79
     }
+   ],
+   "id": "2026-10-07-ochtend-10",
+   "beeld": "https://substackcdn.com/image/fetch/$s_!0Lmd!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9dbae198-0201-4307-b79a-55c3d79c8f85_1672x941.png",
+   "onderwerpen": [
+    "Claude-abonnementen",
+    "Anthropic"
    ]
   }
  ],
@@ -239,7 +298,8 @@
      "datum": "2026-10-06T19:28:44+00:00",
      "sterren": 1341
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k1"
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -255,7 +315,8 @@
      "discussie": "https://news.ycombinator.com/item?id=49981905",
      "punten": 165
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k2"
   },
   {
    "rubriek": "Het grote nieuws",
@@ -269,7 +330,8 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wz9oim/anthropic_is_giving_startups_a_free_year_of/",
      "datum": "2026-10-06T18:08:06+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k3"
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -283,7 +345,8 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyyfwc/opus_55_intentionally_inserting_anthropic/",
      "datum": "2026-10-06T09:46:31+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k4"
   },
   {
    "rubriek": "Het grote nieuws",
@@ -297,7 +360,8 @@
      "url": "https://www.reddit.com/r/ClaudeCode/comments/1wz2p4d/holy_ultra_output_tokens_batman_what_are_they/",
      "datum": "2026-10-06T13:32:04+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k5"
   },
   {
    "rubriek": "Onderzoek en regels",
@@ -311,7 +375,8 @@
      "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyy0ua/claude_knows_about_my_employer_in_incognito/",
      "datum": "2026-10-06T09:19:24+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k6"
   },
   {
    "rubriek": "Onderzoek en regels",
@@ -325,7 +390,8 @@
      "url": "https://jack-clark.net/2026/10/05/import-ai-475-swarm-scaling-google-deepmind-watermarks-biology-and-the-ai-science-economy/",
      "datum": "2026-10-05T12:32:30+00:00"
     }
-   ]
+   ],
+   "id": "2026-10-07-ochtend-k7"
   }
  ],
  "probeer": {
@@ -335,5 +401,37 @@
  },
  "bekeken": 48,
  "aantal_bronnen": 29,
- "fouten": []
+ "fouten": [],
+ "quiz": [
+  {
+   "vraag": "Hoeveel niveaus krijgt het toegangsprogramma van Anthropic voor beveiligingsexperts?",
+   "opties": [
+    "Drie",
+    "Twee",
+    "Vier"
+   ],
+   "goed": 0,
+   "uitleg": "Anthropic voegt twee programma's samen en breidt ze uit tot drie niveaus: Defense Access, Red Team Access en Specialized Access."
+  },
+  {
+   "vraag": "Wanneer komen de downloadbare bestanden van Mistral Large 4?",
+   "opties": [
+    "Direct bij de preview",
+    "Eind deze maand",
+    "Pas volgend jaar"
+   ],
+   "goed": 1,
+   "uitleg": "De preview werkt al via de API op Mistral Studio, en de downloadbare bestanden volgen eind deze maand."
+  },
+  {
+   "vraag": "Onder welke licentie is EmbeddingGemma 2 gratis te gebruiken?",
+   "opties": [
+    "MIT",
+    "GPL",
+    "Apache 2.0"
+   ],
+   "goed": 2,
+   "uitleg": "Het model is klein genoeg voor een telefoon en gratis te gebruiken onder de Apache 2.0 licentie."
+  }
+ ]
 }

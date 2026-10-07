@@ -56,11 +56,13 @@ jobs:
             python ai_nieuws.py --nodig
           fi
 
-      - name: Claude Code installeren
+      - name: Claude Code en Pillow installeren
         if: steps.check.outputs.nodig == 'true'
         run: |
           curl -fsSL https://claude.ai/install.sh | bash
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          # Pillow meet de beelden, zodat logo's en te kleine plaatjes wegvallen.
+          pip install --quiet pillow
 
       - name: Claude-sleutel testen
         if: steps.check.outputs.nodig == 'true' && inputs.claude_testen
@@ -91,6 +93,7 @@ jobs:
           git config user.name "AI-nieuws"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add edities begrippen.json gezien.json
+          if [ -d weken ]; then git add weken; fi
           if ! git diff --cached --quiet; then
             git commit -m "Editie $(date '+%Y-%m-%d %H:%M')"
             git pull --rebase
