@@ -6,7 +6,7 @@
   site/leren.html           de begrippenlijst en alle tips
 """
 import html
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 # Volgorde op de site, tekst op de knop bovenaan, css-klasse en het label van de 'waarom'-zin.
@@ -92,6 +92,13 @@ dl{margin:0}
 
 def dagtitel(tijd):
     return f"{DAGEN[tijd.weekday()]} {tijd.day} {MAANDEN[tijd.month - 1]}"
+
+
+def editiedag(ed):
+    """De dag waar een editie bij hoort. Oudere edities hebben alleen het tijdstip waarop ze gemaakt zijn."""
+    if ed.get("datum"):
+        return date.fromisoformat(ed["datum"])
+    return datetime.fromisoformat(ed["tijd"]).date()
 
 
 def wanneer(datum, ref):
@@ -197,7 +204,7 @@ def editie_html(ed):
         voet += f" Niet bereikbaar: {', '.join(ed['fouten'])}."
     return (
         f'<div class="editiekop"><div class="label">{e(ed["moment"].capitalize())}editie</div>'
-        f'<h1>{e(dagtitel(tijd).capitalize())}</h1>'
+        f'<h1>{e(dagtitel(editiedag(ed)).capitalize())}</h1>'
         f'<p class="intro">{e(ed["intro"])}</p>'
         f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten. Gemaakt om {tijd:%H:%M}.</p></div>'
         f'<div class="knoppen">{"".join(knoppen)}</div>'
@@ -211,10 +218,9 @@ def archief_html(edities):
         return '<h1>Archief</h1><p class="leeg">Nog geen edities.</p>'
     per_dag = {}
     for ed in sorted(edities, key=lambda ed: ed["tijd"], reverse=True):
-        per_dag.setdefault(ed["tijd"][:10], []).append(ed)
+        per_dag.setdefault(editiedag(ed), []).append(ed)
     dagen = []
-    for _, lijst in per_dag.items():
-        tijd = datetime.fromisoformat(lijst[0]["tijd"])
+    for dag, lijst in per_dag.items():
         regels = []
         for ed in lijst:
             top = max(ed["items"], key=lambda i: i["score"])["kop"] if ed["items"] else ""
@@ -223,7 +229,7 @@ def archief_html(edities):
                 f'<a class="editie" href="edities/{e(ed["id"])}.html"><b>{e(ed["moment"].capitalize())}editie</b>'
                 f'{e(top)}<div class="meta">{aantal} berichten</div></a>'
             )
-        dagen.append(f'<div class="dag"><h2>{e(dagtitel(tijd))}</h2>{"".join(regels)}</div>')
+        dagen.append(f'<div class="dag"><h2>{e(dagtitel(dag))}</h2>{"".join(regels)}</div>')
     return '<div class="editiekop"><h1>Archief</h1><p class="teller">Alle edities, de nieuwste bovenaan.</p></div>' + "".join(dagen)
 
 
@@ -244,10 +250,9 @@ def leren_html(begrippen, edities):
     tips = []
     for ed in sorted(edities, key=lambda ed: ed["tijd"], reverse=True):
         if ed.get("probeer"):
-            tijd = datetime.fromisoformat(ed["tijd"])
             p = ed["probeer"]
             tips.append(
-                f'<div class="tip"><div class="label">{e(dagtitel(tijd))}, {e(ed["moment"])}</div>'
+                f'<div class="tip"><div class="label">{e(dagtitel(editiedag(ed)))}, {e(ed["moment"])}</div>'
                 f'<h3>{e(p["titel"])}</h3><p>{e(p["tekst"])}</p>{_extern(p["url"], "Naar de bron")}</div>'
             )
     tips_html = "".join(tips) or '<p class="leeg">Nog geen tips.</p>'
@@ -283,7 +288,7 @@ def schrijf_site(doel, edities, begrippen):
     (doel / "edities").mkdir(parents=True, exist_ok=True)
     edities = sorted(edities, key=lambda ed: ed["tijd"])
     for ed in edities:
-        titel = f"AI-nieuws, {dagtitel(datetime.fromisoformat(ed['tijd']))} {ed['moment']}"
+        titel = f"AI-nieuws, {dagtitel(editiedag(ed))} {ed['moment']}"
         (doel / "edities" / f"{ed['id']}.html").write_text(pagina(titel, "../", None, editie_html(ed)), encoding="utf-8")
     if edities:
         voorpagina = editie_html(edities[-1])

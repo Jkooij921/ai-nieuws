@@ -34,7 +34,7 @@ from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
-from maak_site import MAILKLEUREN, RUBRIEKEN, bronlinks, dagtitel, datumregel, schrijf_site, wanneer
+from maak_site import MAILKLEUREN, RUBRIEKEN, bronlinks, dagtitel, datumregel, editiedag, schrijf_site, wanneer
 
 MAP = Path(__file__).resolve().parent
 CONFIG = MAP / "config.json"
@@ -637,8 +637,12 @@ def _bronnen(onderwerp):
     return uit
 
 
-def stel_samen(tijd, moment, gekozen, kort, antwoord, bekeken, aantal_bronnen, fouten):
-    """Zet de keuze en de teksten van Claude samen in één editie, klaar om te bewaren."""
+def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bronnen, fouten):
+    """Zet de keuze en de teksten van Claude samen in één editie, klaar om te bewaren.
+
+    `tijd` is wanneer de editie gemaakt is, `datum` de dag waar hij bij hoort. Die verschillen
+    als GitHub de avondeditie pas na middernacht start.
+    """
     lang = {i["nr"]: i for i in antwoord.get("items", [])}
     items = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": lang[nr]["kop"], "uitleg": lang[nr]["uitleg"],
@@ -656,14 +660,23 @@ def stel_samen(tijd, moment, gekozen, kort, antwoord, bekeken, aantal_bronnen, f
     else:
         probeer = None
     return {
-        "id": None, "tijd": tijd.isoformat(timespec="minutes"), "moment": moment,
+        "id": None, "tijd": tijd.isoformat(timespec="minutes"), "datum": datum.isoformat(), "moment": moment,
         "intro": antwoord.get("intro", "").strip(), "items": items, "kort": korte, "probeer": probeer,
         "bekeken": bekeken, "aantal_bronnen": aantal_bronnen, "fouten": fouten,
     }
 
 
-def nieuw_id(tijd, moment, edities):
-    basis = f"{tijd:%Y-%m-%d}-{moment}"
+def laatste_moment(lokaal):
+    """De laatste vaste editie die al had moeten verschijnen: (dag, 'ochtend' of 'avond')."""
+    if lokaal.hour >= 20:
+        return lokaal.date(), "avond"
+    if lokaal.hour >= 8:
+        return lokaal.date(), "ochtend"
+    return lokaal.date() - timedelta(days=1), "avond"
+
+
+def nieuw_id(datum, moment, edities):
+    basis = f"{datum:%Y-%m-%d}-{moment}"
     bestaand = {ed["id"] for ed in edities}
     kandidaat, n = basis, 2
     while kandidaat in bestaand:
@@ -712,8 +725,8 @@ def bewaar_json(pad, data):
 def bouw_mail(ed, site_url):
     """Een korte mail: de vijf belangrijkste berichten en een link naar de rest. Geeft (onderwerp, tekst, html)."""
     e = html.escape
+    datum, moment = dagtitel(editiedag(ed)), ed["moment"]
     tijd = datetime.fromisoformat(ed["tijd"])
-    datum, moment = dagtitel(tijd), ed["moment"]
     top = sorted(ed["items"], key=lambda i: i["score"], reverse=True)[:5]
     totaal = len(ed["items"]) + len(ed["kort"])
     if top:
@@ -832,7 +845,8 @@ def main():
     keuzes = argparse.ArgumentParser(description="AI-nieuws ophalen, schrijven, op de site zetten en mailen.")
     keuzes.add_argument("--voorbeeld", action="store_true", help="proefeditie in de map voorbeeld/, niets mailen of bewaren")
     keuzes.add_argument("--bronnen", action="store_true", help="tonen wat elke bron nu oplevert")
-    keuzes.add_argument("--gepland", action="store_true", help="alleen een editie maken als het 08:00 of 20:00 geweest is en die er nog niet is")
+    keuzes.add_argument("--gepland", action="store_true", help="de laatste vaste editie (08:00 of 20:00) maken, als die er nog niet is")
+    keuzes.add_argument("--nodig", action="store_true", help="alleen kijken of de laatste vaste editie nog ontbreekt (voor GitHub)")
     keuzes.add_argument("--alles", action="store_true", help="met --voorbeeld: doen alsof er nog niets gezien is, om alles te testen")
     args = keuzes.parse_args()
     if args.alles and not args.voorbeeld:
@@ -854,13 +868,20 @@ def main():
     staat = {"urls": {}, "verstuurd": [], "bronnen": []} if args.alles else laad_staat()
     nu = datetime.now(timezone.utc)
     lokaal = datetime.now()
-    moment = "ochtend" if lokaal.hour < 14 else "avond"
+    datum, moment = lokaal.date(), ("ochtend" if lokaal.hour < 14 else "avond")
 
-    if args.gepland:
-        # GitHub start dit vier keer per dag, omdat het alleen in UTC plant en de zomertijd niet kent.
-        # Alleen de eerste keer na 08:00 of 20:00 Nederlandse tijd maakt een editie.
-        grens = 8 if moment == "ochtend" else 20
-        if lokaal.hour < grens or any(ed["id"] == f"{lokaal:%Y-%m-%d}-{moment}" for ed in laad_edities()):
+    if args.gepland or args.nodig:
+        # GitHub start geplande runs soms uren te laat of slaat ze over. Daarom kijkt het programma
+        # welke editie er als laatste had moeten zijn, en maakt die alsnog als hij ontbreekt.
+        datum, moment = laatste_moment(lokaal)
+        ontbreekt = not any(ed["id"] == f"{datum:%Y-%m-%d}-{moment}" for ed in laad_edities())
+        if args.nodig:
+            log.info("Editie %s %s %s", f"{datum:%Y-%m-%d}", moment, "ontbreekt" if ontbreekt else "is er al")
+            if os.environ.get("GITHUB_OUTPUT"):
+                with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as uitvoer:
+                    uitvoer.write(f"nodig={'true' if ontbreekt else 'false'}\n")
+            return 0
+        if not ontbreekt:
             log.info("Geen editie nodig om %s; alleen de site wordt opnieuw gemaakt.", f"{lokaal:%H:%M}")
             schrijf_site(SITE, laad_edities(), laad_begrippen())
             return 0
@@ -904,8 +925,8 @@ def main():
 
     edities = laad_edities()
     begrippen = laad_begrippen()
-    ed = stel_samen(lokaal, moment, gekozen, kort, antwoord, len(berichten), len(telling), fouten)
-    ed["id"] = nieuw_id(lokaal, moment, edities)
+    ed = stel_samen(lokaal, datum, moment, gekozen, kort, antwoord, len(berichten), len(telling), fouten)
+    ed["id"] = nieuw_id(datum, moment, edities)
     leeg = not ed["items"] and not ed["kort"]
     if not leeg:
         edities.append(ed)
