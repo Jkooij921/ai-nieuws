@@ -1,0 +1,339 @@
+{
+ "id": "2026-10-07-ochtend",
+ "tijd": "2026-10-07T08:14",
+ "datum": "2026-10-07",
+ "moment": "ochtend",
+ "intro": "Goedemorgen. Anthropic laat meer beveiligingsexperts toe tot zijn krachtigste modellen, en OpenAI heeft honderden wiskundige uitkomsten gepubliceerd van een model dat nog niet uit is.",
+ "items": [
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 9,
+   "kop": "Claude Mythos 5.1 verschijnt in de chat voor sommige gebruikers",
+   "uitleg": "Anthropic heeft een Cyber Verification Program (CVP), een programma waarin gecontroleerde beveiligingsprofessionals toegang krijgen tot Claude met minder blokkades rond hackerwerk. Claude Mythos 5.1 is een van de krachtigste modellen van Anthropic.",
+   "samenvatting": "Meerdere leden van het CVP melden op Reddit dat Mythos nu als keuze in de gewone chat staat, onder 'More Models'. Ze zijn er erg enthousiast over. Dit zijn berichten van gebruikers, Anthropic zelf zegt hier niets over in deze bronnen.",
+   "waarom": "Het laat zien dat het krachtigste model van Anthropic langzaam bij meer mensen terechtkomt, al is het nu alleen voor gecontroleerde beveiligingsmensen.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzgbby/cvp_members_now_have_mythos_51/",
+     "datum": "2026-10-06T22:31:36+00:00"
+    },
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzn92v/just_got_access_to_mythos_51/",
+     "datum": "2026-10-07T04:20:44+00:00"
+    },
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzfw5f/mythos_is_now_available_cvp/",
+     "datum": "2026-10-06T22:12:48+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 7,
+   "kop": "Anthropic geeft beveiligingsexperts in drie niveaus toegang tot sterkere modellen",
+   "uitleg": "Normale Claude-modellen weigeren veel hackerwerk, omdat dezelfde kennis waarmee je een lek dicht, ook kan helpen om in te breken. Het Cyber Verification Program van Anthropic gaf daarom al gecontroleerde teams toegang met minder blokkades, en Project Glasswing deed dat met Claude Mythos voor organisaties die cruciale software beveiligen.",
+   "samenvatting": "Anthropic voegt die twee programma's samen en breidt ze uit tot drie niveaus. Defense Access is voor verdedigend werk, Red Team Access voegt toegestaan hacken van eigen systemen toe, en Specialized Access heeft de minste blokkades en is voor een kleine groep organisaties die bijvoorbeeld energienetwerken of banknetwerken mogen testen. Alle niveaus geven toegang tot onder meer Claude Opus 5.5, Claude Sonnet 5.5 en Claude Mythos 5.1.",
+   "waarom": "Verdedigers van ziekenhuizen, universiteiten en kleinere beveiligingsbedrijven kunnen nu makkelijker aan de krachtigste hulpmiddelen komen, terwijl gevaarlijke acties zoals het inzetten van gijzelsoftware geblokkeerd blijven.",
+   "bronnen": [
+    {
+     "bron": "Anthropic",
+     "groep": "lab",
+     "url": "https://www.anthropic.com/news/cyber-verification-program",
+     "datum": null
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 8,
+   "kop": "Mistral laat voorproefje van nieuw groot model los",
+   "uitleg": "Mistral is een AI-bedrijf dat naar eigen zeggen in Europa traint en werkt. Het maakt open-weight modellen, dat wil zeggen dat je de bestanden van het eindresultaat zelf kunt downloaden en op je eigen systemen draaien.",
+   "samenvatting": "Mistral heeft een previewversie uitgebracht van Mistral Large 4, een model met 1 biljoen parameters (de instelwaarden die een model heeft geleerd). Volgens het bedrijf presteert het beter dan elk open model uit de VS of Europa, vooral bij programmeren en beveiliging. Je kunt de preview nu al proberen via de API (de technische toegangsdeur voor programma's) op Mistral Studio, en de downloadbare bestanden volgen eind deze maand.",
+   "waarom": "Als je liever geen gesloten model van een Amerikaans bedrijf gebruikt, komt er een serieus alternatief bij dat je zelf kunt draaien, al zijn de prestatiecijfers van Mistral zelf.",
+   "bronnen": [
+    {
+     "bron": "Mistral",
+     "groep": "lab",
+     "url": "https://mistral.ai/news/mistral-large-4/",
+     "datum": "2026-10-06T12:00:27+00:00"
+    },
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://mistral.ai/news/mistral-large-4/\\",
+     "datum": "2026-10-06T13:15:49+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49977979",
+     "punten": 1692
+    },
+    {
+     "bron": "Simon Willison",
+     "groep": "curator",
+     "url": "https://simonwillison.net/2026/Oct/6/le-chonk/",
+     "datum": "2026-10-06T20:18:19+00:00"
+    },
+    {
+     "bron": "Simon Willison",
+     "groep": "curator",
+     "url": "https://simonwillison.net/2026/Oct/6/hn-49982139/",
+     "datum": "2026-10-06T18:20:58+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 6,
+   "kop": "Google brengt klein model uit dat tekst, beeld en geluid doorzoekbaar maakt",
+   "uitleg": "Een embedding-model zet tekst, plaatjes of geluid om in getallen, zodat een programma kan zoeken op betekenis in plaats van op losse woorden. Google DeepMind, de AI-afdeling van Google, bracht vorig jaar al een versie voor alleen tekst uit, die meer dan 20 miljoen keer is gedownload.",
+   "samenvatting": "EmbeddingGemma 2 doet dit nu ook voor beeld, video, audio en code. Het model is klein genoeg om op een telefoon te draaien en is gratis te gebruiken onder de Apache 2.0 licentie. Je kunt het uitproberen in de apps van Google AI Edge Gallery.",
+   "waarom": "Je kunt daarmee zoekfuncties in je eigen app bouwen die op je eigen apparaat draaien, zodat je gegevens niet naar een server hoeven.",
+   "bronnen": [
+    {
+     "bron": "Google DeepMind",
+     "groep": "lab",
+     "url": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/",
+     "datum": "2026-10-06T19:57:04+00:00"
+    },
+    {
+     "bron": "Simon Willison",
+     "groep": "curator",
+     "url": "https://simonwillison.net/2026/Oct/6/hn-49983751/",
+     "datum": "2026-10-06T20:37:53+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 6,
+   "kop": "Claude Code krijgt een update met nieuwe opties en veel beveiligingsfixes",
+   "uitleg": "Claude Code is het programma van Anthropic waarmee je in de terminal (het tekstvenster van je computer) met Claude programma's bouwt, en het heeft bijna 150.000 sterren op GitHub. Een plugin is een uitbreiding die je aan een programma toevoegt, zoals een app op je telefoon.",
+   "samenvatting": "In versie 2.1.292 kun je plugins nu in één keer installeren, ook als de bron ervan (de marketplace) nog niet is toegevoegd. Ook kun je voor hulp-agents (kleine Claude-hulpjes die deeltaken uitvoeren) aangeven hoe hard ze moeten nadenken. Daarnaast zijn er veel kleine fouten en beveiligingslekken verholpen.",
+   "waarom": "Plugins zijn makkelijker te installeren en Claude Code is veiliger geworden, zonder dat je er zelf iets voor hoeft te doen.",
+   "bronnen": [
+    {
+     "bron": "Claude Code",
+     "groep": "lab",
+     "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.292",
+     "datum": "2026-10-06T18:59:30+00:00",
+     "sterren": 149660
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 7,
+   "kop": "Claude waarschuwde dat een Mac Mini was gehackt",
+   "uitleg": "Claude Code kan op de achtergrond blijven meekijken en op vaste momenten opnieuw starten. Ben Thompson gebruikt dat om een eigen overzichtsscherm bij te houden, en schreef erover op zijn blog.",
+   "samenvatting": "Bij zo'n herstart meldde Claude dat de Mac Mini van Thompson waarschijnlijk was gehackt en dat er een crypto miner op stond, een programma dat stiekem rekenkracht gebruikt om cryptomunten te maken. Het lek bleek de poort voor schermdelen (poort 5900) te zijn, waarmee iemand van buiten het scherm kan zien en toetsenbord en muis kan bedienen.",
+   "waarom": "Het laat zien dat Claude ook kan meekijken naar wat er op je computer gebeurt en problemen kan opmerken waar jij zelf niet naar zoekt.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzkpu9/claude_tells_ben_thompson_his_mac_mini_is/",
+     "datum": "2026-10-07T02:04:19+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 6,
+   "kop": "Een oud computerspel uit 1989 werd met Claude Code een natuurkundespel",
+   "uitleg": "Gravity Wars is een spel voor twee spelers waarbij je raketten afschiet langs planeten en zwarte gaten, en de zwaartekracht buigt elke schot. De maker bouwde het na op basis van een DOS-spel uit 1989 van Sohrab Ismail-Beigi, dat vrij te gebruiken was.",
+   "samenvatting": "Bijna alle code is door Claude Code geschreven, terwijl de maker zelf speelde, testte en besliste wat er nodig was. In het spel zie je onder meer zwarte gaten die het licht buigen en raketten die last hebben van tijdsvertraging. Je kunt het gratis spelen op gravwars.com, zonder account, op telefoon of computer.",
+   "waarom": "Het is een mooi voorbeeld van hoe je door te praten met Claude Code een heel spel kunt bouwen, met een plan-bestand zodat elke nieuwe sessie weet waar de vorige stopte.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wz61i4/i_used_claude_code_to_turn_a_1989_dos_game_i/",
+     "datum": "2026-10-06T15:48:18+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 6,
+   "kop": "Claude Opus 5.5 blijkt verrassend goed spelmuziek te kunnen maken",
+   "uitleg": "Simon Willison schrijft een bekende weblog over AI en probeert daar nieuwe modellen op uit. Een artifact is een klein programma dat Claude midden in het gesprek bouwt en dat je direct kunt gebruiken.",
+   "samenvatting": "Willison vroeg Claude Opus 5.5 om een eenvoudig tekstformaat voor muziek te bedenken en een speler te bouwen, met voorbeeldnummers in de stijl van het spel The Secret of Monkey Island. Het resultaat noemt hij verrassend goed. Hij vraagt zich af of muziek maken een nieuwe vaardigheid van tekstmodellen is, maar dat moet nog worden onderzocht.",
+   "waarom": "Je kunt Claude dus niet alleen vragen om tekst en programma's, maar ook om muziek te laten bedenken en afspelen.",
+   "bronnen": [
+    {
+     "bron": "Simon Willison",
+     "groep": "curator",
+     "url": "https://simonwillison.net/2026/Oct/6/scrimshaw-jukebox/",
+     "datum": "2026-10-06T15:17:39+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 7,
+   "kop": "OpenAI publiceert honderden wiskundige uitkomsten van een nog onuitgebracht model",
+   "uitleg": "Wiskundigen hebben lange lijsten met open problemen, vragen waar nog niemand het antwoord op weet. OpenAI zegt dat een intern model, dat nog niet is uitgebracht, er veel heeft opgelost.",
+   "samenvatting": "OpenAI heeft 722 wetenschappelijke artikelen gepubliceerd op GitHub, in 372 groepen van samenhangende resultaten. Een nieuwe adviesgroep van wiskundigen zegt dat het gaat om oplossingen voor honderden open vragen, maar het vakgebied is ze nog aan het beoordelen.",
+   "waarom": "",
+   "bronnen": [
+    {
+     "bron": "OpenAI",
+     "groep": "lab",
+     "url": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+     "datum": "2026-10-06T12:00:00+00:00"
+    },
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1005004/openai-math-release-github",
+     "datum": "2026-10-06T19:26:38-04:00"
+    },
+    {
+     "bron": "Latent Space",
+     "groep": "curator",
+     "url": "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
+     "datum": "2026-10-07T04:55:44+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 6,
+   "kop": "Analyse: Claude-abonnementen geven veel meer gebruiksruimte dan die van OpenAI",
+   "uitleg": "Bij een abonnement betaal je een vast bedrag per maand en mag je daarvoor een bepaalde hoeveelheid gebruiken, voordat je een limiet bereikt. SemiAnalysis, dat een betaalde nieuwsbrief over AI-bedrijven schrijft, heeft die limieten bij veel aanbieders gemeten.",
+   "samenvatting": "Volgens de analyse geven de abonnementen van Anthropic bij de middenklasse-modellen ongeveer 5 keer zoveel waarde als die van OpenAI, als je het omrekent naar wat dezelfde hoeveelheid via de API zou kosten. Ook bleek dat aanbieders de limieten stilletjes kunnen veranderen, want een van de geteste accounts had ongeveer 20 procent lagere limieten door een kleine test.",
+   "waarom": "",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wz02ul/anthropic_subscriptions_offer_5x_more_value_than/",
+     "datum": "2026-10-06T11:24:25+00:00"
+    },
+    {
+     "bron": "Hacker News (Anthropic)",
+     "groep": "community",
+     "url": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+     "datum": "2026-10-06T07:29:50+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49975345",
+     "punten": 79
+    }
+   ]
+  }
+ ],
+ "kort": [
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 6,
+   "kop": "Iemand houdt bij of Opus 5.5 slechter wordt",
+   "zin": "LiveNerf is een project dat dag voor dag meet of Claude Opus 5.5 na de release slechter wordt, met een basisscore van 58,4 procent.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wzbt5t/was_opus_55_nerfed_livenerf_day_13_update/",
+     "datum": "2026-10-06T19:28:44+00:00",
+     "sterren": 1341
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 5,
+   "kop": "Over de voorgestelde berichten in Claude Code",
+   "zin": "Een stuk op Hacker News, een nieuwssite voor techmensen, bespreekt de functie in Claude Code die berichten voorstelt en beweert dat vooral het model daar baat bij heeft.",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://www.zohaib.cc/blog/smartest-claude-code-feature",
+     "datum": "2026-10-06T18:00:34+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49981905",
+     "punten": 165
+    }
+   ]
+  },
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 5,
+   "kop": "Anthropic geeft startups een jaar gratis Claude Team",
+   "zin": "Startups krijgen volgens een Reddit-bericht een jaar gratis Claude Team, 1.000 dollar tegoed en voordelen ter waarde van maximaal 45.000 dollar.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wz9oim/anthropic_is_giving_startups_a_free_year_of/",
+     "datum": "2026-10-06T18:08:06+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 5,
+   "kop": "Gebruiker ziet Opus 5.5 steeds Anthropic-koppelingen toevoegen",
+   "zin": "Een gebruiker meldt dat Claude Opus 5.5 in al zijn nieuwe projecten ongevraagd een koppeling met de API van Anthropic zet, en vraagt of anderen dit ook zien.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyyfwc/opus_55_intentionally_inserting_anthropic/",
+     "datum": "2026-10-06T09:46:31+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 5,
+   "kop": "Reddit-gebruiker schrikt van hoge prijs per tekstblokjes",
+   "zin": "Een gebruiker reageert verbijsterd op een prijs van 300 dollar per miljoen output tokens, de stukjes tekst die een model schrijft.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeCode/comments/1wz2p4d/holy_ultra_output_tokens_batman_what_are_they/",
+     "datum": "2026-10-06T13:32:04+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 5,
+   "kop": "Claude lijkt werkgever te kennen in incognitochat",
+   "zin": "Een gebruiker meldt dat Claude in een incognitochat, die buiten geschiedenis en geheugen zou blijven, toch zijn werkgever noemde, en vraagt hoe dat kan.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1wyy0ua/claude_knows_about_my_employer_in_incognito/",
+     "datum": "2026-10-06T09:19:24+00:00"
+    }
+   ]
+  },
+  {
+   "rubriek": "Onderzoek en regels",
+   "score": 5,
+   "kop": "Nieuwsbrief over AI-onderzoek behandelt zwermen en watermerken",
+   "zin": "Import AI, een nieuwsbrief over AI-onderzoek, bespreekt in nummer 475 onder meer wanneer je zwermen van AI's inzet en watermerken voor biologie van Google DeepMind.",
+   "bronnen": [
+    {
+     "bron": "Import AI",
+     "groep": "curator",
+     "url": "https://jack-clark.net/2026/10/05/import-ai-475-swarm-scaling-google-deepmind-watermarks-biology-and-the-ai-science-economy/",
+     "datum": "2026-10-05T12:32:30+00:00"
+    }
+   ]
+  }
+ ],
+ "probeer": {
+  "titel": "Laat Claude spelmuziek maken",
+  "tekst": "Open een gewoon gesprek met Claude en geef deze opdracht: \"Schrijf computerspelmuziek voor me. Bedenk eerst een eenvoudig tekstformaat voor de muziek en bouw een artifact dat de muziek hardop kan afspelen, met een paar voorbeeldnummers erin.\" Je hoeft niets te installeren. Het resultaat kan anders zijn dan bij Simon Willison, die dit met Claude Opus 5.5 probeerde, dus vraag gerust om een andere stijl.",
+  "url": "https://simonwillison.net/2026/Oct/6/scrimshaw-jukebox/"
+ },
+ "bekeken": 48,
+ "aantal_bronnen": 29,
+ "fouten": []
+}

@@ -9,7 +9,7 @@
   "woord": "model",
   "uitleg": "Een model is het AI-brein achter een assistent, dat leert uit enorme hoeveelheden tekst.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "flash-lite": {
   "woord": "Flash-Lite",
@@ -51,7 +51,7 @@
   "woord": "token",
   "uitleg": "Een token is een stukje tekst waarmee een AI rekent, ongeveer driekwart woord.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "videokaart": {
   "woord": "videokaart",
@@ -75,7 +75,7 @@
   "woord": "Apache 2.0",
   "uitleg": "Apache 2.0 is een vrije licentie die mensen mag laten gebruiken en aanpassen wat eronder valt.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "swe-bench verified": {
   "woord": "SWE-bench Verified",
@@ -87,13 +87,13 @@
   "woord": "agent",
   "uitleg": "Een agent is een AI-programma dat zelfstandig taken uitvoert in plaats van alleen antwoord te geven.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "claude code": {
   "woord": "Claude Code",
   "uitleg": "Claude Code is het programma van Anthropic waarmee je door te praten programma's laat bouwen.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "cowork": {
   "woord": "Cowork",
@@ -123,7 +123,7 @@
   "woord": "plugin",
   "uitleg": "Een plugin is een uitbreiding die je aan een programma toevoegt, zoals een app op je telefoon.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "claude-mem": {
   "woord": "claude-mem",
@@ -201,6 +201,102 @@
   "woord": "OpenMontage",
   "uitleg": "OpenMontage is een open systeem waarmee een AI-programmeerassistent video's kan maken.",
   "editie": "2026-10-06-ochtend",
+  "keer": 1
+ },
+ "cyber verification program": {
+  "woord": "Cyber Verification Program",
+  "uitleg": "Een programma van Anthropic waarin gecontroleerde beveiligingsprofessionals Claude kunnen gebruiken met minder blokkades rond hackerwerk.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "claude mythos 5.1": {
+  "woord": "Claude Mythos 5.1",
+  "uitleg": "Een van de krachtigste AI-modellen van Anthropic, dat alleen voor een beperkte groep beschikbaar is.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "project glasswing": {
+  "woord": "Project Glasswing",
+  "uitleg": "Een programma van Anthropic waarin organisaties die cruciale software beveiligen toegang kregen tot Claude Mythos.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "mistral": {
+  "woord": "Mistral",
+  "uitleg": "Een AI-bedrijf dat naar eigen zeggen in Europa traint en werkt en eigen taalmodellen maakt.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "open-weight": {
+  "woord": "open-weight",
+  "uitleg": "Een model waarvan je de bestanden zelf kunt downloaden en op je eigen systemen kunt draaien.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "parameter": {
+  "woord": "parameter",
+  "uitleg": "Een instelwaarde in een AI-model die tijdens het trainen is geleerd, en hoe meer er zijn, hoe groter het model.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "api": {
+  "woord": "API",
+  "uitleg": "Een technische toegangsdeur waarmee programma's een AI-model kunnen gebruiken zonder de chat te openen.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "google deepmind": {
+  "woord": "Google DeepMind",
+  "uitleg": "De AI-onderzoeksafdeling van Google.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "embedding-model": {
+  "woord": "embedding-model",
+  "uitleg": "Een model dat tekst, plaatjes of geluid omzet in getallen, zodat je kunt zoeken op betekenis.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "terminal": {
+  "woord": "terminal",
+  "uitleg": "Een tekstvenster op je computer waarin je opdrachten typt in plaats van te klikken.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "crypto miner": {
+  "woord": "crypto miner",
+  "uitleg": "Een programma dat rekenkracht van een computer gebruikt om cryptomunten te maken, en bij hacks vaak stiekem wordt geïnstalleerd.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "artifact": {
+  "woord": "artifact",
+  "uitleg": "Een klein programma dat Claude midden in het gesprek bouwt en dat je direct kunt gebruiken.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "github": {
+  "woord": "GitHub",
+  "uitleg": "Een website waar programmeurs hun code delen, waar sterren een soort waardering zijn.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "semianalysis": {
+  "woord": "SemiAnalysis",
+  "uitleg": "Een bedrijf dat in een betaalde nieuwsbrief onderzoek over AI-bedrijven en hun kosten publiceert.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "hacker news": {
+  "woord": "Hacker News",
+  "uitleg": "Een nieuwssite voor techmensen waar gebruikers links delen en bespreken.",
+  "editie": "2026-10-07-ochtend",
+  "keer": 1
+ },
+ "import ai": {
+  "woord": "Import AI",
+  "uitleg": "Een nieuwsbrief over AI-onderzoek.",
+  "editie": "2026-10-07-ochtend",
   "keer": 1
  }
 }
