@@ -27,7 +27,7 @@
   "woord": "open source",
   "uitleg": "Open source betekent dat de code voor iedereen in te zien en te gebruiken is.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "lokaal draaien": {
   "woord": "lokaal draaien",
@@ -51,7 +51,7 @@
   "woord": "token",
   "uitleg": "Een token is een stukje tekst waarmee een AI rekent, ongeveer driekwart woord.",
   "editie": "2026-10-06-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "videokaart": {
   "woord": "videokaart",
@@ -87,13 +87,13 @@
   "woord": "agent",
   "uitleg": "Een agent is een AI-programma dat zelfstandig taken uitvoert in plaats van alleen antwoord te geven.",
   "editie": "2026-10-06-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "claude code": {
   "woord": "Claude Code",
   "uitleg": "Claude Code is het programma van Anthropic waarmee je door te praten programma's laat bouwen.",
   "editie": "2026-10-06-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "cowork": {
   "woord": "Cowork",
@@ -225,7 +225,7 @@
   "woord": "Mistral",
   "uitleg": "Een AI-bedrijf dat naar eigen zeggen in Europa traint en werkt en eigen taalmodellen maakt.",
   "editie": "2026-10-07-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "open-weight": {
   "woord": "open-weight",
@@ -279,7 +279,7 @@
   "woord": "GitHub",
   "uitleg": "Een website waar programmeurs hun code delen, waar sterren een soort waardering zijn.",
   "editie": "2026-10-07-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "semianalysis": {
   "woord": "SemiAnalysis",
@@ -393,6 +393,84 @@
   "woord": "Grok Bot",
   "uitleg": "Grok Bot is een AI-assistent van het AI-onderdeel van SpaceX.",
   "editie": "2026-10-07-avond",
+  "keer": 1
+ },
+ "intelligent ui": {
+  "woord": "Intelligent UI",
+  "uitleg": "Een functie van ChatGPT waarmee antwoorden ook diagrammen, grafieken, formulieren en knoppen kunnen bevatten.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "gpt-6 sol": {
+  "woord": "GPT-6 Sol",
+  "uitleg": "De middelgrote versie van het AI-model GPT-6 van OpenAI.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "gpt-6 luna": {
+  "woord": "GPT-6 Luna",
+  "uitleg": "De zuinigere versie van het AI-model GPT-6 van OpenAI.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "claude haiku 5.5": {
+  "woord": "Claude Haiku 5.5",
+  "uitleg": "Het kleinste en goedkoopste AI-model van Anthropic, bedoeld voor veel simpel werk.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "hybrid intelligence": {
+  "woord": "Hybrid Intelligence",
+  "uitleg": "Microsofts naam voor AI die deels op je eigen pc en deels in de cloud draait.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "autopilot": {
+  "woord": "Autopilot",
+  "uitleg": "Een AI-tool van Microsoft die taken op je pc kan uitvoeren.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "docker agent": {
+  "woord": "Docker Agent",
+  "uitleg": "Een hulpmiddel van Docker Engineering om AI-agents te maken en te draaien met een configuratiebestand.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "dos": {
+  "woord": "DOS",
+  "uitleg": "Het oude besturingssysteem waarop pc's in de jaren negentig draaiden.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "stichting offlimits": {
+  "woord": "Stichting Offlimits",
+  "uitleg": "Een Nederlands expertisecentrum voor online misbruik.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "ecosia": {
+  "woord": "Ecosia",
+  "uitleg": "Een zoekmachine uit Berlijn die ook door overheidsdiensten wordt gebruikt.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "cryptografie": {
+  "woord": "cryptografie",
+  "uitleg": "Versleuteling waarmee gegevens en betalingen worden beveiligd.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "blockchain": {
+  "woord": "blockchain",
+  "uitleg": "Een gedeeld digitaal boekhoudsysteem waar cryptogeld op draait.",
+  "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "terence tao": {
+  "woord": "Terence Tao",
+  "uitleg": "Een persoon die reageerde op de wiskundige resultaten van OpenAI.",
+  "editie": "2026-10-08-ochtend",
   "keer": 1
  }
 }

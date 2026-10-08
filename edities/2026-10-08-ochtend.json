@@ -1,0 +1,435 @@
+{
+ "id": "2026-10-08-ochtend",
+ "tijd": "2026-10-08T08:05",
+ "datum": "2026-10-08",
+ "moment": "ochtend",
+ "intro": "Goedemorgen. ChatGPT antwoordt voortaan met diagrammen, grafieken en knoppen, en Anthropic brengt een veel goedkoper Claude-model uit. Ook Microsoft laat Copilot straks zelfstandig met je bestanden werken.",
+ "items": [
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 9,
+   "kop": "ChatGPT antwoordt nu ook met diagrammen, grafieken en knoppen",
+   "uitleg": "ChatGPT is de chatbot van OpenAI. GPT-6 is de nieuwe generatie AI-modellen erachter, waarvan OpenAI de eerste modellen vorige maand aankondigde.",
+   "samenvatting": "ChatGPT kan je antwoord voortaan combineren met diagrammen, grafieken, formulieren en knoppen waarop je tikt. Dat heet Intelligent UI en komt met GPT-6, dat OpenAI nu uitrolt. Betalende gebruikers hebben het vanaf gisteren, gratis gebruikers en gebruikers van het abonnement Go krijgen het donderdag.",
+   "waarom": "Vraag je om uitleg of een rekenhulp, dan krijg je een bruikbaar hulpmiddel in plaats van alleen een lap tekst.",
+   "bronnen": [
+    {
+     "bron": "OpenAI",
+     "groep": "lab",
+     "url": "https://openai.com/index/gpt-6-for-everyone",
+     "datum": "2026-10-07T00:00:00+00:00"
+    },
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1007276/openai-chatgpt-intelligent-ui-gpt-6",
+     "datum": "2026-10-07T15:10:42-04:00"
+    },
+    {
+     "bron": "Reddit (ChatGPT)",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/OpenAI/comments/1x045qs/gpt6_and_intelligent_ui_for_everyone/",
+     "datum": "2026-10-07T18:23:54+00:00"
+    }
+   ],
+   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/Intelligent-UI.png?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200",
+   "bedrijf": "OpenAI",
+   "onderwerpen": [
+    "GPT-6",
+    "ChatGPT",
+    "OpenAI"
+   ],
+   "id": "2026-10-08-ochtend-1"
+  },
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 8,
+   "kop": "Claude Haiku 5.5 kost volgens Anthropic ongeveer 75 procent minder",
+   "uitleg": "Haiku is het kleinste en goedkoopste type AI-model van Anthropic, het bedrijf achter Claude. Het is bedoeld voor veel, simpel werk zoals samenvatten en sorteren.",
+   "samenvatting": "Anthropic brengt Claude Haiku 5.5 uit. Volgens Anthropic kost het gemiddeld ongeveer 75 procent minder dan Haiku 4.5 en doet het meer dan zijn voorganger bij programmeren en werken met een computer. Het model is nu beschikbaar op alle platforms, ook bij Amazon Web Services, Google Cloud en Microsoft Azure.",
+   "waarom": "Wie Claude in een eigen app gebruikt, betaalt minder voor simpele taken.",
+   "bronnen": [
+    {
+     "bron": "Claude Code",
+     "groep": "lab",
+     "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.293",
+     "datum": "2026-10-07T18:10:20+00:00",
+     "sterren": 149806
+    },
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeCode/comments/1x03lg8/introducing_claude_haiku_55_the_cheapest_fastest/",
+     "datum": "2026-10-07T18:02:45+00:00"
+    },
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1x03k4j/introducing_claude_haiku_55_the_cheapest_fastest/",
+     "datum": "2026-10-07T18:01:28+00:00"
+    },
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://www.anthropic.com/claude-haiku-5-5",
+     "datum": "2026-10-07T18:01:32+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49996437",
+     "punten": 791
+    },
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeCode/comments/1x042oi/55_family_is_complete/",
+     "datum": "2026-10-07T18:20:40+00:00"
+    }
+   ],
+   "beeld": "https://opengraph.githubassets.com/b1fed6c2fe312a54f44918106e83d012a118501f051c017e7a7afe3d4455ee69/anthropics/claude-code/releases/tag/v2.1.293",
+   "bedrijf": "Anthropic",
+   "onderwerpen": [
+    "Claude Haiku 5.5",
+    "Claude",
+    "Anthropic"
+   ],
+   "id": "2026-10-08-ochtend-2"
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 7,
+   "kop": "Copilot gaat bestanden op je pc zoeken en acties uitvoeren",
+   "uitleg": "Copilot is de AI-assistent van Microsoft. Microsoft noemt de nieuwe aanpak Hybrid Intelligence: AI die deels op je eigen pc en deels in de cloud (op internet) draait.",
+   "samenvatting": "Copilot krijgt toegang tot bestanden op je pc en kan handelingen in Windows uitvoeren. In een demo zocht de tool Autopilot documenten voor een belastingaangifte, hernoemde ze, stopte ze in een zipbestand en schreef een e-mail aan de accountant. De functies komen de komende maanden, een nieuwe zoekbalk in Windows 11 volgt deze herfst.",
+   "waarom": "Je kunt Copilot straks vragen om rommelwerk met je bestanden over te nemen.",
+   "bronnen": [
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/tech/1007113/microsoft-windows-copilot-ai-control-search-hybrid-intelligence",
+     "datum": "2026-10-07T14:01:20-04:00"
+    }
+   ],
+   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/lcimg-e4e44609-0bf6-40b2-8c24-2e8c3ce7cee8.jpeg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+   "bedrijf": "Microsoft",
+   "onderwerpen": [
+    "Copilot",
+    "Microsoft"
+   ],
+   "id": "2026-10-08-ochtend-3"
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 6,
+   "kop": "Docker Agent laat je AI-agents maken met een configuratiebestand",
+   "uitleg": "Een agent is een AI die zelfstandig taken uitvoert. Docker Agent komt van Docker Engineering en heeft bijna 3.900 sterren op GitHub, de site waar programmeurs hun werk delen.",
+   "samenvatting": "Met Docker Agent beschrijf je in een tekstbestand wat een AI-agent doet, zonder te programmeren. Je start hem met het commando docker agent run. Je kunt ook teams van agents laten samenwerken, met modellen van onder meer OpenAI, Anthropic, Google en Mistral.",
+   "waarom": "Wie eigen AI-hulpjes wil bouwen, heeft daar geen programmeerkennis voor nodig.",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://github.com/docker/docker-agent",
+     "datum": "2026-10-07T17:48:38+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49996259",
+     "punten": 210,
+     "sterren": 3874
+    }
+   ],
+   "beeld": "https://opengraph.githubassets.com/6a943ce293b31840300fc2d2c5cf221eee7b9f140fa209e6f238d7aa1dcde5bf/docker/docker-agent",
+   "bedrijf": "Anders",
+   "onderwerpen": [
+    "Docker Agent",
+    "AI-agents"
+   ],
+   "id": "2026-10-08-ochtend-4"
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 6,
+   "kop": "Claude repareert met drie bytes een DOS-spel uit 1991",
+   "uitleg": "DOS is het oude besturingssysteem van pc's uit de jaren negentig. Een gebruiker kocht een oude Pentium 75 om het spel Operation Neptune van zijn jeugd op echte apparatuur te spelen.",
+   "samenvatting": "Het spel bleef hangen, dus de gebruiker gaf de spelbestanden en een beschrijving van het probleem aan Claude. In vijf minuten ontleedde Claude het programma, vond de oorzaak en maakte een kopie met een aanpassing van drie bytes. Die werkte meteen. Het spel wachtte eindeloos op antwoord van een geluidskaart die het niet kende.",
+   "waarom": "Werkt een oud programma niet meer, dan kun je Claude vragen om uit te zoeken waarom.",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1x06hmp/claude_fixed_a_bug_in_a_dos_game_from_1991_and/",
+     "datum": "2026-10-07T19:58:41+00:00"
+    }
+   ],
+   "beeld": "",
+   "bedrijf": "Anthropic",
+   "onderwerpen": [
+    "Claude",
+    "Anthropic"
+   ],
+   "id": "2026-10-08-ochtend-5"
+  },
+  {
+   "rubriek": "AI in Nederland",
+   "score": 7,
+   "kop": "Meer meldingen van online pesten, ook met AI-beelden",
+   "uitleg": "Stichting Offlimits is een expertisecentrum voor online misbruik. Het houdt meldingen bij van mensen die online worden gepest.",
+   "samenvatting": "Het aantal meldingen van online pesten is opnieuw gestegen, meldt Stichting Offlimits. Het centrum ziet ook meer pesten met AI-beelden.",
+   "waarom": "Ouders en scholen krijgen steeds vaker te maken met pesten waarbij nepbeelden worden gebruikt.",
+   "bronnen": [
+    {
+     "bron": "RTL Nieuws",
+     "groep": "nl-eu",
+     "url": "https://www.rtl.nl/nieuws/binnenland/artikel/5657759/stichting-ziet-sterke-toename-online-pesten",
+     "datum": "2026-10-08T06:44:47+02:00"
+    }
+   ],
+   "beeld": "",
+   "bedrijf": "Anders",
+   "onderwerpen": [
+    "AI-misbruik"
+   ],
+   "id": "2026-10-08-ochtend-6"
+  },
+  {
+   "rubriek": "AI in Nederland",
+   "score": 6,
+   "kop": "Zoekmachine Ecosia stapt van Mistral over op open modellen",
+   "uitleg": "Ecosia is een zoekmachine uit Berlijn die ook overheidsdiensten gebruiken. Mistral is een AI-bedrijf. Open source modellen zijn modellen die iedereen vrij mag gebruiken en aanpassen.",
+   "samenvatting": "Ecosia stopt met Mistral en gebruikt voortaan open source modellen, ook Chinese. De oprichter zegt tegen Politico dat het bedrijf teleurgesteld is in de kwaliteit van Mistral.",
+   "waarom": "Een zoekmachine die overheidsdiensten gebruiken, kiest daarmee voor andere modellen, ook uit China.",
+   "bronnen": [
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261008/p4#a261008p4",
+     "datum": "2026-10-08T00:50:01-04:00"
+    }
+   ],
+   "beeld": "",
+   "bedrijf": "Mistral",
+   "onderwerpen": [
+    "Mistral",
+    "Open modellen"
+   ],
+   "id": "2026-10-08-ochtend-7"
+  },
+  {
+   "rubriek": "Maatschappij",
+   "score": 6,
+   "kop": "OpenAI publiceert weer wiskundige resultaten, Terence Tao reageert",
+   "uitleg": "OpenAI, de maker van ChatGPT, heeft een nieuwe reeks wiskundige resultaten gepubliceerd. The Verge schrijft over opnieuw een batch, dus het is niet de eerste keer.",
+   "samenvatting": "Terence Tao heeft gereageerd op de nieuwe reeks wiskundige resultaten van OpenAI. Wat hij precies schrijft, staat niet in onze bronnen. De Verge noemt de resultaten wel baanbrekend, dat is hun woord en niet het onze.",
+   "waarom": "Wiskundigen kijken kritisch mee of AI echt nieuwe wiskunde kan opleveren.",
+   "bronnen": [
+    {
+     "bron": "Hacker News (OpenAI)",
+     "groep": "community",
+     "url": "https://mathstodon.xyz/@tao/117395269325940185",
+     "datum": "2026-10-08T05:14:14+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=50002008",
+     "punten": 81
+    },
+    {
+     "bron": "Reddit (ChatGPT)",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ChatGPT/comments/1x0i1zl/another_peaceful_day_in_mathematics/",
+     "datum": "2026-10-08T04:51:10+00:00"
+    }
+   ],
+   "beeld": "",
+   "bedrijf": "OpenAI",
+   "onderwerpen": [
+    "AI voor wetenschap",
+    "OpenAI"
+   ],
+   "id": "2026-10-08-ochtend-8"
+  },
+  {
+   "rubriek": "Maatschappij",
+   "score": 6,
+   "kop": "AI-bedrijven testen volgens bron of hun modellen versleuteling kunnen kraken",
+   "uitleg": "Cryptografie is de versleuteling die gegevens en betalingen beveiligt. Een blockchain is een gedeeld digitaal boekhoudsysteem, waar cryptogeld op draait.",
+   "samenvatting": "Volgens computerwetenschapper Scott Aaronson, die zich op bronnen beroept, onderzoeken AI-bedrijven stilletjes of hun modellen belangrijke versleutelingsmethoden kunnen breken. Vitalik Buterin vindt dat we de risico's van AI voor cryptografie serieus moeten nemen. Hij steunt een oproep aan de blockchainsector om in een soort bunkermodus te gaan.",
+   "waarom": "Kan AI versleuteling kraken, dan raakt dat alles wat daarmee wordt beveiligd.",
+   "bronnen": [
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261008/p6#a261008p6",
+     "datum": "2026-10-08T01:10:11-04:00"
+    },
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261008/p5#a261008p5",
+     "datum": "2026-10-08T01:05:01-04:00"
+    }
+   ],
+   "beeld": "",
+   "bedrijf": "Anders",
+   "onderwerpen": [
+    "AI-beveiliging"
+   ],
+   "id": "2026-10-08-ochtend-9"
+  },
+  {
+   "rubriek": "Maatschappij",
+   "score": 6,
+   "kop": "Meta en Microsoft laten eigen medewerkers minder met Claude werken",
+   "uitleg": "Claude Code is een programma van Anthropic waarmee Claude code schrijft. Meta en Microsoft zijn klanten van Anthropic, maar maken ook zelf AI-tools.",
+   "samenvatting": "Volgens The Information bouwen Meta en Microsoft het eigen gebruik van Claude af. Bij Microsoft ging de maandelijkse AI-limiet per medewerker in de meeste gevallen van 100.000 naar ongeveer 10.000 dollar. Bij Meta daalde het aantal Claude Code-gebruikers van ongeveer 60.000 naar 30.000. Klanten kunnen Claude via Microsoft gewoon blijven gebruiken.",
+   "waarom": "Grote bedrijven letten op AI-kosten en kiezen steeds vaker voor hun eigen tools.",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://www.rswebsols.com/news/meta-and-microsoft-take-steps-to-reduce-employee-usage-of-claude-ai/",
+     "datum": "2026-10-07T18:49:40+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=49997161",
+     "punten": 331
+    }
+   ],
+   "beeld": "https://cdn.rswebsols.com/wp-content/uploads/2025/10/otr1by4mkru.jpg",
+   "bedrijf": "Anders",
+   "onderwerpen": [
+    "Claude Code",
+    "Anthropic"
+   ],
+   "id": "2026-10-08-ochtend-10"
+  }
+ ],
+ "kort": [
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 5,
+   "kop": "Haiku 5.5 kostte in test twaalf keer meer dan Luna",
+   "zin": "Een Reddit-gebruiker betaalde in dezelfde test 24,96 dollar voor Claude Haiku 5.5 en 1,96 dollar voor GPT-6 Luna, omdat Haiku veel meer tokens verbruikte.",
+   "bedrijf": "Anders",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1x0agoh/claude_haiku_55_cost_12x_more_than_gpt6_luna_for/",
+     "datum": "2026-10-07T22:33:24+00:00"
+    }
+   ],
+   "id": "2026-10-08-ochtend-k1"
+  },
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 5,
+   "kop": "Claude Sonnet 5.5 wordt goedkoper bij lange taken",
+   "zin": "Anthropic halveert de prijs voor het opnieuw lezen van opgeslagen tekst bij Sonnet 5.5, waardoor lange taken volgens Anthropic ongeveer 20 procent goedkoper worden.",
+   "bedrijf": "Anthropic",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeCode/comments/1x04oqq/claude_sonnet_55_cache_reads_now_cost_50_less/",
+     "datum": "2026-10-07T18:44:25+00:00"
+    }
+   ],
+   "id": "2026-10-08-ochtend-k2"
+  },
+  {
+   "rubriek": "AI in Nederland",
+   "score": 5,
+   "kop": "Microsoft: AI versnelt cyberaanvallen, bedrijven moeten weerbaarder worden",
+   "zin": "Het Microsoft Digital Defense Rapport 2026 zegt dat AI cyberdreigingen sterk versnelt, waardoor weerbaarheid een zaak van bedrijfsleiding wordt.",
+   "bedrijf": "Microsoft",
+   "bronnen": [
+    {
+     "bron": "Computable",
+     "groep": "nl-eu",
+     "url": "https://www.computable.nl/2026/10/08/ai-jaagt-cyberdreigingen-aan-organisaties-moeten-veerkrachtig-worden/",
+     "datum": "2026-10-08T05:15:00+00:00"
+    }
+   ],
+   "id": "2026-10-08-ochtend-k3"
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 5,
+   "kop": "Ontwikkelaar maakt gratis Adobe-alternatieven met AI",
+   "zin": "Een AI-ontwikkelaar bouwde met het model Opus open source alternatieven voor Adobe Creative Cloud, maar ze zijn volgens Ars Technica nog lang niet af.",
+   "bedrijf": "Anders",
+   "bronnen": [
+    {
+     "bron": "Ars Technica AI",
+     "groep": "media",
+     "url": "https://arstechnica.com/ai/2026/10/software-is-over-bold-ai-developer-takes-aim-at-adobe-with-open-source-clones/",
+     "datum": "2026-10-07T21:56:42+00:00"
+    }
+   ],
+   "id": "2026-10-08-ochtend-k4"
+  },
+  {
+   "rubriek": "Maatschappij",
+   "score": 5,
+   "kop": "Ontslagen OpenAI-onderzoekers waarschuwen in brief",
+   "zin": "Drie ontslagen onderzoekers vragen AI-bedrijven te stoppen met werk dat toezicht op AI moeilijker maakt, en zeggen dat hun ontslag collega's afschrikt.",
+   "bedrijf": "OpenAI",
+   "bronnen": [
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261007/p42#a261007p42",
+     "datum": "2026-10-07T20:05:01-04:00"
+    }
+   ],
+   "id": "2026-10-08-ochtend-k5"
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 5,
+   "kop": "Adverteerder klaagt over onverwachte kosten bij ChatGPT-advertenties",
+   "zin": "Een kleine webwinkelier zegt dat zijn testcampagne van 50 dollar per dag nog eens 84,92 euro extra aan afschrijvingen opleverde.",
+   "bedrijf": "OpenAI",
+   "bronnen": [
+    {
+     "bron": "Reddit (ChatGPT)",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/OpenAI/comments/1wzyysy/chatgpt_ads_total_scam/",
+     "datum": "2026-10-07T15:06:59+00:00"
+    }
+   ],
+   "id": "2026-10-08-ochtend-k6"
+  }
+ ],
+ "probeer": {
+  "titel": "Laat ChatGPT een rekenhulp bouwen",
+  "tekst": "Open ChatGPT en typ: \"Maak een rekenhulp om een restaurantrekening eerlijk te splitsen.\" Is GPT-6 voor jou al beschikbaar, dan krijg je een bruikbaar hulpmiddel in het gesprek zelf. Probeer daarna: \"Laat met een diagram zien hoe een fiets met zeven versnellingen werkt.\" Zie je nog geen knoppen, dan komt de update voor jou waarschijnlijk donderdag.",
+  "url": "https://openai.com/index/gpt-6-for-everyone"
+ },
+ "quiz": [
+  {
+   "vraag": "Welke twee versies van GPT-6 komen in ChatGPT?",
+   "opties": [
+    "Haiku en Sonnet",
+    "Sol en Luna",
+    "Mini en Max"
+   ],
+   "goed": 1,
+   "uitleg": "Betalende gebruikers krijgen GPT-6 Sol en gratis gebruikers GPT-6 Luna."
+  },
+  {
+   "vraag": "Hoeveel goedkoper is Claude Haiku 5.5 gemiddeld dan Haiku 4.5, volgens Anthropic?",
+   "opties": [
+    "Ongeveer 25 procent",
+    "Ongeveer 50 procent",
+    "Ongeveer 75 procent"
+   ],
+   "goed": 2,
+   "uitleg": "Anthropic zegt dat Haiku 5.5 gemiddeld ongeveer 75 procent minder kost."
+  },
+  {
+   "vraag": "Op hoeveel is het aantal Claude Code-gebruikers bij Meta ongeveer gedaald?",
+   "opties": [
+    "30.000",
+    "60.000",
+    "6.000"
+   ],
+   "goed": 0,
+   "uitleg": "Het aantal daalde van ongeveer 60.000 naar ongeveer 30.000."
+  }
+ ],
+ "bekeken": 52,
+ "aantal_bronnen": 43,
+ "fouten": []
+}
