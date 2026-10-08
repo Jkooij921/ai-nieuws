@@ -51,7 +51,7 @@
   "woord": "token",
   "uitleg": "Een token is een stukje tekst waarmee een AI rekent, ongeveer driekwart woord.",
   "editie": "2026-10-06-ochtend",
-  "keer": 3
+  "keer": 4
  },
  "videokaart": {
   "woord": "videokaart",
@@ -87,13 +87,13 @@
   "woord": "agent",
   "uitleg": "Een agent is een AI-programma dat zelfstandig taken uitvoert in plaats van alleen antwoord te geven.",
   "editie": "2026-10-06-ochtend",
-  "keer": 3
+  "keer": 4
  },
  "claude code": {
   "woord": "Claude Code",
   "uitleg": "Claude Code is het programma van Anthropic waarmee je door te praten programma's laat bouwen.",
   "editie": "2026-10-06-ochtend",
-  "keer": 3
+  "keer": 4
  },
  "cowork": {
   "woord": "Cowork",
@@ -135,7 +135,7 @@
   "woord": "skill",
   "uitleg": "Een skill is een map met instructies die Claude erbij pakt als een taak erom vraagt.",
   "editie": "2026-10-06-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "mod": {
   "woord": "mod",
@@ -261,7 +261,7 @@
   "woord": "terminal",
   "uitleg": "Een tekstvenster op je computer waarin je opdrachten typt in plaats van te klikken.",
   "editie": "2026-10-07-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "crypto miner": {
   "woord": "crypto miner",
@@ -471,6 +471,90 @@
   "woord": "Terence Tao",
   "uitleg": "Een persoon die reageerde op de wiskundige resultaten van OpenAI.",
   "editie": "2026-10-08-ochtend",
+  "keer": 1
+ },
+ "gebruiksbeleid": {
+  "woord": "Gebruiksbeleid",
+  "uitleg": "De lijst met regels waaraan je je moet houden als je een AI-dienst gebruikt.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "google ai edge foresight": {
+  "woord": "Google AI Edge Foresight",
+  "uitleg": "Een gratis experimentele Mac-app van Google die vergaderingen uitschrijft en samenvat.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "embeddinggemma 2": {
+  "woord": "EmbeddingGemma 2",
+  "uitleg": "Een AI-model van Google dat klein genoeg is om op je eigen computer te draaien.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "granola": {
+  "woord": "Granola",
+  "uitleg": "Een AI-app die vergaderingen uitschrijft en samenvat.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "wispr flow": {
+  "woord": "Wispr Flow",
+  "uitleg": "Een AI-app die gesproken tekst omzet in geschreven tekst.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "gemini enterprise": {
+  "woord": "Gemini Enterprise",
+  "uitleg": "De zakelijke versie van Googles AI-assistent Gemini.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "ponytail": {
+  "woord": "Ponytail",
+  "uitleg": "Een gratis skill die codeer-AI kleinere en completere wijzigingen laat maken.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "subagent": {
+  "woord": "Subagent",
+  "uitleg": "Een hulp-AI die een deeltaak van de hoofd-AI overneemt.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "soc": {
+  "woord": "Soc",
+  "uitleg": "Een security operations center is een team dat dag en nacht let op cyberdreigingen.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "microsoft execution containers": {
+  "woord": "Microsoft Execution Containers",
+  "uitleg": "Een afgeschermde ruimte in Windows waarin AI-agenten werken, zodat ze niet overal bij kunnen.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "lean": {
+  "woord": "Lean",
+  "uitleg": "Een programma waarmee een computer wiskundige bewijzen stap voor stap controleert.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "association for human mathematics": {
+  "woord": "Association for Human Mathematics",
+  "uitleg": "Een groep wiskundigen die kritiek heeft op de publicatie van OpenAI.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "benchmark": {
+  "woord": "Benchmark",
+  "uitleg": "Een standaardtest waarmee je AI-modellen met elkaar vergelijkt.",
+  "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "natura": {
+  "woord": "Natura",
+  "uitleg": "Een startup voor AI-hardware die een slimme ring van 99 dollar toont.",
+  "editie": "2026-10-08-avond",
   "keer": 1
  }
 }
