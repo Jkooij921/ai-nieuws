@@ -276,15 +276,16 @@ def bronnen_html(item):
 
 
 def kaart(item, ref, basis, site_url, groot=False):
-    """Een bericht in een editie. De hele kaart is één link naar de pagina van het bericht, zoals bij andere nieuwssites.
+    """Een bericht in een editie. De hele kaart is één link naar de pagina van het bericht, zoals bij NOS en nu.nl.
 
-    De kop is de echte link; via CSS (a::after) is de hele kaart aanklikbaar. Eerst het nieuws, dan waarom het ertoe doet.
+    De kop is de echte link; via CSS (a::after) is de hele kaart aanklikbaar. In de lijst alleen beeld en kop,
+    zoals bij NOS; alleen het openingsbericht krijgt op een groot scherm ook de samenvatting.
     """
     stijl = RUBRIEKEN[item["rubriek"]]
     link = f"{basis}artikel/{item['id']}.html"
     n = aantal_bronnen(item)
     kop = "h1" if groot else "h3"
-    lede = f'<p class="lede">{e(item["samenvatting"])}</p>' if groot else f'<p>{e(item["samenvatting"])}</p>'
+    lede = f'<p class="lede">{e(item["samenvatting"])}</p>' if groot else ""
     waarom = (f'<p class="waarom"><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>'
               if groot and item.get("waarom") else "")
     product = PRODUCT.get(bedrijf_van(item))
@@ -296,8 +297,7 @@ def kaart(item, ref, basis, site_url, groot=False):
         f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
         f'<{kop}><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></{kop}>'
         f'{lede}{waarom}'
-        f'<div class="onder"><span class="leesverder" aria-hidden="true">Lees het bericht <span class="pijl">→</span></span>'
-        f'<span>{leestijd(item)} min lezen · {n} {"bron" if n == 1 else "bronnen"}</span>'
+        f'<div class="onder"><span>{leestijd(item)} min lezen · {n} {"bron" if n == 1 else "bronnen"}</span>'
         f'<span class="gelezen" hidden>{VINK}Gelezen</span></div>'
         f'</article>'
     )
@@ -371,13 +371,23 @@ def quiz_html(quiz, ed, site_url):
     )
 
 
+VERGROOTGLAS = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
+                'stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M20 20l-4.6-4.6"></path></svg>')
+MENUSTREEPJES = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
+                 'stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>')
+
+
 def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_url=""):
     huidig = ' aria-current="page"'
-    links = "".join(
-        f'<a href="{basis}{doel}"{huidig if naam == actief else ""}>{naam}</a>'
-        for naam, doel in (("Vandaag", "index.html"), ("De week", "week/index.html"), ("Archief", "archief.html"),
-                           ("Begrippen en tips", "leren.html"), ("Zoeken", "zoeken.html"))
-    )
+    menu = (("Vandaag", "index.html"), ("De week", "week/index.html"), ("Archief", "archief.html"),
+            ("Begrippen en tips", "leren.html"), ("Zoeken", "zoeken.html"))
+    links = "".join(f'<a href="{basis}{doel}"{huidig if naam == actief else ""}>{naam}</a>' for naam, doel in menu)
+    # Op de telefoon, zoals bij NOS: één regel met de naam, Zoeken en Menu. Menu klapt de pagina's uit.
+    menulinks = "".join(f'<a href="{basis}{doel}"{huidig if naam == actief else ""}>{naam}</a>'
+                        for naam, doel in menu[:4] + (("Zo maken we dit", "zo-maken-we-dit.html"),))
+    snel = (f'<div class="snel"><a class="zoeklink" href="{basis}zoeken.html">{VERGROOTGLAS}<span>Zoeken</span></a>'
+            f'<details class="menu"><summary>{MENUSTREEPJES}<span>Menu</span></summary>'
+            f'<nav aria-label="Menu">{menulinks}</nav></details></div>')
     return (
         '<!doctype html><html lang="nl"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
@@ -398,7 +408,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         f'<a class="ailabel" href="{basis}zo-maken-we-dit.html">Geschreven met AI</a></div></div>'
         f'<header class="kop"><div class="binnen"><div><a class="merk" href="{basis}index.html">AI-nieuws</a>'
         '<div class="ondertitel">Het belangrijkste AI-nieuws in gewone taal, twee keer per dag</div></div>'
-        f'<nav aria-label="Hoofdmenu">{links}</nav></div></header>'
+        f'<nav class="hoofdmenu" aria-label="Hoofdmenu">{links}</nav>{snel}</div></header>'
         f'{inhoud}'
         '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude). Dat kan fouten opleveren, dus lees bij twijfel de bron. '
         'De beelden komen van de bronnen zelf. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
@@ -433,32 +443,22 @@ def editie_html(ed, begrippen, basis, site_url):
     tweede = next((i for i in groot + rest if lead is not None and i is not lead), None)
     getoond = {id(lead), id(tweede)}
 
-    # De filterbalk: één keuze tegelijk. Eerst welke AI, dan een onderwerp. Het getal op een knop is precies
-    # het aantal berichten dat je na het tikken ziet; een knop zonder berichten komt er niet op.
+    # De keuzeknoppen, zoals de ronde knoppen bij NOS: Alles, Claude, ChatGPT en de Quiz. Groot genoeg voor je duim.
+    # De onderwerpen zijn tussenkopjes in de lijst. Hoeveel berichten je ziet, staat na het tikken boven de lijst.
     alles_bij_elkaar = items + ed["kort"]
-    merken = []
+    keuzes = [("alles", "Alles", len(alles_bij_elkaar), "alles", "")]
     for code, naam, uitleg, _ in MERKFILTERS:
         aantal = sum(1 for i in alles_bij_elkaar if merk_van(i) == code)
-        if aantal:
-            merken.append((code, naam, aantal, naam, uitleg))
-    onderwerpen = []
-    for naam, stijl in RUBRIEKEN.items():
-        aantal = sum(1 for i in items if i["rubriek"] == naam)
-        if aantal:
-            onderwerpen.append((stijl["klasse"], stijl["knop"], aantal, stijl["knop"], stijl["uitleg"]))
-    if ed["kort"]:
-        onderwerpen.append(("kort", "Kort nieuws", len(ed["kort"]), "Kort nieuws", "Kleiner nieuws in één zin. De link gaat naar de bron."))
+        if aantal and code != "overig":
+            keuzes.append((code, naam, aantal, "merk", uitleg))
     if ed.get("quiz"):
-        onderwerpen.append(("quiz", "Quiz", len(ed["quiz"]), "Nieuwsquiz", ""))
-
-    def knoppen(rij, soort):
-        return "".join(
-            f'<button type="button" data-filter="{k}" data-soort="{soort}" data-titel="{e(t)}" data-uitleg="{e(u)}" '
-            f'aria-pressed="{"true" if k == "alles" else "false"}">{e(n)} <span>{a}</span></button>'
-            for k, n, a, t, u in rij
-        )
-    tabbalk = (knoppen([("alles", "Alles", len(alles_bij_elkaar), "", "")], "alles") + knoppen(merken, "merk")
-               + '<span class="scheiding" aria-hidden="true"></span>' + knoppen(onderwerpen, "onderwerp"))
+        keuzes.append(("quiz", "Quiz", len(ed["quiz"]), "quiz", ""))
+    tabbalk = "".join(
+        f'<button type="button" data-filter="{k}" data-soort="{soort}" data-titel="{e(n)}" data-uitleg="{e(u)}" '
+        f'data-aantal="{a}" aria-label="{e(n)}, {a} {"vragen" if k == "quiz" else "berichten"}" '
+        f'aria-pressed="{"true" if k == "alles" else "false"}">{e(n)}</button>'
+        for k, n, a, soort, u in keuzes
+    )
 
     # Uitgelegd: een begrip dat in deze editie voor het eerst werd uitgelegd.
     nieuw = [b for b in begrippen.values() if b.get("editie") == ed["id"]]
@@ -488,8 +488,7 @@ def editie_html(ed, begrippen, basis, site_url):
         lijst = [i for i in items if i["rubriek"] == naam and id(i) not in getoond]
         if lijst:
             kaarten = "".join(kaart(i, ref, basis, site_url) for i in lijst)
-            secties.append(f'<section class="sectie"><div class="kopregel"><h2>{e(naam)}</h2>'
-                           f'<button type="button" class="tekstknop" data-kies="{stijl["klasse"]}">Alleen {e(stijl["knop"].lower() if stijl["knop"] != "Zo gebruik je AI" else stijl["knop"])} tonen</button></div>'
+            secties.append(f'<section class="sectie" id="{stijl["klasse"]}"><div class="kopregel"><h2>{e(naam)}</h2></div>'
                            f'<div class="raster">{kaarten}</div></section>')
 
     # Na het kiezen van een filter: alles wat erbij past in één lijst, ook Kort nieuws.
@@ -510,7 +509,7 @@ def editie_html(ed, begrippen, basis, site_url):
         f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten'
         f'<span class="alleenbreed"> en geschreven met AI</span>.</p></div>'
         f'<div class="tabbalk" data-totaal="{len(items)}" data-ids="{e(",".join(i["id"] for i in items))}"><div class="binnen">'
-        f'<div class="tabs" role="group" aria-label="Kies een AI of een onderwerp">{tabbalk}</div>'
+        f'<div class="tabs" role="group" aria-label="Kies wat je wilt zien">{tabbalk}</div>'
         f'<div class="voortgang"><span class="voortgangtekst">0 van {len(items)} gelezen</span>'
         f'<div class="balk" role="progressbar" aria-label="Hoeveel berichten je hebt gelezen" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div></div></div></div>'
         f'</div></div>'
@@ -520,7 +519,7 @@ def editie_html(ed, begrippen, basis, site_url):
         f'<div id="alles">{opening}{probeer}{"".join(secties)}</div>'
         f'<section id="gefilterd" hidden aria-live="polite"><div class="filterstand"><p>Je ziet: <b class="filternaam"></b>'
         f' · <span class="filteraantal"></span></p>'
-        f'<button type="button" class="tekstknop" data-kies="alles">✕ Toon alles</button></div>'
+        f'<button type="button" class="knop licht" data-kies="alles">✕ Toon alles</button></div>'
         f'<p class="filteruitleg"></p><ol class="lijst">{rijen}</ol></section>'
         f'{kort}{quiz_html(ed.get("quiz"), ed, site_url)}'
         f'<p class="editievoet">{e(voet)}</p></main>'

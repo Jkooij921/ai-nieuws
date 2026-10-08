@@ -104,8 +104,15 @@
     window.addEventListener('hashchange', function () { filter = location.hash.slice(1) || 'alles'; toon(false); });
   }
 
-  // Past een rij knoppen of links niet op het scherm, dan vervaagt de rechterkant: een teken dat je kunt schuiven.
-  document.querySelectorAll('.tabs, header nav').forEach(function (schuif) {
+  // Het menu op de telefoon: dicht als je ernaast tikt of op Escape drukt.
+  var menu = document.querySelector('details.menu');
+  if (menu) {
+    document.addEventListener('click', function (gebeurtenis) { if (menu.open && !menu.contains(gebeurtenis.target)) menu.open = false; });
+    document.addEventListener('keydown', function (gebeurtenis) { if (gebeurtenis.key === 'Escape') menu.open = false; });
+  }
+
+  // Past de rij keuzeknoppen niet op het scherm, dan vervaagt de rechterkant: een teken dat je kunt schuiven.
+  document.querySelectorAll('.tabs').forEach(function (schuif) {
     var meer = function () {
       schuif.toggleAttribute('data-meer', schuif.scrollLeft + schuif.clientWidth < schuif.scrollWidth - 4);
     };
