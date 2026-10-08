@@ -39,78 +39,52 @@
   // Dan alsnog de vinkjes en de voortgang bijwerken.
   window.addEventListener('pageshow', function (gebeurtenis) { if (gebeurtenis.persisted) toonGelezen(); });
 
-  // Twee filters die samenwerken: een onderwerp (de filterbalk) en een AI (de knoppen bovenaan).
-  // Het onderwerp komt in het adres, zodat je het kunt delen; de gekozen AI wordt op dit apparaat onthouden.
-  var MERKSLEUTEL = 'ai-nieuws-merk';
+  // De filterbalk: één keuze tegelijk, een AI of een onderwerp. Het getal op een knop is precies wat je daarna ziet.
+  // De keuze komt in het adres, zodat je hem kunt delen. Bij een nieuw bezoek begin je bij Alles, zodat je niets mist.
+  try { localStorage.removeItem('ai-nieuws-merk'); } catch (fout) { /* de oude, onthouden AI-keuze; privévenster */ }
   var tabs = document.querySelectorAll('.tabs button');
-  var merkknoppen = document.querySelectorAll('.merkknoppen button');
+  var tabrij = document.querySelector('.tabs');
   var filter = 'alles';
-  var merk = 'alle';
-  try { merk = localStorage.getItem(MERKSLEUTEL) || 'alle'; } catch (fout) { /* privévenster */ }
-  if (!document.querySelector('.merkknoppen button[data-merk="' + merk + '"]')) merk = 'alle';
-
-  function past(el) { return merk === 'alle' || el.getAttribute('data-merk') === merk; }
 
   function toon(scrollen) {
     var tab = document.querySelector('.tabs button[data-filter="' + filter + '"]') ||
       document.querySelector('.tabs button[data-filter="alles"]');
     if (!tab) return;
     filter = tab.getAttribute('data-filter');
-    var merkknop = document.querySelector('.merkknoppen button[data-merk="' + merk + '"]');
     tabs.forEach(function (t) { t.setAttribute('aria-pressed', t === tab ? 'true' : 'false'); });
-    merkknoppen.forEach(function (k) { k.setAttribute('aria-pressed', k === merkknop ? 'true' : 'false'); });
 
-    var rubriek = ['alles', 'kort', 'quiz'].indexOf(filter) < 0;
-    var metMerk = merk !== 'alle';
+    var gewoon = filter === 'alles';
+    var lijst = !gewoon && filter !== 'quiz';
     var alles = document.getElementById('alles');
     var gefilterd = document.getElementById('gefilterd');
     var kort = document.getElementById('kort');
     var quiz = document.getElementById('quiz');
-    if (alles) alles.hidden = !(filter === 'alles' && !metMerk);
-    if (quiz) quiz.hidden = !((filter === 'alles' && !metMerk) || filter === 'quiz');
-    if (kort) {
-      kort.hidden = !(filter === 'alles' || filter === 'kort');
-      var korteZichtbaar = 0;
-      kort.querySelectorAll('li').forEach(function (li) { li.hidden = !past(li); if (!li.hidden) korteZichtbaar++; });
-      kort.querySelector('.geenkort').hidden = korteZichtbaar > 0;
-    }
+    if (alles) alles.hidden = !gewoon;
+    if (kort) kort.hidden = !gewoon;
+    if (quiz) quiz.hidden = !(gewoon || filter === 'quiz');
     if (gefilterd) {
-      var toonGefilterd = rubriek || (filter === 'alles' && metMerk);
-      gefilterd.hidden = !toonGefilterd;
-      if (toonGefilterd) {
+      gefilterd.hidden = !lijst;
+      if (lijst) {
+        var opMerk = tab.getAttribute('data-soort') === 'merk';
         var aantal = 0;
-        gefilterd.querySelectorAll('.kaart').forEach(function (k) {
-          var zichtbaar = (!rubriek || k.getAttribute('data-rubriek') === filter) && past(k);
-          k.hidden = !zichtbaar;
-          if (zichtbaar) aantal++;
+        gefilterd.querySelectorAll('.rij').forEach(function (rij) {
+          var past = rij.getAttribute(opMerk ? 'data-merk' : 'data-rubriek') === filter;
+          rij.hidden = !past;
+          if (past) aantal++;
         });
-        var titel = [];
-        var uitleg = '';
-        if (metMerk) { titel.push(merkknop.getAttribute('data-naam')); uitleg = merkknop.getAttribute('data-uitleg'); }
-        if (rubriek) {
-          titel.push(tab.getAttribute('data-titel'));
-          uitleg = tab.getAttribute('data-uitleg') + (metMerk ? ' Alleen over ' + merkknop.getAttribute('data-naam') + '.' : '');
-        }
-        gefilterd.querySelector('h2').textContent = titel.join(' · ');
-        gefilterd.querySelector('.filteruitleg').textContent = uitleg;
-        gefilterd.querySelector('.geenresultaat').hidden = aantal > 0;
+        gefilterd.querySelector('.filternaam').textContent = tab.getAttribute('data-titel');
+        gefilterd.querySelector('.filteraantal').textContent = aantal + (aantal === 1 ? ' bericht' : ' berichten');
+        gefilterd.querySelector('.filteruitleg').textContent = tab.getAttribute('data-uitleg');
       }
     }
 
-    // De aantallen op de filterbalk tellen alleen wat bij de gekozen AI past.
-    var kaarten = gefilterd ? gefilterd.querySelectorAll('.kaart') : [];
-    var korte = kort ? kort.querySelectorAll('li') : [];
-    tabs.forEach(function (t) {
-      var f = t.getAttribute('data-filter');
-      var getal = t.querySelector('span');
-      if (!getal || f === 'quiz') return;
-      var n = 0;
-      if (f === 'alles' || f === 'kort') korte.forEach(function (li) { if (past(li)) n++; });
-      if (f !== 'kort') kaarten.forEach(function (k) { if ((f === 'alles' || k.getAttribute('data-rubriek') === f) && past(k)) n++; });
-      getal.textContent = n;
-    });
-
-    if (history.replaceState) history.replaceState(null, '', filter === 'alles' ? location.pathname : '#' + filter);
+    // Op een smal scherm: de gekozen knop in beeld schuiven, ook als je via een link binnenkomt.
+    if (tabrij) {
+      var knop = tab.getBoundingClientRect();
+      var rij = tabrij.getBoundingClientRect();
+      if (knop.left < rij.left || knop.right > rij.right) tabrij.scrollLeft += knop.left - rij.left - 24;
+    }
+    if (history.replaceState) history.replaceState(null, '', gewoon ? location.pathname : '#' + filter);
     if (scrollen) {
       var balk = document.querySelector('.tabbalk');
       if (balk && window.scrollY > balk.offsetTop) window.scrollTo({ top: balk.offsetTop, behavior: 'smooth' });
@@ -123,28 +97,22 @@
   document.querySelectorAll('[data-kies]').forEach(function (k) {
     k.addEventListener('click', function () { filter = k.getAttribute('data-kies'); toon(true); });
   });
-  merkknoppen.forEach(function (k) {
-    k.addEventListener('click', function () {
-      merk = k.getAttribute('data-merk');
-      try { localStorage.setItem(MERKSLEUTEL, merk); } catch (fout) { /* privévenster: dan niet onthouden */ }
-      toon(false);
-    });
-  });
   if (tabs.length) {
     if (location.hash) filter = location.hash.slice(1);
     toon(false);
+    // Een link naar bijvoorbeeld #claude op dezelfde pagina: ook dan het filter zetten.
+    window.addEventListener('hashchange', function () { filter = location.hash.slice(1) || 'alles'; toon(false); });
   }
 
-  // Past de filterbalk niet op het scherm, dan vervaagt de rechterkant: een teken dat je kunt schuiven.
-  var tabrij = document.querySelector('.tabs');
-  if (tabrij) {
+  // Past een rij knoppen of links niet op het scherm, dan vervaagt de rechterkant: een teken dat je kunt schuiven.
+  document.querySelectorAll('.tabs, header nav').forEach(function (schuif) {
     var meer = function () {
-      tabrij.toggleAttribute('data-meer', tabrij.scrollLeft + tabrij.clientWidth < tabrij.scrollWidth - 4);
+      schuif.toggleAttribute('data-meer', schuif.scrollLeft + schuif.clientWidth < schuif.scrollWidth - 4);
     };
-    tabrij.addEventListener('scroll', meer, { passive: true });
+    schuif.addEventListener('scroll', meer, { passive: true });
     window.addEventListener('resize', meer);
     meer();
-  }
+  });
 
   // Een artikelpagina openen telt als gelezen.
   var artikel = document.querySelector('[data-artikel]');

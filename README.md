@@ -6,8 +6,8 @@ Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de beric
 
 ## De site
 
-- **Vandaag:** de nieuwste editie. Bovenaan een keuze welke AI je wilt zien (Alle AI, Claude, ChatGPT, Overig; onthouden op je apparaat) en filters per onderwerp: Groot nieuws, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws en de Quiz. Elk bericht heeft een beeld van de bron, een impact-label en het aantal bronnen. Tik of klik ergens op een bericht en je gaat naar de hele uitleg, zoals bij andere nieuwssites. Kort nieuws heeft geen eigen pagina: een pijltje (↗) laat zien dat die link naar de bron gaat. Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen. Na de quiz kun je je score delen via WhatsApp, met een link naar dezelfde quiz.
-- **Een pagina per bericht** (`artikel/`): de hele uitleg, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Eerder over …" met eerdere berichten over hetzelfde onderwerp.
+- **Vandaag:** de nieuwste editie. Eén filterbalk met één keuze tegelijk: Alles, een AI (Claude, ChatGPT, Overig) of een onderwerp (Groot nieuws, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws, Quiz). Het getal op een knop is precies het aantal berichten dat je dan ziet, en boven de lijst staat welk filter aan staat. Elk bericht heeft een beeld van de bron, een impact-label en het aantal bronnen. Tik of klik ergens op een bericht en je gaat naar het hele artikel, zoals bij andere nieuwssites. Op de telefoon staat alleen het openingsbericht groot; de rest staat als rijen met een kleine foto, zoals in een nieuwsapp. Kort nieuws heeft geen eigen pagina: een pijltje (↗) laat zien dat die link naar de bron gaat. Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen. Na de quiz kun je je score delen via WhatsApp, met een link naar dezelfde quiz.
+- **Een pagina per bericht** (`artikel/`): een artikel van 2 tot 3 minuten lezen, met tussenkopjes, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Eerder over …" met eerdere berichten over hetzelfde onderwerp. Het programma haalt de tekst van maximaal 3 bronnen op. Is er te weinig brontekst voor een echt artikel (minder dan 1.500 tekens, bijvoorbeeld door een betaalmuur), dan wordt het Kort nieuws in plaats van een opgevuld artikel.
 - **Geschreven met AI:** bovenaan elke pagina en onder elke kop staat dat de berichten met AI geschreven zijn (dat moet sinds 2 augustus 2026 volgens de Europese AI-verordening, artikel 50). Het label linkt naar **Zo maken we dit** (`zo-maken-we-dit.html`): hoe we kiezen, wat er niet in komt en welke bronnen, automatisch uit `config.json`.
 - **Delen:** elke pagina geeft WhatsApp en andere apps een kop, een korte tekst en een beeld voor de voorvertoning. Zonder bruikbaar beeld komt `deel.png`, het plaatje met de naam van de site.
 - **Onderwerpen** (`onderwerp/`): alle berichten over bijvoorbeeld Claude Code of Mistral bij elkaar. Claude geeft elk bericht 1 tot 3 onderwerpen en hergebruikt bestaande namen.
@@ -23,7 +23,7 @@ Net als nieuwsaggregators gebruikt de site het deelbeeld dat de bron zelf opgeef
 ## Hoe het werkt
 
 1. GitHub start `.github/workflows/editie.yml` twee keer per uur in de uren na 08:00 en 20:00. Elke run kijkt eerst welke editie er als laatste had moeten zijn (08:00 of 20:00). Bestaat die al, dan stopt de run na een paar seconden.
-2. Ontbreekt de editie, dan haalt `ai_nieuws.py` het nieuws op, laat Claude kiezen en schrijven, maakt de site en mailt.
+2. Ontbreekt de editie, dan haalt `ai_nieuws.py` het nieuws op, laat Claude kiezen en schrijven, maakt de site en mailt. Claude schrijft eerst de editie (koppen, samenvattingen, kort nieuws, quiz) en daarna elk artikel apart, vier tegelijk. Zo krijgt elk artikel zijn volle aandacht.
 3. De editie, de begrippen en de lijst met gezien nieuws worden bewaard in deze repository. De site gaat naar GitHub Pages.
 
 GitHub start geplande runs soms te laat of slaat er een over. Daarom wordt er vaak gekeken: een gemiste editie komt bij de volgende run alsnog, meestal binnen een half uur na 08:00 of 20:00.
@@ -31,7 +31,7 @@ GitHub start geplande runs soms te laat of slaat er een over. Daarom wordt er va
 ## Wat erin komt
 
 - `criteria.md`: voor wie de site is, wat er in elke rubriek hoort, wat er niet in komt (geen reclame, geen onbekende tools) en hoe de score werkt.
-- `SCHRIJF_OPDRACHT` bovenin `ai_nieuws.py`: hoe de berichten geschreven worden.
+- Bovenin `ai_nieuws.py`: hoe de berichten geschreven worden. `SCHRIJFREGELS` geldt voor alles (het belangrijkste eerst, beloningen onderweg, tussenkopjes als vraag, eindigen met iets wat je kunt doen), `SCHRIJF_OPDRACHT` is voor de editie en `ARTIKEL_OPDRACHT` voor het verhaal van elk artikel.
 - `config.json`: de bronnen en de aantallen.
 
 Pas een van deze bestanden aan, zet de wijziging op GitHub, en de volgende editie volgt de nieuwe regels.

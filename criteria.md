@@ -30,7 +30,7 @@ Tools, skills, plugins en MCP-servers draaien op de computer van de lezer en kun
 - Reclame voor een eigen product of dienst, zonder dat anderen het bevestigen, komt er niet in.
 - Artikelen van onbekende schrijvers zonder bewijs of voorbeelden komen er niet in.
 - Tips en ervaringen van gebruikers op Reddit mogen, als ze concreet zijn en niets verkopen.
-- Een bewering die alleen op Reddit staat ("ik zie een nieuw model in mijn chat") is geen nieuws, maar een gerucht. Geef die hooguit een 5. Pas als een bedrijf of een nieuwssite het bevestigt, is het nieuws. Het programma houdt zich hier ook zelf aan.
+- Een bewering die alleen op Reddit staat ("ik zie een nieuw model in mijn chat") is geen nieuws, maar een gerucht. Geef die hooguit een 5. Pas als een bedrijf of een nieuwssite het bevestigt, is het nieuws. Dat geldt ook voor een nieuwe tool die alleen op Reddit wordt aangeprezen, tenzij hij genoeg sterren op GitHub heeft. Het programma houdt zich hier ook zelf aan.
 - Twijfel je of iets betrouwbaar of veilig is, laat het dan weg.
 
 ## Rubrieken

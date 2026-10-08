@@ -176,18 +176,60 @@ SCHRIJF_SCHEMA = {
     "required": ["intro", "items", "kort", "probeer", "begrippen", "quiz"],
 }
 
-SCHRIJF_OPDRACHT = """Je schrijft de {moment}editie van een persoonlijke AI-nieuwssite in het Nederlands.
+ARTIKEL_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "artikel": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"tussenkop": {"type": "string"}, "alineas": {"type": "array", "items": {"type": "string"}}},
+                "required": ["tussenkop", "alineas"],
+            },
+        }
+    },
+    "required": ["artikel"],
+}
 
-De site is een krant voor mensen met een beetje kennis van AI. Ze gebruiken zelf ChatGPT, Claude, Gemini of Copilot en weten wat een chatbot, een AI-model en een prompt is, maar kennen de vaktaal en de achtergrond niet. Bekend zijn: Anthropic, OpenAI, Google, Microsoft, Claude, ChatGPT, Gemini, Copilot, chatbot, AI-model en prompt. Alle andere producten, bedrijven, onderzoeksgroepen en vaktermen zijn onbekend. Schrijf zoals een goede krant voor een breed publiek: helder, zakelijk en prettig om te lezen, zonder vakjargon en zonder kinderachtig te worden.
+# Voor wie de site is. Staat in de opdracht voor de editie en in die voor elk artikel.
+LEZERS = """De site is een krant voor mensen met een beetje kennis van AI. Ze gebruiken zelf ChatGPT, Claude, Gemini of Copilot en weten wat een chatbot, een AI-model en een prompt is, maar kennen de vaktaal en de achtergrond niet. Bekend zijn: Anthropic, OpenAI, Google, Microsoft, Claude, ChatGPT, Gemini, Copilot, chatbot, AI-model en prompt. Alle andere producten, bedrijven, onderzoeksgroepen en vaktermen zijn onbekend. Schrijf zoals een goede krant voor een breed publiek: helder, zakelijk en prettig om te lezen, zonder vakjargon en zonder kinderachtig te worden."""
 
-Zo schrijf je een bericht dat mensen willen lezen:
+# Hoe een artikel prettig leest: het belangrijkste eerst, dan het verhaal, beloningen onderweg,
+# nieuwsgierigheid zonder clickbait en eindigen met iets wat de lezer kan doen.
+SCHRIJFREGELS = """Zo schrijf je een artikel dat mensen willen lezen:
 - Het belangrijkste eerst. De kop en de eerste zin van de samenvatting vertellen samen het nieuws. Wie alleen die twee leest, weet wat er gebeurd is en wat er voor de lezer verandert. Daarna pas de details.
+- Daarna het verhaal. Na de samenvatting vertelt het artikel wat er precies gebeurde: de details, een voorbeeld, de achtergrond. Wie alleen de samenvatting leest, weet genoeg. Wie doorleest, wordt beloond.
+- Beloon de lezer onderweg. Zet in het midden van het artikel minstens twee dingen die het lezen waard maken: een getal, een concreet voorbeeld, een opvallend detail, of een korte uitspraak die letterlijk in de brontekst staat (vertaald, tussen aanhalingstekens, met wie het zei). Stop niet al het goede in de eerste zin.
+- Maak nieuwsgierig zonder te overdrijven. Een tussenkop is de vraag die de lezer op dat moment heeft, en het antwoord staat er direct onder. Beloof nooit meer dan het artikel waarmaakt.
+- Eindig met iets wat de lezer kan doen of moet weten: hoe je het zelf probeert, waar je op let, of wat er nu gaat gebeuren. Is het nieuws zorgelijk, zeg dan ook wat eraan gedaan wordt of wat je zelf kunt doen, als de bron dat noemt. Mensen haken af van nieuws waar ze zich machteloos bij voelen.
+- Wees eerlijk over wat niet vaststaat. Is iets alleen een bewering van een bedrijf of een gebruiker, zeg dat. Noemt de bron iets niet, laat het weg.
 - Begin met het nieuws zelf, niet met wie het meldt. Niet: "OpenAI heeft aangekondigd dat ChatGPT een nieuwe functie krijgt." Wel: "Wie ChatGPT gebruikt, kan voortaan ..." De eerste woorden van een zin dragen de informatie.
 - Maak het concreet. Liever één voorbeeld, één getal of één situatie uit de tekst dan een algemene bewering. Niet "het model is veel beter", maar wat het nu kan wat eerst niet kon. Geef een getal houvast: "twee keer zo snel als het vorige model", "voor 20 dollar per maand".
 - Maak het persoonlijk. Laat zien wat het betekent voor iemand op het werk, op school of thuis. Spreek de lezer aan met je.
 - Schrijf kort en actief. Gemiddeld 12 tot 15 woorden per zin, nooit meer dan 20. Eén gedachte per zin. Zeg wie wat doet ("Google brengt ... uit", niet "Er wordt door Google ... uitgebracht"). Kies gewone woorden: gebruiken in plaats van implementeren, maken in plaats van genereren, uitbrengen in plaats van lanceren.
 - Geen persberichttaal. Geen woorden als revolutionair, baanbrekend, game changer, naadloos, krachtig of next level. Neem de lof van een bedrijf niet over. Zegt een bedrijf zelf dat iets beter of sneller is, schrijf dan "volgens Anthropic" of "volgens OpenAI".
-- Wissel af. Begin niet elk bericht op dezelfde manier.
+- Wissel af. Begin niet elk bericht op dezelfde manier."""
+
+WOORDREGELS = """Woorden uitleggen:
+- Kun je iets zonder vakwoord zeggen, doe dat dan.
+- Heb je een vakwoord nodig, leg het dan uit in een paar gewone woorden op de plek waar het voor het eerst staat. Denk aan: token, parameter, open source, API, agent, plugin, skill, MCP, hook, terminal, context, sandbox, benchmark, videokaart, lokaal draaien. Leg niet uit wat iedereen al weet, zoals wat een chatbot of een AI-model is.
+- Noem een onbekende naam (een tool, een bedrijf, een onderzoeksgroep) altijd samen met wat het is.
+
+Regels:
+- Gebruik alleen feiten die in de aangeleverde tekst staan. Staat iets er niet in, laat het weg. Verzin geen cijfers, namen of data. Dat geldt ook voor de waarom-zin: geen "voor het eerst" of "grootste" als de tekst dat niet zegt.
+- De paginatekst kan menu's, cookiemeldingen of reclame bevatten. Negeer die.
+- Schrijf gewoon, helder Nederlands. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
+- Productnamen en namen van modellen blijven onvertaald."""
+
+# De editie: kop, uitleg, samenvatting en waarom-zin van elk bericht, plus intro, kort nieuws, tip, quiz en begrippen.
+# Het verhaal van elk artikel wordt daarna apart geschreven (ARTIKEL_OPDRACHT).
+SCHRIJF_OPDRACHT = """Je schrijft de {moment}editie van een persoonlijke AI-nieuwssite in het Nederlands.
+
+{lezers}
+
+Elk bericht wordt een artikel van 2 tot 3 minuten lezen. Jij schrijft per bericht de kop, de uitleg, de samenvatting en de waarom-zin. Het verhaal daarna wordt apart geschreven. De samenvatting staat ook op de voorpagina, dus houd die kort.
+
+{regels}
 
 intro: 1 of 2 zinnen die de editie openen. Begin met "{groet}". Noem het opvallendste van deze editie concreet en in woorden die een leek snapt, geen opsomming van alles.
 
@@ -201,7 +243,7 @@ items: één per onderwerp uit "onderwerpen".
   - Zo gebruik je AI: 2 korte zinnen. Wat is de aanpak en hoe werkt die.
   - AI in Nederland: 2 of 3 korte zinnen. Wie in Nederland of Vlaanderen doet wat, en wat verandert er.
   - Maatschappij: 2 korte zinnen. Wat is er gebeurd of ontdekt, en wie raakt het.
-  Bij Zo gebruik je AI maak je het concreet: wat deed iemand precies, met welke AI, en hoe doe je het zelf.
+  Bij Zo gebruik je AI maak je het concreet: wat deed iemand precies, met welke AI, en hoe doe je het zelf. Komt het verhaal alleen van Reddit of Hacker News, schrijf dan dat een gebruiker het vertelt ("Een gebruiker op Reddit vertelt dat ...") en breng het niet als vaststaand feit.
 - waarom: 1 directe zin over het gevolg, zonder herhaling van de samenvatting. Bij Het grote nieuws, AI in Nederland en Maatschappij: waarom dit ertoe doet, voor gewone mensen. Bij Nieuwe modellen: wat dit betekent voor iemand die AI gebruikt. Bij Nieuwe tools en Zo gebruik je AI: wat de lezer eraan heeft.
 - bedrijf: over wiens AI het bericht vooral gaat. Anthropic (Claude, Claude Code), OpenAI (ChatGPT, Codex, GPT), Google (Gemini, DeepMind), Microsoft (Copilot), Meta (Llama), Mistral, of Anders. Gaat het over meerdere bedrijven tegelijk of over AI in het algemeen, kies dan Anders. De lezer filtert hierop.
 - onderwerpen: 1 tot 3 onderwerpen waar het bericht over gaat, van specifiek naar algemeen, bijvoorbeeld ["Claude Mythos", "Anthropic"] of ["Claude Code"] of ["Mistral", "Open modellen"]. Hiermee vindt de site eerdere berichten over hetzelfde. Gebruik een onderwerp uit "bekende_onderwerpen" als het past, en schrijf het dan precies zo. Bedenk alleen een nieuw onderwerp als geen bekend onderwerp past. Een onderwerp is een product, model, bedrijf of vast thema (zoals "AI-beveiliging" of "AI Act"), nooit een los woord als "nieuws", "AI" of "update".
@@ -228,18 +270,31 @@ begrippen: elk vakwoord dat je in deze editie uitlegt, en elke naam van een tool
 - woord: zoals het in de tekst staat. Een hoofdletter alleen als het een naam is.
 - uitleg: 1 korte zin die ook los te begrijpen is, zonder te verwijzen naar dit nieuws.
 
-Woorden uitleggen:
-- Kun je iets zonder vakwoord zeggen, doe dat dan.
-- Heb je een vakwoord nodig, leg het dan uit in een paar gewone woorden op de plek waar het voor het eerst staat. Denk aan: token, parameter, open source, API, agent, plugin, skill, MCP, hook, terminal, context, sandbox, benchmark, videokaart, lokaal draaien. Leg niet uit wat iedereen al weet, zoals wat een chatbot of een AI-model is.
-- Noem een onbekende naam (een tool, een bedrijf, een onderzoeksgroep) altijd samen met wat het is.
-
-Regels:
-- Gebruik alleen feiten die in de aangeleverde tekst staan. Staat iets er niet in, laat het weg. Verzin geen cijfers, namen of data. Dat geldt ook voor de waarom-zin: geen "voor het eerst" of "grootste" als de tekst dat niet zegt.
-- De paginatekst kan menu's, cookiemeldingen of reclame bevatten. Negeer die.
-- Schrijf gewoon, helder Nederlands. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
-- Productnamen en namen van modellen blijven onvertaald.
+{woorden}
 
 Onderwerpen, korte berichten en bekende onderwerpen:
+"""
+
+# Het verhaal van één artikel, na de samenvatting. Elk artikel apart, zodat Claude er zijn volle aandacht aan geeft:
+# in één opdracht met de hele editie schreef hij de artikelen steeds korter dan gevraagd.
+ARTIKEL_OPDRACHT = """Je schrijft één artikel voor een Nederlandstalige AI-nieuwssite.
+
+{lezers}
+
+Het artikel is 2 tot 3 minuten lezen. De kop, de samenvatting, de uitleg en de waarom-zin staan al vast (zie "bericht"). Jij schrijft het verhaal dat daarna komt. Lezers lezen ook op hun telefoon een goed verhaal uit, maar haken af bij een opsomming of herhaling.
+
+{regels}
+
+artikel: 3 blokken. Herhaal niets uit de samenvatting, de uitleg of de waarom-zin. Per blok:
+- tussenkop: hooguit 6 woorden. Een vraag die de lezer op dat moment heeft, zoals "Wat kan het precies?", "Kost het iets?" of "Wat weten we nog niet?", of een korte zin die zegt wat er komt. Kies tussenkoppen die bij dit artikel passen.
+- alineas: 3 alinea's van 3 zinnen. Korte alinea's lezen prettig op een telefoon.
+Samen is dat ongeveer 300 woorden. Het laatste blok maakt de waarom-zin concreet: hoe je het zelf probeert, waar je op let, of wat er nu gebeurt.
+Gebruik alleen wat in de bronnen staat. Meestal staat er genoeg in: details, getallen, voorbeelden, wat iemand zei, wat er nog onzeker is. Zegt de brontekst echt te weinig, schrijf dan minder alinea's: liever 150 woorden die kloppen dan 300 met opvulling. Vul nooit op met algemene zinnen over AI.
+Bij Zo gebruik je AI vertel je het als een kort verhaal: wie deed wat, met welke AI, wat ging er goed of mis, en hoe doe je het zelf. Komt het verhaal alleen van Reddit of Hacker News, schrijf dan dat een gebruiker het vertelt en breng het niet als vaststaand feit.
+
+{woorden}
+
+Het bericht en de bronnen:
 """
 
 
@@ -273,7 +328,7 @@ def ontcijfer(data, tekenset):
 class _Tekst(HTMLParser):
     """Verzamelt de leesbare tekst uit HTML; scripts, stijlen en menu's vallen weg."""
 
-    OVERSLAAN = {"script", "style", "noscript", "svg", "nav", "footer"}
+    OVERSLAAN = {"script", "style", "noscript", "svg", "nav", "footer", "header", "aside", "form", "button", "template"}
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -567,9 +622,29 @@ def haal_pagina(url):
     return ontcijfer(data, tekenset)
 
 
+def _blokken(markup, tag):
+    """De stukken HTML van <tag> tot en met </tag>, ook als ze in elkaar zitten."""
+    blokken, open_ = [], []
+    for gevonden in re.finditer(rf"<(/?){tag}\b[^>]*>", markup, re.I):
+        if not gevonden.group(1):
+            open_.append(gevonden.start())
+        elif open_:
+            blokken.append(markup[open_.pop():gevonden.end()])
+    return blokken
+
+
 def artikeltekst_uit(markup, url):
-    """De leesbare tekst van een artikel, of niets bij een cookiemuur of inlogpagina."""
-    tekst = platte_tekst(markup)
+    """De leesbare tekst van een artikel, of niets bij een cookiemuur of inlogpagina.
+
+    Staat het artikel in <article> of <main>, dan alleen dat stuk: zonder menu, zijbalk en "lees ook".
+    Van meerdere <article>-blokken (vaak kaartjes naar andere artikelen) telt het blok met de meeste tekst.
+    """
+    for tag in ("article", "main"):
+        tekst = max((platte_tekst(blok) for blok in _blokken(markup, tag)), key=len, default="")
+        if len(tekst) >= 500:
+            break
+    else:
+        tekst = platte_tekst(markup)
     if len(tekst) < 500:
         log.info("Artikel te kort, waarschijnlijk een cookiemuur (%s)", url)
         return ""
@@ -622,26 +697,25 @@ def beeld_geschikt(url):
 
 
 def verrijk(berichten):
-    """Haalt voor een onderwerp de artikeltekst en het beste beeld op.
+    """Haalt voor een onderwerp de artikelteksten en het beste beeld op.
 
-    Geeft (plek van de bron met tekst, tekst, beeld-adres) terug. De eerste hand staat
-    vooraan, dus het beeld van het lab zelf wint van dat van een nieuwssite.
+    Geeft ({plek van de bron: paginatekst}, beeld-adres) terug. De tekst komt van elk van de eerste
+    drie bronnen, zodat er genoeg is voor een echt artikel. De eerste hand staat vooraan, dus het
+    beeld van het lab zelf wint van dat van een nieuwssite.
     """
-    plek_tekst, tekst, beeld = -1, "", ""
+    teksten, beeld = {}, ""
     for plek, bericht in enumerate(berichten[:3]):
         markup = haal_pagina(bericht["url"])
-        if markup and not tekst and not bericht.get("volledig"):
+        if markup and not bericht.get("volledig"):
             tekst = artikeltekst_uit(markup, bericht["url"])
             if tekst:
-                plek_tekst = plek
+                teksten[plek] = tekst
         if markup and not beeld:
             beeld = next((b for b in beelden_uit(markup, bericht["url"]) if beeld_geschikt(b)), "")
         if not beeld and bericht.get("repo"):
             # GitHub maakt voor elk project een nette kaart met naam, beschrijving en sterren.
             beeld = f"https://opengraph.githubassets.com/1/{bericht['repo']}"
-        if beeld and (tekst or bericht.get("volledig")):
-            break
-    return plek_tekst, tekst, beeld
+    return teksten, beeld
 
 
 # ---------------------------------------------------------------- Claude
@@ -658,6 +732,9 @@ def vraag_claude(cfg, bericht, schema):
     ]
     uitkomst = subprocess.run(
         opdracht, input=bericht, capture_output=True, text=True, encoding="utf-8",
+        # Een editie met veel berichten en kort nieuws kan lang worden. Boven de standaardgrens van
+        # Claude Code breekt het antwoord halverwege af; deze grens is ruim genoeg.
+        env={**os.environ, "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "64000"},
         # Op Windows geen zwart venster; in de cloud (Linux) bestaat die vlag niet.
         timeout=900, cwd=MAP, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
     )
@@ -684,8 +761,9 @@ GEBRUIKERSPOSTS = ("reddit.com", "news.ycombinator.com")
 
 def bevestigd(bericht):
     """Komt dit bericht van een echte nieuwsbron? Een post op Reddit of een tekstpost op Hacker News niet;
-    een Hacker News-link naar een artikel van een nieuwssite of bedrijf wel."""
-    if bericht["groep"] != "community":
+    een Hacker News-link naar een artikel van een nieuwssite of bedrijf wel. Een tool met genoeg sterren op
+    GitHub ook: dan bestaat hij echt en gebruiken veel mensen hem (tel_sterren liet de rest al weg)."""
+    if bericht["groep"] != "community" or bericht.get("sterren") is not None:
         return True
     host = urllib.parse.urlsplit(bericht["url"]).netloc.lower()
     return not any(host == d or host.endswith("." + d) for d in GEBRUIKERSPOSTS)
@@ -717,10 +795,11 @@ def kies(cfg, berichten, staat):
             bij.sort(key=lambda b: b["groep"] != "lab")
             onderwerpen.append({**keuze, "berichten": bij})
     # Iets wat alleen in een bericht op Reddit of Hacker News staat, is (nog) geen nieuws: een gebruiker
-    # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws, Nederlands nieuws of
-    # maatschappijnieuws zijn; hooguit Kort nieuws. Ervaringen en tools mogen wel, want daar gaat het juist om gebruikers.
+    # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws, toolnieuws, Nederlands nieuws
+    # of maatschappijnieuws zijn; hooguit Kort nieuws. Ervaringen (Zo gebruik je AI) mogen wel, want daar gaat
+    # het juist om gebruikers; het artikel zegt dan dat een gebruiker het vertelt.
     for o in onderwerpen:
-        if (o["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "AI in Nederland", "Maatschappij")
+        if (o["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "Nieuwe tools", "AI in Nederland", "Maatschappij")
                 and not any(bevestigd(b) for b in o["berichten"])):
             log.info("Niet bevestigd, naar Kort nieuws: %s", o["berichten"][0]["titel"])
             o["score"] = min(o["score"], cfg["minimale_score_kort"])
@@ -751,35 +830,49 @@ def kies(cfg, berichten, staat):
     return gekozen, kort
 
 
-def schrijf_editie(cfg, gekozen, kort, moment, bekend):
-    """Haalt de artikelen en beelden op en laat Claude de editie schrijven. Geeft het antwoord van Claude terug.
+# Zoveel brontekst (in tekens) is minstens nodig voor een echt artikel. Minder: dan wordt het Kort nieuws,
+# want anders moet Claude opvullen.
+MIN_BRONSTOF = 1500
 
-    Het gekozen beeld komt in elk onderwerp onder "beeld".
+
+def schrijf_editie(cfg, gekozen, kort, moment, bekend):
+    """Haalt de artikelen en beelden op en laat Claude de editie schrijven.
+
+    Geeft (antwoord van Claude, gekozen, kort) terug. Een onderwerp met te weinig brontekst voor een
+    echt artikel schuift door naar Kort nieuws. Het gekozen beeld komt in elk onderwerp onder "beeld".
     """
     with ThreadPoolExecutor(max_workers=6) as pool:
         verrijkt = list(pool.map(lambda o: verrijk(o["berichten"]), gekozen))
     # Hetzelfde plaatje bij twee verschillende berichten is het standaardplaatje van een site, geen nieuwsfoto.
     tellingen = {}
-    for _, _, beeld in verrijkt:
+    for _, beeld in verrijkt:
         if beeld:
             tellingen[beeld] = tellingen.get(beeld, 0) + 1
-    for onderwerp, (_, _, beeld) in zip(gekozen, verrijkt):
+    for onderwerp, (_, beeld) in zip(gekozen, verrijkt):
         onderwerp["beeld"] = beeld if tellingen.get(beeld) == 1 else ""
     log.info("Beelden gevonden voor %s van de %s berichten", sum(1 for o in gekozen if o["beeld"]), len(gekozen))
-    teksten = [(plek, tekst) for plek, tekst, _ in verrijkt]
     nu = datetime.now()
-    onderwerpen = []
-    for nr, (onderwerp, (plek_pagina, pagina)) in enumerate(zip(gekozen, teksten), 1):
+    onderwerpen, lang, te_dun = [], [], []
+    for onderwerp, (paginas, _) in zip(gekozen, verrijkt):
         bronnen = []
         for plek, bericht in enumerate(onderwerp["berichten"][:3]):
             tekst = bericht["tekst"]
-            if plek == plek_pagina and pagina:
-                tekst = f"{tekst}\n\nPAGINATEKST:\n{pagina}".strip()
+            if paginas.get(plek):
+                # De tekst uit de feed is dan meestal een samenvatting van dezelfde pagina; het begin is genoeg.
+                tekst = f"{tekst[:600]}\n\nPAGINATEKST:\n{paginas[plek]}".strip()
             bron = {"bron": bericht["bron"], "datum": wanneer(bericht["datum"], nu), "titel": bericht["titel"], "tekst": tekst}
             if bericht.get("sterren") is not None:
                 bron["github_sterren"] = bericht["sterren"]
             bronnen.append(bron)
-        onderwerpen.append({"nr": nr, "rubriek": onderwerp["rubriek"], "bronnen": bronnen})
+        stof = sum(len(b["tekst"]) for b in bronnen)
+        if stof < MIN_BRONSTOF:
+            log.info("Te weinig brontekst (%s tekens), naar Kort nieuws: %s", stof, onderwerp["berichten"][0]["titel"])
+            te_dun.append(onderwerp)
+            continue
+        lang.append(onderwerp)
+        onderwerpen.append({"nr": len(lang), "rubriek": onderwerp["rubriek"], "bronnen": bronnen})
+    gekozen = lang
+    kort = sorted(te_dun + kort, key=lambda o: o["score"], reverse=True)[:cfg["max_kort"]]
     korte = []
     for nr, onderwerp in enumerate(kort, 1):
         eerste = onderwerp["berichten"][0]
@@ -787,10 +880,32 @@ def schrijf_editie(cfg, gekozen, kort, moment, bekend):
                       "datum": wanneer(eerste["datum"], nu), "titel": eerste["titel"], "tekst": eerste["tekst"][:600]})
 
     groet = "Goedemorgen." if moment == "ochtend" else "Goedenavond."
-    opdracht = SCHRIJF_OPDRACHT.format(moment=moment, groet=groet)
+    opdracht = SCHRIJF_OPDRACHT.format(moment=moment, groet=groet, lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)
     inhoud = json.dumps({"onderwerpen": onderwerpen, "korte_berichten": korte, "bekende_onderwerpen": bekend},
                         ensure_ascii=False)
-    return vraag_claude(cfg, opdracht + inhoud, SCHRIJF_SCHEMA)
+    antwoord = vraag_claude(cfg, opdracht + inhoud, SCHRIJF_SCHEMA)
+
+    # Daarna het verhaal van elk artikel, apart en een paar tegelijk. Lukt dat bij één artikel niet,
+    # dan verschijnt dat bericht met alleen de samenvatting en de uitleg; de editie gaat gewoon door.
+    geschreven = {i["nr"]: i for i in antwoord.get("items", [])}
+    opdracht = ARTIKEL_OPDRACHT.format(lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)
+
+    def schrijf_artikel(onderwerp):
+        item = geschreven.get(onderwerp["nr"])
+        if not item:
+            return
+        bericht = {"rubriek": onderwerp["rubriek"], **{k: item[k] for k in ("kop", "samenvatting", "uitleg", "waarom")}}
+        try:
+            item["artikel"] = vraag_claude(
+                cfg, opdracht + json.dumps({"bericht": bericht, "bronnen": onderwerp["bronnen"]}, ensure_ascii=False),
+                ARTIKEL_SCHEMA).get("artikel", [])
+        except Exception as fout:
+            log.warning("Artikel niet geschreven, het bericht krijgt alleen de samenvatting: %s (%s)", item["kop"], fout)
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        list(pool.map(schrijf_artikel, onderwerpen))
+    log.info("Artikelen geschreven: %s van de %s", sum(1 for i in geschreven.values() if i.get("artikel")), len(geschreven))
+    return antwoord, gekozen, kort
 
 
 def bekende_onderwerpen(edities, hoeveel=80):
@@ -819,6 +934,16 @@ def _bronnen(onderwerp):
     return uit
 
 
+def artikelblokken(blokken):
+    """De blokken van een artikel (tussenkop en alinea's), zonder lege stukken."""
+    uit = []
+    for blok in blokken or []:
+        alineas = [a.strip() for a in blok.get("alineas", []) if a.strip()]
+        if alineas:
+            uit.append({"tussenkop": blok.get("tussenkop", "").strip(), "alineas": alineas})
+    return uit
+
+
 def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bronnen, fouten):
     """Zet de keuze en de teksten van Claude samen in één editie, klaar om te bewaren.
 
@@ -828,7 +953,8 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     lang = {i["nr"]: i for i in antwoord.get("items", [])}
     items = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": lang[nr]["kop"], "uitleg": lang[nr]["uitleg"],
-         "samenvatting": lang[nr]["samenvatting"], "waarom": lang[nr]["waarom"], "bronnen": _bronnen(o),
+         "samenvatting": lang[nr]["samenvatting"], "waarom": lang[nr]["waarom"],
+         "artikel": artikelblokken(lang[nr].get("artikel")), "bronnen": _bronnen(o),
          "beeld": o.get("beeld", ""), "bedrijf": lang[nr].get("bedrijf", "Anders"),
          "onderwerpen": [t.strip() for t in lang[nr].get("onderwerpen", []) if t.strip()][:3]}
         for nr, o in enumerate(gekozen, 1) if nr in lang
@@ -903,8 +1029,10 @@ def maak_week(cfg, edities, dag):
     lijst = [{"kop": i["kop"], "samenvatting": i["samenvatting"]} for i in top]
     vraag = (
         "Schrijf de opening van 'De week in AI', het weekoverzicht van een Nederlandse AI-nieuwssite voor lezers met "
-        "een beetje kennis van AI. 2 of 3 zinnen over wat deze week opviel, in helder Nederlands zonder vakjargon. "
-        "Gebruik alleen wat in de berichten staat. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.\n\n"
+        "een beetje kennis van AI. 3 of 4 korte zinnen over wat deze week opviel, in helder Nederlands zonder vakjargon. "
+        "Gemiddeld 12 tot 15 woorden per zin, nooit meer dan 20. Eén gedachte per zin. Wees concreet: noem wie wat deed, "
+        "met een getal of voorbeeld uit de berichten, geen opsomming van alles. Gebruik alleen wat in de berichten staat. "
+        "Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.\n\n"
         f"De belangrijkste berichten van deze week:\n{json.dumps(lijst, ensure_ascii=False)}"
     )
     intro = vraag_claude(cfg, vraag, WEEK_SCHEMA).get("intro", "").strip()
@@ -1170,7 +1298,9 @@ def main():
     try:
         gekozen, kort = kies(cfg, berichten, staat) if berichten else ([], [])
         bekend = bekende_onderwerpen(laad_edities())
-        antwoord = schrijf_editie(cfg, gekozen, kort, moment, bekend) if gekozen or kort else {}
+        antwoord = {}
+        if gekozen or kort:
+            antwoord, gekozen, kort = schrijf_editie(cfg, gekozen, kort, moment, bekend)
     except Exception as fout:
         log.exception("Kiezen of schrijven mislukt")
         if wachtwoord and cfg["mail_aan"] and not args.voorbeeld:
@@ -1205,6 +1335,8 @@ def main():
     if args.voorbeeld:
         voorpagina = schrijf_site(VOORBEELD, edities, begrippen, weken, cfg["site_url"], cfg["bronnen"])
         (VOORBEELD / "mail.html").write_text(opmaak, encoding="utf-8")
+        # Om de proefeditie later opnieuw op te maken, bijvoorbeeld na een wijziging in de opmaak.
+        bewaar_json(VOORBEELD / "proefeditie.json", ed)
         log.info("Proefeditie geschreven: %s (%s)", voorpagina, onderwerp)
         return 0
 

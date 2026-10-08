@@ -127,6 +127,14 @@ def aantal_bronnen(item):
     return len({b["bron"] for b in item["bronnen"]})
 
 
+def leestijd(item):
+    """Minuten lezen, bij 200 woorden per minuut. Oudere berichten hebben nog geen artikel, alleen de korte delen."""
+    delen = [item["samenvatting"], item["uitleg"], item.get("waarom", "")]
+    for blok in item.get("artikel", []):
+        delen += [blok["tussenkop"], *blok["alineas"]]
+    return max(1, round(len(" ".join(delen).split()) / 200))
+
+
 def impact(item):
     """Hoe belangrijk een bericht is, afgeleid van de score die Claude bij het kiezen gaf."""
     if item["score"] >= 9:
@@ -245,7 +253,9 @@ def beeld_html(item, verhouding="16 / 10"):
              f'<small>{e(klein)}</small></div>')
     if item.get("beeld") and veilig(item["beeld"]) != "#":
         # Werkt het beeld later niet meer, dan zet vroeg.js er alsnog het blok voor in de plaats.
-        inhoud = (f'<img src="{e(item["beeld"])}" alt="" loading="lazy" referrerpolicy="no-referrer" '
+        # Een GitHub-kaart is tekst op wit: heel laten in plaats van bijsnijden, anders valt de tekst half weg.
+        heel = ' class="heel"' if "opengraph.githubassets.com" in item["beeld"] else ""
+        inhoud = (f'<img src="{e(item["beeld"])}"{heel} alt="" loading="lazy" referrerpolicy="no-referrer" '
                   f'style="aspect-ratio: {verhouding}" data-groot="{e(groot)}" data-klein="{e(klein)}">')
     else:
         inhoud = tegel
@@ -280,18 +290,47 @@ def kaart(item, ref, basis, site_url, groot=False):
     product = PRODUCT.get(bedrijf_van(item))
     productlabel = f'<span class="product">{e(product)}</span>' if product else ""
     return (
-        f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}" '
-        f'data-merk="{merk_van(item)}">'
+        f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}">'
         f'{beeld_html(item, "16 / 9" if groot else "16 / 10")}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>{productlabel}'
         f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
         f'<{kop}><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></{kop}>'
         f'{lede}{waarom}'
         f'<div class="onder"><span class="leesverder" aria-hidden="true">Lees het bericht <span class="pijl">→</span></span>'
-        f'<span>{max(1, round(len((item["uitleg"] + " " + item["samenvatting"] + " " + item.get("waarom", "")).split()) / 200))} min'
-        f' · {n} {"bron" if n == 1 else "bronnen"}</span>'
+        f'<span>{leestijd(item)} min lezen · {n} {"bron" if n == 1 else "bronnen"}</span>'
         f'<span class="gelezen" hidden>{VINK}Gelezen</span></div>'
         f'</article>'
+    )
+
+
+def rij_html(item, ref, basis):
+    """Een bericht als rij in de lijst die je na het kiezen van een filter ziet. Ook hier is de hele rij een link."""
+    stijl = RUBRIEKEN[item["rubriek"]]
+    product = PRODUCT.get(bedrijf_van(item))
+    n = aantal_bronnen(item)
+    return (
+        f'<li class="kaart rij" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}" data-merk="{merk_van(item)}">'
+        f'{beeld_html(item)}<div class="rijtekst">'
+        f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
+        f'{f"<span class=product>{e(product)}</span>" if product else ""}'
+        f'<span>{e(datumregel(item["bronnen"], ref))}</span></div>'
+        f'<h3><a class="kaartlink" href="{basis}artikel/{e(item["id"])}.html">{e(item["kop"])}</a></h3>'
+        f'<p>{e(item["samenvatting"])}</p>'
+        f'<div class="onder"><span>{leestijd(item)} min lezen · {n} {"bron" if n == 1 else "bronnen"}</span>'
+        f'<span class="gelezen" hidden>{VINK}Gelezen</span></div></div></li>'
+    )
+
+
+def kortrij_html(k, ref):
+    """Kort nieuws in dezelfde lijst. Zonder eigen pagina: de link gaat naar de bron, en het pijltje zegt dat."""
+    product = PRODUCT.get(bedrijf_van(k))
+    return (
+        f'<li class="kaart rij kortrij" data-rubriek="kort" data-merk="{merk_van(k)}"><div class="rijtekst">'
+        f'<div class="boven"><span class="rubriek">Kort nieuws</span>'
+        f'{f"<span class=product>{e(product)}</span>" if product else ""}'
+        f'<span>{e(datumregel(k["bronnen"], ref))}</span></div>'
+        f'<h3><a class="kaartlink" href="{e(veilig(k["bronnen"][0]["url"]))}">{e(k["kop"])}{EXTERN}</a></h3>'
+        f'<p>{e(k["zin"])}</p></div></li>'
     )
 
 
@@ -301,7 +340,7 @@ def kort_html(k, ref):
     namen = ", ".join(naam for naam, _ in bronlinks(k["bronnen"]))
     # Kort nieuws heeft geen eigen pagina: de link gaat naar de bron. Het pijltje zegt dat vooraf.
     return (
-        f'<li data-merk="{merk_van(k)}"><span class="tijd">{e(tijd)}</span><div>'
+        f'<li><span class="tijd">{e(tijd)}</span><div>'
         f'<a class="kaartlink" href="{e(veilig(k["bronnen"][0]["url"]))}">{e(k["kop"])}{EXTERN}</a>'
         f'<p>{e(k["zin"])}</p><span class="meta">{e(RUBRIEKEN[k["rubriek"]]["knop"])} · '
         f'{e(datumregel(k["bronnen"], ref))} · {e(namen)}</span></div></li>'
@@ -394,20 +433,32 @@ def editie_html(ed, begrippen, basis, site_url):
     tweede = next((i for i in groot + rest if lead is not None and i is not lead), None)
     getoond = {id(lead), id(tweede)}
 
-    tabs = [("alles", "Alles", len(items) + len(ed["kort"]), "", "")]
+    # De filterbalk: één keuze tegelijk. Eerst welke AI, dan een onderwerp. Het getal op een knop is precies
+    # het aantal berichten dat je na het tikken ziet; een knop zonder berichten komt er niet op.
+    alles_bij_elkaar = items + ed["kort"]
+    merken = []
+    for code, naam, uitleg, _ in MERKFILTERS:
+        aantal = sum(1 for i in alles_bij_elkaar if merk_van(i) == code)
+        if aantal:
+            merken.append((code, naam, aantal, naam, uitleg))
+    onderwerpen = []
     for naam, stijl in RUBRIEKEN.items():
         aantal = sum(1 for i in items if i["rubriek"] == naam)
         if aantal:
-            tabs.append((stijl["klasse"], stijl["knop"], aantal, stijl["knop"], stijl["uitleg"]))
+            onderwerpen.append((stijl["klasse"], stijl["knop"], aantal, stijl["knop"], stijl["uitleg"]))
     if ed["kort"]:
-        tabs.append(("kort", "Kort nieuws", len(ed["kort"]), "Kort nieuws", "Kleiner nieuws in één zin."))
+        onderwerpen.append(("kort", "Kort nieuws", len(ed["kort"]), "Kort nieuws", "Kleiner nieuws in één zin. De link gaat naar de bron."))
     if ed.get("quiz"):
-        tabs.append(("quiz", "Quiz", len(ed["quiz"]), "Nieuwsquiz", ""))
-    tabbalk = "".join(
-        f'<button type="button" data-filter="{k}" data-titel="{e(t)}" data-uitleg="{e(u)}" '
-        f'aria-pressed="{"true" if k == "alles" else "false"}">{e(n)} <span>{a}</span></button>'
-        for k, n, a, t, u in tabs
-    )
+        onderwerpen.append(("quiz", "Quiz", len(ed["quiz"]), "Nieuwsquiz", ""))
+
+    def knoppen(rij, soort):
+        return "".join(
+            f'<button type="button" data-filter="{k}" data-soort="{soort}" data-titel="{e(t)}" data-uitleg="{e(u)}" '
+            f'aria-pressed="{"true" if k == "alles" else "false"}">{e(n)} <span>{a}</span></button>'
+            for k, n, a, t, u in rij
+        )
+    tabbalk = (knoppen([("alles", "Alles", len(alles_bij_elkaar), "", "")], "alles") + knoppen(merken, "merk")
+               + '<span class="scheiding" aria-hidden="true"></span>' + knoppen(onderwerpen, "onderwerp"))
 
     # Uitgelegd: een begrip dat in deze editie voor het eerst werd uitgelegd.
     nieuw = [b for b in begrippen.values() if b.get("editie") == ed["id"]]
@@ -441,35 +492,25 @@ def editie_html(ed, begrippen, basis, site_url):
                            f'<button type="button" class="tekstknop" data-kies="{stijl["klasse"]}">Alleen {e(stijl["knop"].lower() if stijl["knop"] != "Zo gebruik je AI" else stijl["knop"])} tonen</button></div>'
                            f'<div class="raster">{kaarten}</div></section>')
 
-    alle_kaarten = "".join(kaart(i, ref, basis, site_url) for i in items)
+    # Na het kiezen van een filter: alles wat erbij past in één lijst, ook Kort nieuws.
+    rijen = "".join(rij_html(i, ref, basis) for i in items) + "".join(kortrij_html(k, ref) for k in ed["kort"])
     kort = ""
     if ed["kort"]:
         kort = (f'<section class="sectie kortnieuws" id="kort"><div class="kopregel"><h2>Kort nieuws</h2>'
                 f'<span>Kleiner nieuws in één zin</span></div>'
-                f'<p class="geenkort" hidden>Over deze AI staat geen kort nieuws in deze editie.</p>'
                 f'<ul>{"".join(kort_html(k, ref) for k in ed["kort"])}</ul></section>')
 
-    # De keuze welke AI je wilt zien. Werkt samen met de onderwerpen op de filterbalk.
-    alles_bij_elkaar = items + ed["kort"]
-    merkknoppen = '<button type="button" data-merk="alle" aria-pressed="true">Alle AI</button>' + "".join(
-        f'<button type="button" data-merk="{code}" data-naam="{e(naam)}" data-uitleg="{e(uitleg)}" aria-pressed="false">'
-        f'{e(naam)} <span>{sum(1 for i in alles_bij_elkaar if merk_van(i) == code)}</span></button>'
-        for code, naam, uitleg, _ in MERKFILTERS
-    )
-    merken = (f'<div class="merken"><span class="merkvraag">Welke AI wil je zien?</span>'
-              f'<div class="merkknoppen" role="group" aria-label="Kies een AI">{merkknoppen}</div>'
-              f'<span class="merkuitleg">Je keuze wordt onthouden op dit apparaat.</span></div>')
-
-    voet = f"Gekozen uit {ed['bekeken']} nieuwe berichten uit {ed['aantal_bronnen']} bronnen."
+    voet =f"Gekozen uit {ed['bekeken']} nieuwe berichten uit {ed['aantal_bronnen']} bronnen."
     if ed.get("fouten"):
         voet += f" Niet bereikbaar: {', '.join(ed['fouten'])}."
     aantal = len(items) + len(ed["kort"])
     return (
         f'<div class="editiekop binnen"><div class="label">{e(ed["moment"].capitalize())}editie</div>'
         f'<h1>{e(dagtitel(editiedag(ed)).capitalize())}</h1><p class="intro">{e(ed["intro"])}</p>'
-        f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten en geschreven met AI.</p>{merken}</div>'
+        f'<p class="teller">{aantal} berichten, gekozen uit {ed["bekeken"]} nieuwe berichten'
+        f'<span class="alleenbreed"> en geschreven met AI</span>.</p></div>'
         f'<div class="tabbalk" data-totaal="{len(items)}" data-ids="{e(",".join(i["id"] for i in items))}"><div class="binnen">'
-        f'<div class="tabs" role="group" aria-label="Kies een onderwerp">{tabbalk}</div>'
+        f'<div class="tabs" role="group" aria-label="Kies een AI of een onderwerp">{tabbalk}</div>'
         f'<div class="voortgang"><span class="voortgangtekst">0 van {len(items)} gelezen</span>'
         f'<div class="balk" role="progressbar" aria-label="Hoeveel berichten je hebt gelezen" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div></div></div></div>'
         f'</div></div>'
@@ -477,9 +518,10 @@ def editie_html(ed, begrippen, basis, site_url):
         f'<div class="klaar" hidden>{VINK}<span>Je hebt alles van deze editie gelezen. De volgende verschijnt om '
         f'{"20:00" if ed["moment"] == "ochtend" else "08:00"}.</span></div>'
         f'<div id="alles">{opening}{probeer}{"".join(secties)}</div>'
-        f'<section id="gefilterd" hidden><div class="kopregel"><h2></h2></div><p class="filteruitleg"></p>'
-        f'<p class="geenresultaat" hidden>Over deze keuze staat niets in deze editie. Kies een ander onderwerp of een andere AI.</p>'
-        f'<div class="raster">{alle_kaarten}</div></section>'
+        f'<section id="gefilterd" hidden aria-live="polite"><div class="filterstand"><p>Je ziet: <b class="filternaam"></b>'
+        f' · <span class="filteraantal"></span></p>'
+        f'<button type="button" class="tekstknop" data-kies="alles">✕ Toon alles</button></div>'
+        f'<p class="filteruitleg"></p><ol class="lijst">{rijen}</ol></section>'
         f'{kort}{quiz_html(ed.get("quiz"), ed, site_url)}'
         f'<p class="editievoet">{e(voet)}</p></main>'
     )
@@ -517,20 +559,26 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<li><a href="{basis}artikel/{e(i["id"])}.html"><span class="meta">{e(RUBRIEKEN[i["rubriek"]]["knop"])}</span>'
         f'<b>{e(i["kop"])}</b></a></li>' for i in meer
     )
-    waarom = f'<p><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>' if item.get("waarom") else ""
+    waarom = f'<p class="waarom"><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>' if item.get("waarom") else ""
+    # Het artikel zelf: blokken met een tussenkop. Oudere berichten hebben dat nog niet.
+    lijf = "".join(
+        (f'<h2>{e(blok["tussenkop"])}</h2>' if blok["tussenkop"] else "") + "".join(f"<p>{e(a)}</p>" for a in blok["alineas"])
+        for blok in item.get("artikel", [])
+    )
     return (
         f'<main class="artikel binnen" data-artikel="{e(item["id"])}">'
         f'<nav class="kruimel" aria-label="Waar je bent"><a href="{basis}edities/{e(ed["id"])}.html">{e(editietitel(ed))}</a>'
         f' › <a href="{basis}edities/{e(ed["id"])}.html#{stijl["klasse"]}">{e(stijl["knop"])}</a></nav>'
         f'{beeld_html(item, "16 / 9")}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
-        f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
+        f'<span>{e(datumregel(item["bronnen"], ref))}</span><span>{leestijd(item)} min lezen</span>{impact_html(item)}</div>'
         f'<h1>{e(item["kop"])}</h1>'
         f'<p class="byline">Geschreven met AI (Claude) op basis van de bronnen hieronder · '
         f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></p>'
         f'<p class="lede">{e(item["samenvatting"])}</p>'
-        f'<div class="uitlegblok"><div class="label">Even uitgelegd</div><p>{e(item["uitleg"])}</p></div>'
         f'{waarom}'
+        f'<div class="uitlegblok"><div class="label">Even uitgelegd</div><p>{e(item["uitleg"])}</p></div>'
+        f'{f"<div class=lijf>{lijf}</div>" if lijf else ""}'
         f'<p class="bronnen">{bronnen_html(item)}</p>'
         f'<p class="acties"><a class="knop" href="{e(veilig(item["bronnen"][0]["url"]))}">Lees de bron{EXTERN}</a>'
         f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p>'
