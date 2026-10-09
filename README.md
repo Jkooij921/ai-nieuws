@@ -1,13 +1,14 @@
 # AI-nieuws
 
-Een AI-nieuwssite met elke dag om 08:00 en 20:00 een nieuwe editie: wat er sinds de vorige editie in AI is gebeurd, vooral rond Claude. Per editie ongeveer 12 berichten met uitleg voor leken en 10 tot 15 korte berichten. Je krijgt een mail met de 5 belangrijkste en een link naar de rest.
+Een AI-nieuwssite met elke dag om 08:00 en 20:00 een nieuwe editie: wat er sinds de vorige editie in AI is gebeurd, vooral rond Claude. Per editie 5 tot 8 artikelen voor leken, één uitlegstuk en tot 15 korte berichten. Je krijgt een mail met de 5 belangrijkste en een link naar de rest.
 
 Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de berichten via je eigen abonnement.
 
 ## De site
 
-- **Vandaag:** de nieuwste editie, opgezet zoals NOS en nu.nl. Vier ronde knoppen, groot genoeg voor je duim: Alles, Claude, ChatGPT en Quiz. Daarna een lange lijst met de onderwerpen (Groot nieuws, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws) als tussenkopjes: per bericht een foto en de kop, de samenvatting staat in het artikel. Tik of klik ergens op een bericht en je gaat naar het hele artikel. Na het kiezen van Claude of ChatGPT staat boven de lijst hoeveel berichten je ziet. Op de telefoon blijft bovenaan één regel staan met Zoeken en Menu; alles wat je aantikt is minstens 48 pixels hoog (NN/g: minstens 1 bij 1 cm). Kort nieuws heeft geen eigen pagina: een pijltje (↗) laat zien dat die link naar de bron gaat. Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen. Na de quiz kun je je score delen via WhatsApp, met een link naar dezelfde quiz.
-- **Een pagina per bericht** (`artikel/`): een artikel van 2 tot 3 minuten lezen, met tussenkopjes, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Eerder over …" met eerdere berichten over hetzelfde onderwerp. Het programma haalt de tekst van maximaal 3 bronnen op. Is er te weinig brontekst voor een echt artikel (minder dan 1.500 tekens, bijvoorbeeld door een betaalmuur), dan wordt het Kort nieuws in plaats van een opgevuld artikel.
+- **Vandaag:** de nieuwste editie, opgezet zoals NOS en nu.nl. Vier ronde knoppen, groot genoeg voor je duim: Alles, Claude, ChatGPT en Quiz. Daarna een lange lijst met de onderwerpen (Groot nieuws, Uitleg, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws) als tussenkopjes: per bericht een foto en de kop, de samenvatting staat in het artikel. Tik of klik ergens op een bericht en je gaat naar het hele artikel. Na het kiezen van Claude of ChatGPT staat boven de lijst hoeveel berichten je ziet. Op de telefoon blijft bovenaan één regel staan met Zoeken en Menu; alles wat je aantikt is minstens 48 pixels hoog (NN/g: minstens 1 bij 1 cm). Kort nieuws heeft geen eigen pagina: een pijltje (↗) laat zien dat die link naar de bron gaat. Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen. Na de quiz kun je je score delen via WhatsApp, met een link naar dezelfde quiz.
+- **Uitleg:** elke editie één uitlegstuk. Dat is geen nieuws, maar achtergrond bij een van de berichten, bijvoorbeeld wat een AI-agent is. Het is stap voor stap opgebouwd, want zo begrijpen leken ingewikkeld technieknieuws beter (Yaros 2006). Claude kiest een onderwerp dat nog niet eerder aan bod kwam.
+- **Een pagina per bericht** (`artikel/`): een artikel van 2 tot 3 minuten lezen, met tussenkopjes, alle bronnen, een knop om te delen via WhatsApp, en onderaan "Lees ook": 3 tot 5 berichten, eerst over hetzelfde onderwerp en dan uit dezelfde editie. Het programma haalt de tekst van maximaal 3 bronnen op. Is er te weinig brontekst voor een echt artikel (minder dan 1.500 tekens, bijvoorbeeld door een betaalmuur), dan wordt het Kort nieuws in plaats van een opgevuld artikel.
 - **Geschreven met AI:** bovenaan elke pagina en onder elke kop staat dat de berichten met AI geschreven zijn (dat moet sinds 2 augustus 2026 volgens de Europese AI-verordening, artikel 50). Het label linkt naar **Zo maken we dit** (`zo-maken-we-dit.html`): hoe we kiezen, wat er niet in komt en welke bronnen, automatisch uit `config.json`.
 - **Delen:** elke pagina geeft WhatsApp en andere apps een kop, een korte tekst en een beeld voor de voorvertoning. Zonder bruikbaar beeld komt `deel.png`, het plaatje met de naam van de site.
 - **Onderwerpen** (`onderwerp/`): alle berichten over bijvoorbeeld Claude Code of Mistral bij elkaar. Claude geeft elk bericht 1 tot 3 onderwerpen en hergebruikt bestaande namen.
@@ -32,8 +33,14 @@ GitHub start geplande runs soms te laat of slaat er een over. Daarom wordt er va
 
 ## Wat erin komt
 
-- `criteria.md`: voor wie de site is, wat er in elke rubriek hoort, wat er niet in komt (geen reclame, geen onbekende tools) en hoe de score werkt.
-- Bovenin `ai_nieuws.py`: hoe de berichten geschreven worden. `SCHRIJFREGELS` geldt voor alles (het belangrijkste eerst, beloningen onderweg, tussenkopjes als vraag, eindigen met iets wat je kunt doen), `SCHRIJF_OPDRACHT` is voor de editie en `ARTIKEL_OPDRACHT` voor het verhaal van elk artikel.
+- `criteria.md`: voor wie de site is, wat er in elke rubriek hoort, wat er niet in komt (geen reclame, geen onbekende tools) en de vier vaste vragen. Claude geeft zelf geen cijfer, maar beantwoordt per onderwerp vier vragen:
+  - **nut:** wat heeft de lezer eraan? (0 tot 3)
+  - **bereik:** hoeveel lezers raakt het? (0 tot 3)
+  - **nieuw:** is het echt nieuw? (0 tot 2, met in één zin wat er nieuw is)
+  - **bevestiging:** wie zegt het? (0 tot 2)
+
+  Het programma telt de antwoorden op tot een score van 0 tot 10: 6 of hoger is een artikel, 5 is Kort nieuws. Het logboek van elke run laat per onderwerp de vier antwoorden zien, en de editie bewaart ze onder `keuze`.
+- Bovenin `ai_nieuws.py`: hoe de berichten geschreven worden. `SCHRIJFREGELS` geldt voor alles (het belangrijkste eerst, stap voor stap uitleggen, beloningen onderweg, tussenkopjes als vraag, eindigen met iets wat je kunt doen). `SCHRIJF_OPDRACHT` is voor de editie, met de regels voor koppen: een bewering in plaats van een vraag, iets concreets, een sterk werkwoord en korte woorden (Kuiken e.a. 2017, Lagerwerf & Govaert 2021). `ARTIKEL_OPDRACHT` is voor het verhaal van elk artikel en `UITLEG_OPDRACHT` voor het uitlegstuk.
 - `config.json`: de bronnen en de aantallen.
 
 Pas een van deze bestanden aan, zet de wijziging op GitHub, en de volgende editie volgt de nieuwe regels.
@@ -43,10 +50,10 @@ Pas een van deze bestanden aan, zet de wijziging op GitHub, en de volgende editi
 | Instelling | Betekenis |
 |---|---|
 | `site_url` | Het adres van de site, voor de knop in de mail. |
-| `max_items` | Hoogste aantal berichten met uitleg per editie. Standaard `12`. |
-| `max_kort` | Hoogste aantal korte berichten onder "Snel nog even". Standaard `15`. |
-| `minimale_score`, `minimale_score_kort` | Vanaf welke score een bericht uitleg krijgt (`6`) of kort genoemd wordt (`5`). |
-| `min_sterren` | Een GitHub-project met minder sterren valt weg. Standaard `500`. Projecten van de labs zelf blijven altijd. |
+| `min_items`, `max_items` | Minste en hoogste aantal artikelen per editie, zonder het uitlegstuk. Standaard `5` en `8`. Zijn er te weinig artikelen, dan schuiven de beste korte berichten met genoeg brontekst door. |
+| `max_kort` | Hoogste aantal korte berichten in Kort nieuws. Standaard `15`. |
+| `minimale_score`, `minimale_score_kort` | Vanaf welke score een bericht een artikel wordt (`6`) of kort genoemd wordt (`5`). |
+| `min_sterren` | Een tool (rubriek Nieuwe tools) met een GitHub-project met minder sterren valt weg. Standaard `500`. Tools van de AI-bedrijven zelf blijven altijd. Een verhaal of onderzoek met een link naar een klein project mag wel. |
 | `rubrieken` | Hoogste aantal berichten met uitleg per rubriek. `0` zet een rubriek uit. |
 | `venster_uren` | Hoe ver terug er wordt gekeken. Standaard `48`. Niets komt twee keer. |
 | `model` | Het Claude-model: `sonnet`, `opus` of `haiku`. |

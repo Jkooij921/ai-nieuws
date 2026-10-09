@@ -180,15 +180,14 @@ main.editie{padding-top:26px}
 .chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:var(--zacht);margin-top:22px}
 .chip{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;border:1px solid var(--inkt);color:var(--inkt);text-decoration:none;font-weight:600}
 .chip:hover{background:var(--inkt);color:#ffffff}
-.verwant,.meerlijst{margin-top:40px}
-.verwant h2,.meerlijst h2{font-family:Newsreader,Georgia,serif;font-size:28px;margin:0 0 6px;border-bottom:1px solid var(--inkt);padding-bottom:8px}
-.verwant ul,.meerlijst ul{list-style:none;margin:0;padding:0}
+.verwant{margin-top:40px}
+.verwant h2{font-family:Newsreader,Georgia,serif;font-size:28px;margin:0 0 6px;border-bottom:1px solid var(--inkt);padding-bottom:8px}
+.verwant ul{list-style:none;margin:0;padding:0}
 .verwant li a{display:grid;grid-template-columns:160px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--lijn);text-decoration:none;align-items:start}
 .verwant .tegel{padding:10px 12px}
 .verwant .tegel span{font-size:18px}
-.verwant b,.meerlijst b{font-family:Newsreader,Georgia,serif;font-size:20px;line-height:1.25;display:block}
-.meerlijst li a{display:block;padding:12px 0;border-bottom:1px solid var(--lijn);text-decoration:none}
-.verwant li a:hover b,.meerlijst li a:hover b{text-decoration:underline}
+.verwant b{font-family:Newsreader,Georgia,serif;font-size:20px;line-height:1.25;display:block}
+.verwant li a:hover b{text-decoration:underline}
 
 /* de week in AI */
 .weeklijst{list-style:none;margin:10px 0 0;padding:0}
@@ -237,9 +236,9 @@ main.editie{padding-top:26px}
   .beeld img,.beeld .tegel{transition:transform .35s ease,filter .35s ease}
   .kaart:hover .beeld img,.kaart:hover .beeld .tegel,.weeklijst li:hover .beeld img,.weeklijst li:hover .tegel,
   .verwant li a:hover img,.verwant li a:hover .tegel{transform:scale(1.035);filter:brightness(.94)}
-  .kaartlink,.verwant b,.meerlijst b,.archief .editie b,.zoekresultaten a{transition:color .15s}
+  .kaartlink,.verwant b,.archief .editie b,.zoekresultaten a{transition:color .15s}
   .kaart:hover .kaartlink,.weeklijst li:hover .kaartlink,.kortnieuws li:hover .kaartlink,
-  .verwant li a:hover b,.meerlijst li a:hover b,.archief .editie:hover b,.zoekresultaten a:hover{
+  .verwant li a:hover b,.archief .editie:hover b,.zoekresultaten a:hover{
     color:var(--accent);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
   .knop:hover{background:var(--accent);border-color:var(--accent);color:#ffffff}
   .knop.licht:hover{background:var(--inkt);border-color:var(--inkt);color:#ffffff}

@@ -60,7 +60,8 @@ log = logging.getLogger("ai_nieuws")
 STANDAARD = {
     "mail_aan": "",
     "mail_van": "",
-    "max_items": 12,
+    "min_items": 5,
+    "max_items": 8,
     "max_kort": 15,
     "minimale_score": 6,
     "minimale_score_kort": 5,
@@ -97,6 +98,11 @@ GEEN_REPO = {"orgs", "features", "sponsors", "topics", "settings", "marketplace"
 
 SYSTEEM = "Je bent redacteur van een Nederlandstalige AI-nieuwssite. Antwoord alleen met JSON volgens het schema."
 
+# Het uitlegstuk heeft een eigen rubriek; het nieuws komt in de andere.
+UITLEG = "Uitleg"
+NIEUWSRUBRIEKEN = [r for r in RUBRIEKEN if r != UITLEG]
+
+# Claude beantwoordt per onderwerp vier vaste vragen (zie criteria.md); het programma rekent daaruit de score.
 KEUZE_SCHEMA = {
     "type": "object",
     "properties": {
@@ -106,11 +112,15 @@ KEUZE_SCHEMA = {
                 "type": "object",
                 "properties": {
                     "ids": {"type": "array", "items": {"type": "integer"}},
-                    "score": {"type": "integer"},
-                    "rubriek": {"type": "string", "enum": list(RUBRIEKEN)},
+                    "rubriek": {"type": "string", "enum": NIEUWSRUBRIEKEN},
+                    "nut": {"type": "integer"},
+                    "bereik": {"type": "integer"},
+                    "nieuw": {"type": "integer"},
+                    "nieuw_feit": {"type": "string"},
+                    "bevestiging": {"type": "integer"},
                     "reden": {"type": "string"},
                 },
-                "required": ["ids", "score", "rubriek", "reden"],
+                "required": ["ids", "rubriek", "nut", "bereik", "nieuw", "nieuw_feit", "bevestiging", "reden"],
             },
         }
     },
@@ -172,8 +182,21 @@ SCHRIJF_SCHEMA = {
                 "required": ["woord", "uitleg"],
             },
         },
+        "uitlegstuk": {
+            "type": "object",
+            "properties": {
+                "nr": {"type": "integer"},
+                "kop": {"type": "string"},
+                "uitleg": {"type": "string"},
+                "samenvatting": {"type": "string"},
+                "waarom": {"type": "string"},
+                "bedrijf": {"type": "string", "enum": BEDRIJVEN},
+                "onderwerpen": {"type": "array", "items": {"type": "string"}},
+            },
+            "required": ["nr", "kop", "uitleg", "samenvatting", "waarom", "bedrijf", "onderwerpen"],
+        },
     },
-    "required": ["intro", "items", "kort", "probeer", "begrippen", "quiz"],
+    "required": ["intro", "items", "kort", "probeer", "begrippen", "quiz", "uitlegstuk"],
 }
 
 ARTIKEL_SCHEMA = {
@@ -197,7 +220,8 @@ LEZERS = """De site is een krant voor mensen met een beetje kennis van AI. Ze ge
 # Hoe een artikel prettig leest: het belangrijkste eerst, dan het verhaal, beloningen onderweg,
 # nieuwsgierigheid zonder clickbait en eindigen met iets wat de lezer kan doen.
 SCHRIJFREGELS = """Zo schrijf je een artikel dat mensen willen lezen:
-- Het belangrijkste eerst. De kop en de eerste zin van de samenvatting vertellen samen het nieuws. Wie alleen die twee leest, weet wat er gebeurd is en wat er voor de lezer verandert. Daarna pas de details.
+- Het belangrijkste eerst. De kop en de eerste zin van de samenvatting vertellen samen het nieuws. Wie alleen die twee leest, weet wat er gebeurd is en wat er voor de lezer verandert. Kop, samenvatting en waarom-zin samen vertellen het hele nieuws, want een derde van de lezers leest niet verder. Daarna pas de details.
+- Leg stap voor stap uit. Begin bij wat de lezer al kent (ChatGPT, Claude, zijn werk, zijn telefoon) en bouw daarop voort. Verbind de stappen met "omdat", "daardoor" en "dus", zodat de lezer snapt waarom iets zo is en niet alleen wat er is.
 - Daarna het verhaal. Na de samenvatting vertelt het artikel wat er precies gebeurde: de details, een voorbeeld, de achtergrond. Wie alleen de samenvatting leest, weet genoeg. Wie doorleest, wordt beloond.
 - Beloon de lezer onderweg. Zet in het midden van het artikel minstens twee dingen die het lezen waard maken: een getal, een concreet voorbeeld, een opvallend detail, of een korte uitspraak die letterlijk in de brontekst staat (vertaald, tussen aanhalingstekens, met wie het zei). Stop niet al het goede in de eerste zin.
 - Maak nieuwsgierig zonder te overdrijven. Een tussenkop is de vraag die de lezer op dat moment heeft, en het antwoord staat er direct onder. Beloof nooit meer dan het artikel waarmaakt.
@@ -217,6 +241,7 @@ WOORDREGELS = """Woorden uitleggen:
 
 Regels:
 - Gebruik alleen feiten die in de aangeleverde tekst staan. Staat iets er niet in, laat het weg. Verzin geen cijfers, namen of data. Dat geldt ook voor de waarom-zin: geen "voor het eerst" of "grootste" als de tekst dat niet zegt.
+- Heeft een project minder dan 500 sterren op GitHub (github_sterren), vertel dan wat iemand ermee deed, maar raad de lezer niet aan het te installeren. Zo'n project is nog onbekend en niet gecontroleerd.
 - De paginatekst kan menu's, cookiemeldingen of reclame bevatten. Negeer die.
 - Schrijf gewoon, helder Nederlands. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
 - Productnamen en namen van modellen blijven onvertaald."""
@@ -234,7 +259,13 @@ Elk bericht wordt een artikel van 2 tot 3 minuten lezen. Jij schrijft per berich
 intro: 1 of 2 zinnen die de editie openen. Begin met "{groet}". Noem het opvallendste van deze editie concreet en in woorden die een leek snapt, geen opsomming van alles.
 
 items: één per onderwerp uit "onderwerpen".
-- kop: hooguit 10 woorden, te begrijpen zonder voorkennis, ook los in een WhatsApp-bericht. Zeg wie wat doet en wat er verandert, met een werkwoord. Zet het belangrijkste woord vooraan, meestal de naam van de AI of het bedrijf. Geen vaktermen, geen vraag, geen woordgrap, geen clickbait die meer belooft dan het bericht. Niet "Grote update voor Claude", wel "Claude kan nu ... " met wat er echt nieuw is.
+- kop: hooguit 10 woorden, te begrijpen zonder voorkennis, ook los in een WhatsApp-bericht. Een kop die gelezen wordt:
+  - is een bewering, geen vraag. "Zo ..." en "Waarom ..." mogen wel.
+  - noemt iets concreets uit de tekst: een naam, een ding of een getal. Niet "Grote update voor Claude", wel "Claude kan nu ..." met wat er echt nieuw is.
+  - heeft een sterk werkwoord dat precies klopt, zoals verbiedt, halveert, schrapt, opent, waarschuwt. Niet een zwak werkwoord als krijgt, komt met of heeft. Maak het niet groter dan het is.
+  - gebruikt korte, gewone woorden. Liever "kosten voor AI" dan "AI-gebruikskosten". Geen lange samengestelde woorden.
+  - zet het belangrijkste woord vooraan: het ding dat verandert.
+  - heeft geen vaktermen, geen woordgrap en geen hypewoorden, en belooft niet meer dan het bericht.
 - uitleg: 1 of 2 zinnen achtergrond, zodat de lezer snapt waar het over gaat voordat het nieuws komt. Wat is het product, het bedrijf, het probleem of het begrip waar het om draait? Voorbeeld van de toon: "Een plugin is een uitbreiding die je aan een programma toevoegt, zoals een app op je telefoon." Bestaat iets al langer en is nu alleen een deel nieuw, zeg dan in de uitleg wat er al was, zodat de lezer niet denkt dat het oud nieuws is. Doe dat alleen als de brontekst het zegt. Gaat het om een tool, skill of plugin, noem dan wie hem maakte (als de tekst dat zegt) en hoeveel sterren hij op GitHub heeft (github_sterren, afgerond, bijvoorbeeld "bijna 97.000 sterren").
 - samenvatting: wat er nu nieuw is. De eerste zin is het nieuws in één zin: iets wat de lezer nog niet weet. Dit is wat de lezer als eerste ziet, dus de uitleg hierboven mag je hier niet nodig hebben. Lengte per rubriek:
   - Het grote nieuws: 2 of 3 korte zinnen. Wat is er gebeurd en wie deed het.
@@ -270,9 +301,19 @@ begrippen: elk vakwoord dat je in deze editie uitlegt, en elke naam van een tool
 - woord: zoals het in de tekst staat. Een hoofdletter alleen als het een naam is.
 - uitleg: 1 korte zin die ook los te begrijpen is, zonder te verwijzen naar dit nieuws.
 
+uitlegstuk: één stuk dat iets uit deze editie uitlegt, voor lezers die willen snappen hoe het zit. Geen nieuws, maar achtergrond bij het nieuws. Het verhaal wordt apart geschreven; jij kiest het onderwerp en schrijft de kop en de korte teksten.
+- nr: het nummer van het onderwerp uit "onderwerpen" waar het bij hoort. Zijn er geen onderwerpen, of past er niets, geef dan nr 0.
+- Kies een begrip, techniek of ontwikkeling die in dat onderwerp een rol speelt, die een leek niet helemaal snapt maar wel wil begrijpen, en die na vandaag nog steeds nuttig is om te weten. Bijvoorbeeld: wat een AI-agent is en wat je ermee kunt, waarom een kleiner model goedkoper is, of hoe AI lekken in software vindt. Kies niets wat al in "eerdere_uitlegstukken" staat.
+- Het uitlegstuk gaat over het begrip in het algemeen, niet over het nieuws zelf: dat heeft al een eigen artikel. De samenvatting zegt dus wat de lezer gaat snappen, niet wat er nieuw is.
+- kop: volgens de regels voor koppen hierboven, het liefst "Zo werkt ..." of "Waarom ...".
+- uitleg: 1 zin die zegt wat het is, in gewone woorden.
+- samenvatting: 2 korte zinnen: wat de lezer na het lezen snapt, en waarom dat nu speelt.
+- waarom: 1 zin over wat de lezer eraan heeft.
+- bedrijf en onderwerpen: zoals bij items.
+
 {woorden}
 
-Onderwerpen, korte berichten en bekende onderwerpen:
+Onderwerpen, korte berichten, bekende onderwerpen en eerdere uitlegstukken:
 """
 
 # Het verhaal van één artikel, na de samenvatting. Elk artikel apart, zodat Claude er zijn volle aandacht aan geeft:
@@ -291,6 +332,36 @@ artikel: 3 blokken. Herhaal niets uit de samenvatting, de uitleg of de waarom-zi
 Samen is dat ongeveer 300 woorden. Het laatste blok maakt de waarom-zin concreet: hoe je het zelf probeert, waar je op let, of wat er nu gebeurt.
 Gebruik alleen wat in de bronnen staat. Meestal staat er genoeg in: details, getallen, voorbeelden, wat iemand zei, wat er nog onzeker is. Zegt de brontekst echt te weinig, schrijf dan minder alinea's: liever 150 woorden die kloppen dan 300 met opvulling. Vul nooit op met algemene zinnen over AI.
 Bij Zo gebruik je AI vertel je het als een kort verhaal: wie deed wat, met welke AI, wat ging er goed of mis, en hoe doe je het zelf. Komt het verhaal alleen van Reddit of Hacker News, schrijf dan dat een gebruiker het vertelt en breng het niet als vaststaand feit.
+
+{woorden}
+
+Het bericht en de bronnen:
+"""
+
+# Het verhaal van het uitlegstuk: achtergrond bij het nieuws, stap voor stap opgebouwd. Leken begrijpen
+# ingewikkeld technieknieuws beter en vinden het interessanter als het zo wordt uitgelegd (Yaros 2006).
+UITLEG_OPDRACHT = """Je schrijft een uitlegstuk voor een Nederlandstalige AI-nieuwssite.
+
+{lezers}
+
+Een uitlegstuk is geen nieuws maar achtergrond. Het legt iets uit wat in het nieuws van vandaag een rol speelt, zodat de lezer dat nieuws beter snapt. De kop, de samenvatting, de uitleg en de waarom-zin staan al vast (zie "bericht"). Jij schrijft het verhaal dat daarna komt, 2 tot 3 minuten lezen.
+
+Het nieuws zelf heeft al een eigen artikel op de site (zie "nieuws_op_de_site"). Herhaal dat niet: geen details over wat er precies nieuw is, voor wie of vanaf wanneer. Leg het begrip in het algemeen uit: wat het is, hoe het werkt en waarvoor je het gebruikt.
+
+{regels}
+
+Zo leg je het uit:
+- Begin bij iets wat de lezer kent: uit zijn eigen gebruik van ChatGPT of Claude, of uit het dagelijks leven.
+- Bouw het stap voor stap op. Eén stap per alinea, verbonden met "omdat", "daardoor" en "dus".
+- Noem het nieuws hooguit in één alinea als voorbeeld, zodat het concreet wordt.
+- Eindig met wat het voor de lezer betekent: waar hij op let, wat hij ermee kan, of wat hij nu beter snapt aan het nieuws.
+
+artikel: 3 blokken. Herhaal niets uit de samenvatting, de uitleg of de waarom-zin. Per blok:
+- tussenkop: hooguit 6 woorden, de vraag die de lezer op dat moment heeft.
+- alineas: 3 alinea's van 3 zinnen. Korte alinea's lezen prettig op een telefoon.
+Samen is dat ongeveer 300 woorden.
+
+Alles over het nieuws komt uit de bronnen. Voor de uitleg zelf mag je algemene kennis gebruiken die al jaren vaststaat, zoals dat een taalmodel tekst voorspelt op basis van heel veel voorbeelden. Noem daarbij geen cijfers, prijzen of data die niet in de bronnen staan, en geen producten of bedrijven die de lezer niet kent. Weet je iets niet zeker, laat het weg.
 
 {woorden}
 
@@ -581,12 +652,12 @@ def verzamel(cfg, staat, nu):
     return berichten, telling, fouten, basis
 
 
-def tel_sterren(berichten, minimum):
+def tel_sterren(berichten):
     """Zoekt de GitHub-sterren op van elk project in de berichten.
 
-    Sterren zijn het beste teken dat veel mensen een tool gebruiken en vertrouwen.
-    Een project met minder dan `minimum` sterren valt weg, behalve van de labs zelf.
-    Lukt het opzoeken niet, dan blijft het bericht staan zonder aantal.
+    Sterren zijn het beste teken dat veel mensen een tool gebruiken en vertrouwen. Hier valt nog niets
+    weg: een verhaal of onderzoek met een link naar een klein project mag blijven. Alleen een tool met
+    te weinig sterren valt later weg (zie kies). Lukt het opzoeken niet, dan blijft het aantal leeg.
     """
     def ophalen(repo):
         try:
@@ -600,14 +671,9 @@ def tel_sterren(berichten, minimum):
     repos = list(dict.fromkeys(b["repo"] for b in berichten if b.get("repo")))[:50]
     with ThreadPoolExecutor(max_workers=8) as pool:
         sterren = dict(pool.map(ophalen, repos))
-    over = []
     for bericht in berichten:
         bericht["sterren"] = sterren.get(bericht.get("repo"))
-        if bericht["sterren"] is not None and bericht["sterren"] < minimum and bericht["groep"] != "lab":
-            log.info("Weggelaten, %s sterren op GitHub: %s", bericht["sterren"], bericht["titel"])
-            continue
-        over.append(bericht)
-    return over
+    return berichten
 
 
 def haal_pagina(url):
@@ -759,11 +825,19 @@ def vraag_claude(cfg, bericht, schema):
 GEBRUIKERSPOSTS = ("reddit.com", "news.ycombinator.com")
 
 
-def bevestigd(bericht):
+def _tussen(waarde, hoogste):
+    """Een antwoord van Claude als heel getal tussen 0 en `hoogste`."""
+    try:
+        return max(0, min(hoogste, int(waarde)))
+    except (TypeError, ValueError):
+        return 0
+
+
+def bevestigd(bericht, min_sterren):
     """Komt dit bericht van een echte nieuwsbron? Een post op Reddit of een tekstpost op Hacker News niet;
     een Hacker News-link naar een artikel van een nieuwssite of bedrijf wel. Een tool met genoeg sterren op
-    GitHub ook: dan bestaat hij echt en gebruiken veel mensen hem (tel_sterren liet de rest al weg)."""
-    if bericht["groep"] != "community" or bericht.get("sterren") is not None:
+    GitHub ook: dan bestaat hij echt en gebruiken veel mensen hem."""
+    if bericht["groep"] != "community" or (bericht.get("sterren") or 0) >= min_sterren:
         return True
     host = urllib.parse.urlsplit(bericht["url"]).netloc.lower()
     return not any(host == d or host.endswith("." + d) for d in GEBRUIKERSPOSTS)
@@ -784,32 +858,59 @@ def kies(cfg, berichten, staat):
     eerder = "\n".join(f"- {v['kop']}" for v in staat["verstuurd"]) or "- (nog niets)"
     vraag = (
         f"{CRITERIA.read_text(encoding='utf-8')}\n\n"
-        f"## Eerder verschenen\n\nKies deze onderwerpen niet opnieuw, tenzij er een echt nieuw feit bij is gekomen.\n\n{eerder}\n\n"
+        f"## Eerder verschenen (afgelopen 7 dagen)\n\nGebruik deze lijst voor de vraag \"Wat is echt nieuw?\". "
+        f"Gaat een bericht over iets uit deze lijst, dan is nieuw 0, tenzij er een echt nieuw feit bij is gekomen.\n\n{eerder}\n\n"
         f"## Berichten\n\n{json.dumps(lijst, ensure_ascii=False)}"
     )
     onderwerpen = []
     for keuze in vraag_claude(cfg, vraag, KEUZE_SCHEMA)["gekozen"]:
         bij = [berichten[i - 1] for i in dict.fromkeys(keuze["ids"]) if 1 <= i <= len(berichten)]
-        if bij:
-            # De eerste hand voorop: daar wijst de kop naar en die tekst wordt samengevat.
-            bij.sort(key=lambda b: b["groep"] != "lab")
-            onderwerpen.append({**keuze, "berichten": bij})
-    # Iets wat alleen in een bericht op Reddit of Hacker News staat, is (nog) geen nieuws: een gebruiker
-    # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws, toolnieuws, Nederlands nieuws
-    # of maatschappijnieuws zijn; hooguit Kort nieuws. Ervaringen (Zo gebruik je AI) mogen wel, want daar gaat
-    # het juist om gebruikers; het artikel zegt dan dat een gebruiker het vertelt.
-    for o in onderwerpen:
-        if (o["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "Nieuwe tools", "AI in Nederland", "Maatschappij")
-                and not any(bevestigd(b) for b in o["berichten"])):
-            log.info("Niet bevestigd, naar Kort nieuws: %s", o["berichten"][0]["titel"])
-            o["score"] = min(o["score"], cfg["minimale_score_kort"])
+        if not bij:
+            continue
+        # De eerste hand voorop: daar wijst de kop naar en die tekst wordt samengevat.
+        bij.sort(key=lambda b: b["groep"] != "lab")
+        titel = bij[0]["titel"]
+        # De score is de som van de vier antwoorden: 0 tot 10. Zo is hij elke keer op dezelfde manier
+        # bepaald, en in het logboek staat waarom.
+        antwoorden = {"nut": _tussen(keuze.get("nut"), 3), "bereik": _tussen(keuze.get("bereik"), 3),
+                      "nieuw": _tussen(keuze.get("nieuw"), 2), "bevestiging": _tussen(keuze.get("bevestiging"), 2)}
+        onderwerp = {**keuze, **antwoorden, "nieuw_feit": keuze.get("nieuw_feit", "").strip(), "berichten": bij,
+                     "score": sum(antwoorden.values()), "alleen_kort": False}
+        # Niets nieuws ten opzichte van de afgelopen week: weg, ook niet in Kort nieuws.
+        if not antwoorden["nieuw"] or not onderwerp["nieuw_feit"]:
+            log.info("Geen nieuw feit, weggelaten: %s", titel)
+            continue
+        # Een tool, plugin of skill moet bekend zijn: genoeg sterren op GitHub, of van een AI-bedrijf zelf.
+        # Een verhaal of onderzoek met een link naar een klein project mag wel.
+        sterren = [b["sterren"] for b in bij if b.get("sterren") is not None]
+        if (keuze["rubriek"] == "Nieuwe tools" and sterren and max(sterren) < cfg["min_sterren"]
+                and not any(b["groep"] == "lab" for b in bij)):
+            log.info("Tool met %s sterren op GitHub, weggelaten: %s", max(sterren), titel)
+            continue
+        # Een aankondiging die alleen het bedrijf zelf doet, terwijl er voor de lezer niets verandert: hooguit kort.
+        if not antwoorden["nut"] and antwoorden["bevestiging"] <= 1:
+            log.info("Alleen het bedrijf zelf, en niets voor de lezer: hooguit Kort nieuws: %s", titel)
+            onderwerp["alleen_kort"] = True
+        # Iets wat alleen in een bericht op Reddit of Hacker News staat, is (nog) geen nieuws: een gebruiker
+        # kan van alles beweren. Zulke berichten mogen nooit groot nieuws, modelnieuws, toolnieuws, Nederlands
+        # nieuws of maatschappijnieuws zijn; hooguit Kort nieuws. Ervaringen (Zo gebruik je AI) mogen wel, want
+        # daar gaat het juist om gebruikers; het artikel zegt dan dat een gebruiker het vertelt.
+        if (keuze["rubriek"] in ("Het grote nieuws", "Nieuwe modellen", "Nieuwe tools", "AI in Nederland", "Maatschappij")
+                and not any(bevestigd(b, cfg["min_sterren"]) for b in bij)):
+            log.info("Niet bevestigd, hooguit Kort nieuws: %s", titel)
+            onderwerp["alleen_kort"] = True
+        if onderwerp["alleen_kort"]:
+            onderwerp["score"] = min(onderwerp["score"], cfg["minimale_score_kort"])
+        onderwerpen.append(onderwerp)
     onderwerpen.sort(key=lambda o: o["score"], reverse=True)
     for o in onderwerpen:
-        log.info("Score %s [%s] %s (%s)", o["score"], o["rubriek"], o["berichten"][0]["titel"], o["reden"])
+        log.info("Score %s (nut %s, bereik %s, nieuw %s, bevestiging %s) [%s] %s | nieuw: %s | %s", o["score"],
+                 o["nut"], o["bereik"], o["nieuw"], o["bevestiging"], o["rubriek"], o["berichten"][0]["titel"],
+                 o["nieuw_feit"], o["reden"])
 
     # Eerst de beste van elke rubriek, zodat elke rubriek met goed nieuws aan bod komt.
     # Daarna de rest op score, tot het maximum per rubriek en in totaal.
-    goed = [o for o in onderwerpen if o["score"] >= cfg["minimale_score"]]
+    goed = [o for o in onderwerpen if o["score"] >= cfg["minimale_score"] and not o["alleen_kort"]]
     gekozen, per_rubriek = [], {}
     for o in goed:
         if o["rubriek"] not in per_rubriek and cfg["rubrieken"].get(o["rubriek"], 3) > 0:
@@ -835,25 +936,31 @@ def kies(cfg, berichten, staat):
 MIN_BRONSTOF = 1500
 
 
-def schrijf_editie(cfg, gekozen, kort, moment, bekend):
+def schrijf_editie(cfg, gekozen, kort, moment, bekend, eerdere_uitleg):
     """Haalt de artikelen en beelden op en laat Claude de editie schrijven.
 
     Geeft (antwoord van Claude, gekozen, kort) terug. Een onderwerp met te weinig brontekst voor een
-    echt artikel schuift door naar Kort nieuws. Het gekozen beeld komt in elk onderwerp onder "beeld".
+    echt artikel schuift door naar Kort nieuws. Zijn er dan minder dan min_items artikelen, dan schuiven
+    de beste korte berichten met genoeg brontekst door naar een artikel. Het uitlegstuk komt als laatste
+    in gekozen. Het gekozen beeld komt in elk onderwerp onder "beeld".
     """
+    # Reserves, voor als een artikel afvalt of de editie rustig is. Een bericht dat alleen kort mag
+    # (gerucht, alleen het bedrijf zelf), blijft kort.
+    reserve = [o for o in kort if not o["alleen_kort"]][:max(4, cfg["min_items"] + 3 - len(gekozen))]
+    kandidaten = gekozen + reserve
     with ThreadPoolExecutor(max_workers=6) as pool:
-        verrijkt = list(pool.map(lambda o: verrijk(o["berichten"]), gekozen))
+        verrijkt = list(pool.map(lambda o: verrijk(o["berichten"]), kandidaten))
     # Hetzelfde plaatje bij twee verschillende berichten is het standaardplaatje van een site, geen nieuwsfoto.
     tellingen = {}
     for _, beeld in verrijkt:
         if beeld:
             tellingen[beeld] = tellingen.get(beeld, 0) + 1
-    for onderwerp, (_, beeld) in zip(gekozen, verrijkt):
+    for onderwerp, (_, beeld) in zip(kandidaten, verrijkt):
         onderwerp["beeld"] = beeld if tellingen.get(beeld) == 1 else ""
-    log.info("Beelden gevonden voor %s van de %s berichten", sum(1 for o in gekozen if o["beeld"]), len(gekozen))
     nu = datetime.now()
-    onderwerpen, lang, te_dun = [], [], []
-    for onderwerp, (paginas, _) in zip(gekozen, verrijkt):
+    eerste_keus = {id(o) for o in gekozen}
+    lang, reserve_ok, te_dun = [], [], []
+    for onderwerp, (paginas, _) in zip(kandidaten, verrijkt):
         bronnen = []
         for plek, bericht in enumerate(onderwerp["berichten"][:3]):
             tekst = bericht["tekst"]
@@ -864,15 +971,33 @@ def schrijf_editie(cfg, gekozen, kort, moment, bekend):
             if bericht.get("sterren") is not None:
                 bron["github_sterren"] = bericht["sterren"]
             bronnen.append(bron)
+        onderwerp["brontekst"] = bronnen
         stof = sum(len(b["tekst"]) for b in bronnen)
-        if stof < MIN_BRONSTOF:
+        if stof >= MIN_BRONSTOF:
+            (lang if id(onderwerp) in eerste_keus else reserve_ok).append(onderwerp)
+        elif id(onderwerp) in eerste_keus:
             log.info("Te weinig brontekst (%s tekens), naar Kort nieuws: %s", stof, onderwerp["berichten"][0]["titel"])
             te_dun.append(onderwerp)
-            continue
-        lang.append(onderwerp)
-        onderwerpen.append({"nr": len(lang), "rubriek": onderwerp["rubriek"], "bronnen": bronnen})
+    # Aanvullen met reserves die genoeg brontekst hebben, de hoogste score eerst. Tot min_items mag elke reserve;
+    # daarboven, tot max_items, alleen een onderwerp dat zelf een artikel verdient en in zijn rubriek nog past.
+    # Zo gaat een goed onderwerp niet verloren omdat een ander te weinig brontekst had.
+    per_rubriek = {}
+    for onderwerp in lang:
+        per_rubriek[onderwerp["rubriek"]] = per_rubriek.get(onderwerp["rubriek"], 0) + 1
+    for onderwerp in reserve_ok:
+        if len(lang) >= cfg["max_items"]:
+            break
+        past = per_rubriek.get(onderwerp["rubriek"], 0) < cfg["rubrieken"].get(onderwerp["rubriek"], 3)
+        if len(lang) < cfg["min_items"] or (onderwerp["score"] >= cfg["minimale_score"] and past):
+            log.info("Aangevuld tot een artikel (score %s): %s", onderwerp["score"], onderwerp["berichten"][0]["titel"])
+            lang.append(onderwerp)
+            per_rubriek[onderwerp["rubriek"]] = per_rubriek.get(onderwerp["rubriek"], 0) + 1
+    lang.sort(key=lambda o: NIEUWSRUBRIEKEN.index(o["rubriek"]))
+    in_lang = {id(o) for o in lang}
     gekozen = lang
-    kort = sorted(te_dun + kort, key=lambda o: o["score"], reverse=True)[:cfg["max_kort"]]
+    kort = sorted([o for o in te_dun + kort if id(o) not in in_lang], key=lambda o: o["score"], reverse=True)[:cfg["max_kort"]]
+    log.info("Beelden gevonden voor %s van de %s berichten", sum(1 for o in gekozen if o["beeld"]), len(gekozen))
+    onderwerpen = [{"nr": nr, "rubriek": o["rubriek"], "bronnen": o["brontekst"]} for nr, o in enumerate(gekozen, 1)]
     korte = []
     for nr, onderwerp in enumerate(kort, 1):
         eerste = onderwerp["berichten"][0]
@@ -881,29 +1006,52 @@ def schrijf_editie(cfg, gekozen, kort, moment, bekend):
 
     groet = "Goedemorgen." if moment == "ochtend" else "Goedenavond."
     opdracht = SCHRIJF_OPDRACHT.format(moment=moment, groet=groet, lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)
-    inhoud = json.dumps({"onderwerpen": onderwerpen, "korte_berichten": korte, "bekende_onderwerpen": bekend},
-                        ensure_ascii=False)
+    inhoud = json.dumps({"onderwerpen": onderwerpen, "korte_berichten": korte, "bekende_onderwerpen": bekend,
+                         "eerdere_uitlegstukken": eerdere_uitleg}, ensure_ascii=False)
     antwoord = vraag_claude(cfg, opdracht + inhoud, SCHRIJF_SCHEMA)
+    antwoord.setdefault("items", [])
 
     # Daarna het verhaal van elk artikel, apart en een paar tegelijk. Lukt dat bij één artikel niet,
     # dan verschijnt dat bericht met alleen de samenvatting en de uitleg; de editie gaat gewoon door.
-    geschreven = {i["nr"]: i for i in antwoord.get("items", [])}
-    opdracht = ARTIKEL_OPDRACHT.format(lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)
+    geschreven = {i["nr"]: i for i in antwoord["items"]}
+    nieuws = ARTIKEL_OPDRACHT.format(lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)
+    taken = [(o, nieuws) for o in onderwerpen]
 
-    def schrijf_artikel(onderwerp):
+    # Het uitlegstuk: achtergrond bij een van de onderwerpen, met dezelfde bronnen als voorbeeld.
+    # Het komt als laatste in gekozen, met score 0, zodat het nooit het grote nieuws van de editie wordt.
+    uitleg = antwoord.get("uitlegstuk") or {}
+    if 1 <= uitleg.get("nr", 0) <= len(gekozen) and uitleg.get("kop", "").strip():
+        bij = gekozen[uitleg["nr"] - 1]
+        nr = len(gekozen) + 1
+        gekozen.append({"rubriek": UITLEG, "score": 0, "berichten": bij["berichten"], "beeld": ""})
+        geschreven[nr] = {**uitleg, "nr": nr}
+        antwoord["items"].append(geschreven[nr])
+        # Wat er al in het nieuwsartikel staat, zodat het uitlegstuk dat niet herhaalt.
+        nieuwsitem = geschreven.get(uitleg["nr"], {})
+        taken.append(({"nr": nr, "rubriek": UITLEG, "bronnen": bij["brontekst"],
+                       "nieuws": {k: nieuwsitem.get(k, "") for k in ("kop", "samenvatting", "waarom")}},
+                      UITLEG_OPDRACHT.format(lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)))
+        log.info("Uitlegstuk: %s", uitleg["kop"])
+    else:
+        log.info("Geen uitlegstuk in deze editie")
+
+    def schrijf_artikel(taak):
+        onderwerp, opdracht = taak
         item = geschreven.get(onderwerp["nr"])
         if not item:
             return
         bericht = {"rubriek": onderwerp["rubriek"], **{k: item[k] for k in ("kop", "samenvatting", "uitleg", "waarom")}}
+        inhoud = {"bericht": bericht, "bronnen": onderwerp["bronnen"]}
+        if onderwerp.get("nieuws"):
+            inhoud["nieuws_op_de_site"] = onderwerp["nieuws"]
         try:
-            item["artikel"] = vraag_claude(
-                cfg, opdracht + json.dumps({"bericht": bericht, "bronnen": onderwerp["bronnen"]}, ensure_ascii=False),
-                ARTIKEL_SCHEMA).get("artikel", [])
+            item["artikel"] = vraag_claude(cfg, opdracht + json.dumps(inhoud, ensure_ascii=False),
+                                           ARTIKEL_SCHEMA).get("artikel", [])
         except Exception as fout:
             log.warning("Artikel niet geschreven, het bericht krijgt alleen de samenvatting: %s (%s)", item["kop"], fout)
 
     with ThreadPoolExecutor(max_workers=4) as pool:
-        list(pool.map(schrijf_artikel, onderwerpen))
+        list(pool.map(schrijf_artikel, taken))
     log.info("Artikelen geschreven: %s van de %s", sum(1 for i in geschreven.values() if i.get("artikel")), len(geschreven))
     return antwoord, gekozen, kort
 
@@ -951,12 +1099,17 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     als GitHub de avondeditie pas na middernacht start.
     """
     lang = {i["nr"]: i for i in antwoord.get("items", [])}
+
+    def keuze(o):
+        # Waarom dit onderwerp erin kwam: de vier antwoorden van Claude. Het uitlegstuk heeft ze niet.
+        return {k: o[k] for k in ("nut", "bereik", "nieuw", "bevestiging", "nieuw_feit", "reden") if k in o}
+
     items = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": lang[nr]["kop"], "uitleg": lang[nr]["uitleg"],
          "samenvatting": lang[nr]["samenvatting"], "waarom": lang[nr]["waarom"],
          "artikel": artikelblokken(lang[nr].get("artikel")), "bronnen": _bronnen(o),
          "beeld": o.get("beeld", ""), "bedrijf": lang[nr].get("bedrijf", "Anders"),
-         "onderwerpen": [t.strip() for t in lang[nr].get("onderwerpen", []) if t.strip()][:3]}
+         "onderwerpen": [t.strip() for t in lang[nr].get("onderwerpen", []) if t.strip()][:3], "keuze": keuze(o)}
         for nr, o in enumerate(gekozen, 1) if nr in lang
     ]
     # Alleen vragen die kloppen: precies drie antwoorden en een goed antwoord dat bestaat.
@@ -968,7 +1121,7 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     kortjes = {k["nr"]: k for k in antwoord.get("kort", [])}
     korte = [
         {"rubriek": o["rubriek"], "score": o["score"], "kop": kortjes[nr]["kop"], "zin": kortjes[nr]["zin"],
-         "bedrijf": kortjes[nr].get("bedrijf", "Anders"), "bronnen": _bronnen(o)}
+         "bedrijf": kortjes[nr].get("bedrijf", "Anders"), "bronnen": _bronnen(o), "keuze": keuze(o)}
         for nr, o in enumerate(kort, 1) if nr in kortjes
     ]
     probeer = antwoord.get("probeer") or {}
@@ -1020,7 +1173,7 @@ WEEK_SCHEMA = {"type": "object", "properties": {"intro": {"type": "string"}}, "r
 def maak_week(cfg, edities, dag):
     """De week in AI: de 10 belangrijkste berichten van maandag tot en met `dag`."""
     maandag = dag - timedelta(days=dag.weekday())
-    berichten = [item for ed in edities if maandag <= editiedag(ed) <= dag for item in ed["items"]]
+    berichten = [item for ed in edities if maandag <= editiedag(ed) <= dag for item in ed["items"] if item["rubriek"] != UITLEG]
     if not berichten:
         return None
     # Het belangrijkste eerst; bij gelijke score wint wat door meer bronnen gemeld werd.
@@ -1116,7 +1269,7 @@ def bouw_mail(ed, site_url, week=None):
     blokken = []
     for nr, item in enumerate(top):
         url = artikel_url(site_url, item) if site_url else item["bronnen"][0]["url"]
-        regel = datumregel(item["bronnen"], tijd)
+        regel = "Achtergrond bij het nieuws" if item["rubriek"] == UITLEG else datumregel(item["bronnen"], tijd)
         beeld = ""
         if nr == 0 and item.get("beeld"):
             beeld = (f'<a href="{e(url)}"><img src="{e(item["beeld"])}" alt="" width="560" '
@@ -1295,15 +1448,17 @@ def main():
         print(f"\nTotaal {len(berichten)} nieuwe berichten, {len(basis)} oude links overgeslagen.")
         return 0
 
-    berichten = tel_sterren(berichten, cfg["min_sterren"])
+    berichten = tel_sterren(berichten)
     log.info("%s nieuwe berichten uit %s bronnen, mislukt: %s", len(berichten), len(telling), ", ".join(fouten) or "geen")
     wachtwoord = lees_wachtwoord()
     try:
         gekozen, kort = kies(cfg, berichten, staat) if berichten else ([], [])
-        bekend = bekende_onderwerpen(laad_edities())
+        eerder = laad_edities()
+        bekend = bekende_onderwerpen(eerder)
+        eerdere_uitleg = [i["kop"] for ed in eerder for i in ed["items"] if i["rubriek"] == UITLEG][-40:]
         antwoord = {}
         if gekozen or kort:
-            antwoord, gekozen, kort = schrijf_editie(cfg, gekozen, kort, moment, bekend)
+            antwoord, gekozen, kort = schrijf_editie(cfg, gekozen, kort, moment, bekend, eerdere_uitleg)
     except Exception as fout:
         log.exception("Kiezen of schrijven mislukt")
         if wachtwoord and cfg["mail_aan"] and not args.voorbeeld:

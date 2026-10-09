@@ -25,6 +25,9 @@ from pathlib import Path
 RUBRIEKEN = {
     "Het grote nieuws": {"knop": "Groot nieuws", "klasse": "groot", "waarom": "Waarom het ertoe doet",
                          "uitleg": "Wat iedereen die AI volgt vandaag moet weten."},
+    # Elke editie één uitlegstuk: geen nieuws, maar achtergrond bij het nieuws.
+    "Uitleg": {"knop": "Uitleg", "klasse": "uitleg", "waarom": "Wat heb je eraan",
+               "uitleg": "Achtergrond bij het nieuws: hoe iets werkt, stap voor stap en in gewone taal."},
     "Nieuwe modellen": {"knop": "Modellen", "klasse": "modellen", "waarom": "Wat betekent dit",
                         "uitleg": "Nieuwe AI-modellen en grote updates van bestaande modellen."},
     "Nieuwe tools": {"knop": "Tools", "klasse": "tools", "waarom": "Wat heb je eraan",
@@ -146,6 +149,8 @@ def impact(item):
 
 def tegeltekst(item):
     """Wat er op het blok staat als een bericht geen beeld heeft: de bron, en bij Reddit de groep."""
+    if item["rubriek"] == "Uitleg":
+        return "Uitleg", "Achtergrond bij het nieuws"
     bron = item["bronnen"][0]
     gevonden = re.search(r"reddit\.com/r/([^/]+)", bron["url"])
     if gevonden:
@@ -262,7 +267,16 @@ def beeld_html(item, verhouding="16 / 10"):
     return f'<div class="beeld">{inhoud}</div>'
 
 
+def datumtekst(item, ref):
+    """De regel met datum en bron boven een bericht. Een uitlegstuk is geen nieuws: daar staat dat het achtergrond is."""
+    if item["rubriek"] == "Uitleg":
+        return "Achtergrond bij het nieuws"
+    return datumregel(item["bronnen"], ref)
+
+
 def impact_html(item):
+    if item["rubriek"] == "Uitleg":
+        return ""
     niveau, woord = impact(item)
     streepjes = "".join(f'<i class="{"aan" if n < niveau else ""}"></i>' for n in range(3))
     return (f'<span class="impact" title="Impact: hoe belangrijk dit nieuws is volgens de selectie">'
@@ -294,7 +308,7 @@ def kaart(item, ref, basis, site_url, groot=False):
         f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}">'
         f'{beeld_html(item, "16 / 9" if groot else "16 / 10")}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>{productlabel}'
-        f'<span>{e(datumregel(item["bronnen"], ref))}</span>{impact_html(item)}</div>'
+        f'<span>{e(datumtekst(item, ref))}</span>{impact_html(item)}</div>'
         f'<{kop}><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></{kop}>'
         f'{lede}{waarom}'
         f'<div class="onder"><span>{leestijd(item)} min lezen · {n} {"bron" if n == 1 else "bronnen"}</span>'
@@ -313,7 +327,7 @@ def rij_html(item, ref, basis):
         f'{beeld_html(item)}<div class="rijtekst">'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
         f'{f"<span class=product>{e(product)}</span>" if product else ""}'
-        f'<span>{e(datumregel(item["bronnen"], ref))}</span></div>'
+        f'<span>{e(datumtekst(item, ref))}</span></div>'
         f'<h3><a class="kaartlink" href="{basis}artikel/{e(item["id"])}.html">{e(item["kop"])}</a></h3>'
         f'<p>{e(item["samenvatting"])}</p>'
         f'<div class="onder"><span>{leestijd(item)} min lezen · {n} {"bron" if n == 1 else "bronnen"}</span>'
@@ -528,38 +542,44 @@ def editie_html(ed, begrippen, basis, site_url):
     )
 
 
+BYLINE = "Geschreven met AI (Claude) op basis van de bronnen hieronder"
+# Een uitlegstuk gebruikt ook algemene kennis; het nieuws uit de bronnen is het voorbeeld.
+BYLINE_UITLEG = "Uitleg geschreven met AI (Claude), met het nieuws uit de bronnen hieronder als voorbeeld"
+
+
 def artikel_html(item, ed, alle, basis, site_url):
     stijl = RUBRIEKEN[item["rubriek"]]
     ref = datetime.fromisoformat(ed["tijd"])
     onderwerpen = item.get("onderwerpen", [])
     chips = "".join(f'<a class="chip" href="{basis}onderwerp/{slug(o)}.html">{e(o)}</a>' for o in onderwerpen)
 
-    # Meer over hetzelfde onderwerp: eerst het meest specifieke onderwerp, dan de andere.
+    # Lees ook: 3 tot 5 berichten. Eerst over hetzelfde onderwerp (het nieuwste eerst), dan aangevuld uit deze
+    # editie, en is dat nog geen 3, uit de edities ervoor. Lezers die via zo'n link binnenkomen, lezen het langst (Pew 2016).
     verwant, gezien = [], {item["id"]}
-    for onderwerp in onderwerpen:
-        for ander, ander_ed in alle:
-            if ander["id"] not in gezien and onderwerp in ander.get("onderwerpen", []):
-                verwant.append((ander, ander_ed))
-                gezien.add(ander["id"])
-    verwant.sort(key=lambda paar: paar[1]["tijd"], reverse=True)
-    verwant = verwant[:6]
-    eerder = all(a_ed["tijd"] <= ed["tijd"] for _, a_ed in verwant)
+
+    def erbij(ander, ander_ed):
+        if ander["id"] not in gezien and len(verwant) < 5:
+            verwant.append((ander, ander_ed))
+            gezien.add(ander["id"])
+
+    zelfde = [(a, a_ed) for a, a_ed in alle if set(onderwerpen) & set(a.get("onderwerpen", []))]
+    for ander, ander_ed in sorted(zelfde, key=lambda paar: paar[1]["tijd"], reverse=True):
+        erbij(ander, ander_ed)
+    for ander in sorted(ed["items"], key=lambda i: -i["score"]):
+        erbij(ander, ed)
+    for ander, ander_ed in sorted(alle, key=lambda paar: paar[1]["tijd"], reverse=True):
+        if len(verwant) >= 3:
+            break
+        erbij(ander, ander_ed)
     verwant_html = ""
     if verwant:
-        titel = f"{'Eerder' if eerder else 'Meer'} over {onderwerpen[0]}" if onderwerpen else "Meer over dit onderwerp"
         rijen = "".join(
             f'<li data-id="{e(a["id"])}"><a href="{basis}artikel/{e(a["id"])}.html">{beeld_html(a, "16 / 10")}'
             f'<span><span class="meta">{e(dagtitel(editiedag(a_ed)).capitalize())} · {e(RUBRIEKEN[a["rubriek"]]["knop"])}</span>'
             f'<b>{e(a["kop"])}</b></span></a></li>'
             for a, a_ed in verwant
         )
-        verwant_html = f'<section class="verwant"><h2>{e(titel)}</h2><ul>{rijen}</ul></section>'
-
-    meer = [i for i in ed["items"] if i["id"] != item["id"]][:4]
-    meer_html = "".join(
-        f'<li><a href="{basis}artikel/{e(i["id"])}.html"><span class="meta">{e(RUBRIEKEN[i["rubriek"]]["knop"])}</span>'
-        f'<b>{e(i["kop"])}</b></a></li>' for i in meer
-    )
+        verwant_html = f'<section class="verwant"><h2>Lees ook</h2><ul>{rijen}</ul></section>'
     waarom = f'<p class="waarom"><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>' if item.get("waarom") else ""
     # Het artikel zelf: blokken met een tussenkop. Oudere berichten hebben dat nog niet.
     lijf = "".join(
@@ -572,9 +592,9 @@ def artikel_html(item, ed, alle, basis, site_url):
         f' › <a href="{basis}edities/{e(ed["id"])}.html#{stijl["klasse"]}">{e(stijl["knop"])}</a></nav>'
         f'{beeld_html(item, "16 / 9")}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
-        f'<span>{e(datumregel(item["bronnen"], ref))}</span><span>{leestijd(item)} min lezen</span>{impact_html(item)}</div>'
+        f'<span>{e(datumtekst(item, ref))}</span><span>{leestijd(item)} min lezen</span>{impact_html(item)}</div>'
         f'<h1>{e(item["kop"])}</h1>'
-        f'<p class="byline">Geschreven met AI (Claude) op basis van de bronnen hieronder · '
+        f'<p class="byline">{BYLINE_UITLEG if item["rubriek"] == "Uitleg" else BYLINE} · '
         f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></p>'
         f'<p class="lede">{e(item["samenvatting"])}</p>'
         f'{waarom}'
@@ -585,7 +605,6 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p>'
         f'{f"<p class=chips>Onderwerpen: {chips}</p>" if chips else ""}'
         f'{verwant_html}'
-        f'<section class="meerlijst"><h2>Meer uit deze editie</h2><ul>{meer_html}</ul></section>'
         f'</main>'
     )
 
