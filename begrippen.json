@@ -27,7 +27,7 @@
   "woord": "open source",
   "uitleg": "Open source betekent dat de code voor iedereen in te zien en te gebruiken is.",
   "editie": "2026-10-06-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "lokaal draaien": {
   "woord": "lokaal draaien",
@@ -87,7 +87,7 @@
   "woord": "agent",
   "uitleg": "Een agent is een AI-programma dat zelfstandig taken uitvoert in plaats van alleen antwoord te geven.",
   "editie": "2026-10-06-ochtend",
-  "keer": 4
+  "keer": 5
  },
  "claude code": {
   "woord": "Claude Code",
@@ -111,7 +111,7 @@
   "woord": "sandbox",
   "uitleg": "Een sandbox is een afgeschermde ruimte waarin een programma kan werken zonder de rest te raken.",
   "editie": "2026-10-06-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "cloud": {
   "woord": "cloud",
@@ -123,7 +123,7 @@
   "woord": "plugin",
   "uitleg": "Een plugin is een uitbreiding die je aan een programma toevoegt, zoals een app op je telefoon.",
   "editie": "2026-10-06-ochtend",
-  "keer": 2
+  "keer": 3
  },
  "claude-mem": {
   "woord": "claude-mem",
@@ -327,7 +327,7 @@
   "woord": "Codex",
   "uitleg": "Codex is het hulpmiddel van OpenAI dat code schrijft en aanpast.",
   "editie": "2026-10-07-avond",
-  "keer": 2
+  "keer": 3
  },
  "mcp-server": {
   "woord": "MCP-server",
@@ -591,6 +591,42 @@
   "woord": "DeepSeek",
   "uitleg": "DeepSeek is een AI-bedrijf dat taalmodellen maakt.",
   "editie": "2026-10-09-ochtend",
+  "keer": 1
+ },
+ "claude cowork": {
+  "woord": "Claude Cowork",
+  "uitleg": "Een versie van Claude waarbij je een doel geeft en Claude het werk afmaakt.",
+  "editie": "2026-10-09-avond",
+  "keer": 1
+ },
+ "duck.ai": {
+  "woord": "Duck.ai",
+  "uitleg": "De AI-chatbot van zoekmachine DuckDuckGo.",
+  "editie": "2026-10-09-avond",
+  "keer": 1
+ },
+ "autoriteit persoonsgegevens": {
+  "woord": "Autoriteit Persoonsgegevens",
+  "uitleg": "De Nederlandse toezichthouder op privacy en gegevensbescherming.",
+  "editie": "2026-10-09-avond",
+  "keer": 1
+ },
+ "hugging face": {
+  "woord": "Hugging Face",
+  "uitleg": "Een platform waar mensen AI-modellen delen en gebruiken.",
+  "editie": "2026-10-09-avond",
+  "keer": 1
+ },
+ "metr": {
+  "woord": "METR",
+  "uitleg": "Een externe organisatie die AI-systemen onderzoekt en test op risico's.",
+  "editie": "2026-10-09-avond",
+  "keer": 1
+ },
+ "crowdstrike": {
+  "woord": "CrowdStrike",
+  "uitleg": "Een beveiligingsbedrijf dat cyberaanvallen onderzoekt.",
+  "editie": "2026-10-09-avond",
   "keer": 1
  }
 }
