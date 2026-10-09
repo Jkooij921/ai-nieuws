@@ -1296,7 +1296,7 @@ def bouw_mail(ed, site_url, week=None):
         plat.append(f"{verwijzing} {editie_url}")
     if week:
         plat.append(f"Ook nieuw: De week in AI, de 10 belangrijkste berichten van deze week. {site_url}week/{week['id']}.html")
-    plat += ["", "Geschreven met AI (Claude). Lees bij twijfel de bron."]
+    plat += ["", "Geschreven met AI (Claude), niet door een redacteur gecontroleerd. Lees bij twijfel de bron."]
 
     knop = ""
     if verwijzing:
@@ -1318,7 +1318,7 @@ def bouw_mail(ed, site_url, week=None):
         f'<h1 style="font-family:{serif};font-size:34px;line-height:1;margin:4px 0 14px">AI-nieuws</h1>'
         f'<p style="font-family:{serif};margin:0 0 26px;font-size:18px;line-height:1.5;color:#333333">{e(intro)}</p>'
         f'{"".join(blokken)}{knop}'
-        '<p style="margin:26px 0 0;font-size:12px;line-height:1.5;color:#777777">Geschreven met AI (Claude). '
+        '<p style="margin:26px 0 0;font-size:12px;line-height:1.5;color:#777777">Geschreven met AI (Claude), niet door een redacteur gecontroleerd. '
         f'Lees bij twijfel de bron. <a href="{e(site_url)}zo-maken-we-dit.html" style="color:#777777">Zo maken we dit</a></p>'
         '</div></body></html>'
     )

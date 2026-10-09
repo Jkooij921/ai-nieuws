@@ -1,8 +1,11 @@
 /* AI-nieuws: een rustige krant. Koppen in Newsreader, de rest in Archivo, één rode accentkleur. */
-:root{--inkt:#141414;--zacht:#555555;--lijn:#E4E4E1;--vlak:#F3F3F0;--accent:#C4122F;--tegel:#1C1C1C}
+/* Alle kleuren hebben een naam. In de donkere modus (onderaan) krijgen dezelfde namen een andere kleur. */
+:root{color-scheme:light dark;--inkt:#141414;--zacht:#555555;--lijn:#E4E4E1;--vlak:#F3F3F0;--accent:#C4122F;--tegel:#1C1C1C;
+  --papier:#ffffff;--tekst2:#333333;--rand:#BDBDB8;--opaccent:#ffffff;--beeldvlak:#EDEDEA;--beeldrand:rgba(0,0,0,.14);
+  --goedvlak:#E6F4EA;--goedrand:#1E7B3A;--goedtekst:#0F4D22;--foutvlak:#FBE9EA;--fouttekst:#7A0B1D}
 *{box-sizing:border-box}
 html{scroll-padding-top:70px}
-body{margin:0;background:#ffffff;color:var(--inkt);font:17px/1.6 Archivo,system-ui,sans-serif}
+body{margin:0;background:var(--papier);color:var(--inkt);font:17px/1.6 Archivo,system-ui,sans-serif}
 a{color:inherit}
 img{max-width:100%}
 [hidden]{display:none !important}
@@ -31,32 +34,32 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
 .editiekop{padding-top:10px;padding-bottom:20px}
 .label{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .editiekop h1{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:clamp(32px,4vw,46px);line-height:1.1;margin:4px 0 10px}
-.intro{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.5;color:#333333;margin:0 0 6px;max-width:820px}
+.intro{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.5;color:var(--tekst2);margin:0 0 6px;max-width:820px}
 .teller{font-size:14px;color:var(--zacht);margin:0}
 
 .product{font-weight:700;color:var(--inkt)}
 
 /* keuzeknoppen: ronde knoppen zoals bij NOS, groot genoeg voor je duim (minstens 48 pixels, 8 pixels ertussen) */
-.tabbalk{background:#ffffff;border-top:3px solid var(--inkt);border-bottom:1px solid var(--lijn)}
+.tabbalk{background:var(--papier);border-top:3px solid var(--inkt);border-bottom:1px solid var(--lijn)}
 .tabbalk .binnen{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;padding-top:14px;padding-bottom:16px}
 .tabs{display:flex;gap:8px;overflow-x:auto;min-width:0;scrollbar-width:none}
 .tabs[data-meer]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 56px),transparent)}
-.tabs button{flex:none;min-height:48px;padding:0 20px;border:1px solid #BDBDB8;border-radius:999px;background:#ffffff;color:var(--inkt);font:700 15px Archivo,sans-serif;cursor:pointer;white-space:nowrap}
-.tabs button[aria-pressed=true]{background:var(--inkt);border-color:var(--inkt);color:#ffffff}
+.tabs button{flex:none;min-height:48px;padding:0 20px;border:1px solid var(--rand);border-radius:999px;background:var(--papier);color:var(--inkt);font:700 15px Archivo,sans-serif;cursor:pointer;white-space:nowrap}
+.tabs button[aria-pressed=true]{background:var(--inkt);border-color:var(--inkt);color:var(--papier)}
 .voortgang{display:flex;flex:none;align-items:center;gap:12px;font-size:14px}
 .voortgangtekst{font-weight:700;white-space:nowrap}
 .balk{width:90px;height:6px;background:var(--lijn);border-radius:3px;overflow:hidden}
 .balk div{height:100%;width:0;background:var(--accent);transition:width .4s ease}
 
 /* editie */
-main.editie{padding-top:26px}
+.editie{padding-top:26px}
 .klaar{border:1px solid var(--inkt);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px;font-weight:600}
 .klaar .vink,.gelezen .vink{color:var(--accent)}
 /* Melding bij een nieuwe editie: onderaan in beeld, waar je duim is. */
-.nieuweeditie{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--inkt);color:#ffffff;font-weight:700;box-shadow:0 -2px 14px rgba(0,0,0,.25)}
+.nieuweeditie{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--inkt);color:var(--papier);font-weight:700;box-shadow:0 -2px 14px rgba(0,0,0,.25)}
 .nieuweeditie[hidden]{display:none}
-.nieuweeditie .knop{background:var(--accent);border-color:var(--accent)}
-.nieuweeditie button{min-width:48px;min-height:48px;border:0;background:none;color:#ffffff;font-size:20px;cursor:pointer}
+.nieuweeditie .knop{background:var(--accent);border-color:var(--accent);color:var(--opaccent)}
+.nieuweeditie button{min-width:48px;min-height:48px;border:0;background:none;color:var(--papier);font-size:20px;cursor:pointer}
 .opening{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
 .opening>.kaart{flex:2 1 560px;min-width:0}
 .zij{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:26px}
@@ -68,9 +71,9 @@ main.editie{padding-top:26px}
 /* De kop is de link; zijn ::after ligt over de hele kaart, zodat je overal kunt tikken. */
 .kaartlink::after{content:"";position:absolute;inset:0;z-index:1}
 .beeld{display:block;overflow:hidden;position:relative}
-.beeld img{display:block;width:100%;object-fit:cover;background:#EDEDEA}
+.beeld img{display:block;width:100%;object-fit:cover;background:var(--beeldvlak)}
 /* Een dunne rand, zodat een wit of lichtgrijs beeld niet wegvalt tegen de witte achtergrond. */
-.beeld::after{content:"";position:absolute;inset:0;border:1px solid rgba(0,0,0,.14);pointer-events:none}
+.beeld::after{content:"";position:absolute;inset:0;border:1px solid var(--beeldrand);pointer-events:none}
 .beeld img.heel{object-fit:contain;background:#ffffff}
 .tegel{background:var(--tegel);color:#ffffff;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px}
 .tegel span{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:28px;line-height:1}
@@ -82,20 +85,23 @@ main.editie{padding-top:26px}
 .impact i.aan{background:var(--inkt)}
 .impact i:nth-child(3){margin-right:6px}
 .kaart h3{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:24px;line-height:1.16;margin:6px 0 8px}
-.kaart h1{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:clamp(30px,4vw,50px);line-height:1.08;letter-spacing:-.01em;margin:6px 0 14px}
-.kaart h1 a,.kaart h3 a{text-decoration:none}
-.kaart h1 a:hover,.kaart h3 a:hover{text-decoration:underline}
+.kaart.groot h2{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:clamp(30px,4vw,50px);line-height:1.08;letter-spacing:-.01em;margin:6px 0 14px}
+.kaart h2 a,.kaart h3 a{text-decoration:none}
+.kaart h2 a:hover,.kaart h3 a:hover{text-decoration:underline}
 .kaart p{margin:0 0 10px;font-size:16px}
 .kaart.groot p{font-size:17px}
-.lede,.kaart .lede{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.5;color:#333333}
+.lede,.kaart .lede{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.5;color:var(--tekst2)}
 .acties{display:flex;flex-wrap:wrap;gap:10px}
-.knop{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border:1px solid var(--inkt);background:var(--inkt);color:#ffffff;font:700 14px Archivo,sans-serif;text-decoration:none;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
-.knop.licht{background:#ffffff;color:var(--inkt)}
+.knop{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border:1px solid var(--inkt);background:var(--inkt);color:var(--papier);font:700 14px Archivo,sans-serif;text-decoration:none;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
+.knop.licht{background:var(--papier);color:var(--inkt)}
 .onder{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:4px;font-size:14px;color:var(--zacht)}
 .gelezen{display:inline-flex;align-items:center;gap:5px;color:var(--inkt);font-weight:600}
 /* Een link naar een andere site krijgt een pijltje. .sr is tekst die alleen een schermlezer voorleest. */
 .extern{margin-left:5px;font-family:Archivo,sans-serif;font-weight:700}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* Naar de inhoud: alleen zichtbaar als je met Tab op de pagina begint. */
+.overslaan{position:absolute;left:12px;top:-80px;z-index:50;padding:14px 18px;background:var(--inkt);color:var(--papier);font-weight:700;text-decoration:none}
+.overslaan:focus{top:12px}
 
 /* uitgelegd en probeer dit */
 .uitgelegd{background:var(--vlak);padding:18px 20px}
@@ -135,24 +141,24 @@ main.editie{padding-top:26px}
 .kortnieuws .tijd{flex:none;width:52px;font-weight:800;font-size:14px;color:var(--accent);padding-top:3px}
 .kortnieuws a{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:19px;line-height:1.25;text-decoration:none}
 .kortnieuws a:hover{text-decoration:underline}
-.kortnieuws p{margin:4px 0 2px;font-size:15px;color:#333333}
+.kortnieuws p{margin:4px 0 2px;font-size:15px;color:var(--tekst2)}
 .meta{font-size:13px;color:var(--zacht)}
 
 /* nieuwsquiz */
 .quiz{margin-top:52px;background:var(--vlak);padding:24px 26px;border-top:3px solid var(--accent)}
-.quiz .kopregel{border-bottom-color:#D6D6D2}
+.quiz .kopregel{border-bottom-color:var(--rand)}
 .quizuitleg{color:var(--zacht);margin:10px 0 0}
 .quiz ol{list-style:none;margin:0;padding:0}
 .vraag{margin-top:22px}
 .vraagtekst{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:21px;line-height:1.3;margin:0 0 10px}
 .vraagtekst span{color:var(--accent)}
 .opties{display:flex;flex-direction:column;gap:8px;max-width:760px}
-.opties button{text-align:left;min-height:48px;padding:10px 16px;border:1px solid var(--inkt);background:#ffffff;color:var(--inkt);font:500 16px/1.4 Archivo,sans-serif;cursor:pointer}
+.opties button{text-align:left;min-height:48px;padding:10px 16px;border:1px solid var(--inkt);background:var(--papier);color:var(--inkt);font:500 16px/1.4 Archivo,sans-serif;cursor:pointer}
 .opties button:disabled{cursor:default}
-.opties button.goed{background:#E6F4EA;border-color:#1E7B3A;color:#0F4D22;font-weight:700}
-.opties button.fout{background:#FBE9EA;border-color:var(--accent);color:#7A0B1D}
+.opties button.goed{background:var(--goedvlak);border-color:var(--goedrand);color:var(--goedtekst);font-weight:700}
+.opties button.fout{background:var(--foutvlak);border-color:var(--accent);color:var(--fouttekst)}
 .antwoord{font-weight:800;margin:10px 0 2px}
-.toelichting{margin:0;color:#333333}
+.toelichting{margin:0;color:var(--tekst2)}
 .score{margin:22px 0 0;font-family:Newsreader,Georgia,serif;font-weight:700;font-size:24px}
 .quizdeel{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:14px 0 0}
 .quizdeel span{font-size:14px;color:var(--zacht)}
@@ -179,7 +185,7 @@ main.editie{padding-top:26px}
 .artikel .bronnen{font-size:15px;color:var(--zacht)}
 .chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:var(--zacht);margin-top:22px}
 .chip{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;border:1px solid var(--inkt);color:var(--inkt);text-decoration:none;font-weight:600}
-.chip:hover{background:var(--inkt);color:#ffffff}
+.chip:hover{background:var(--inkt);color:var(--papier)}
 .verwant{margin-top:40px}
 .verwant h2{font-family:Newsreader,Georgia,serif;font-size:28px;margin:0 0 6px;border-bottom:1px solid var(--inkt);padding-bottom:8px}
 .verwant ul{list-style:none;margin:0;padding:0}
@@ -205,7 +211,7 @@ main.editie{padding-top:26px}
 .archief .editie:hover b{text-decoration:underline}
 .dag h3{font-size:15px;margin:22px 0 0;color:var(--zacht)}
 .zoekveld{display:block;font-weight:700;margin:20px 0 10px;max-width:640px}
-.zoekveld input{display:block;width:100%;margin-top:6px;font:400 18px Archivo,sans-serif;padding:12px 14px;border:1px solid var(--inkt);background:#ffffff;color:var(--inkt)}
+.zoekveld input{display:block;width:100%;margin-top:6px;font:400 18px Archivo,sans-serif;padding:12px 14px;border:1px solid var(--inkt);background:var(--papier);color:var(--inkt)}
 .begrippen{margin:0}
 .begrip{padding:12px 0;border-bottom:1px solid var(--lijn)}
 .begrip dt{font-family:Newsreader,Georgia,serif;font-weight:700;font-size:20px}
@@ -240,11 +246,11 @@ main.editie{padding-top:26px}
   .kaart:hover .kaartlink,.weeklijst li:hover .kaartlink,.kortnieuws li:hover .kaartlink,
   .verwant li a:hover b,.archief .editie:hover b,.zoekresultaten a:hover{
     color:var(--accent);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
-  .knop:hover{background:var(--accent);border-color:var(--accent);color:#ffffff}
-  .knop.licht:hover{background:var(--inkt);border-color:var(--inkt);color:#ffffff}
+  .knop:hover{background:var(--accent);border-color:var(--accent);color:var(--opaccent)}
+  .knop.licht:hover{background:var(--inkt);border-color:var(--inkt);color:var(--papier)}
   .tabs button,.hoofdmenu a{transition:background-color .15s,border-color .15s,color .15s}
   .tabs button:not([aria-pressed=true]):hover{border-color:var(--inkt);background:var(--vlak)}
-  .hoofdmenu a:not([aria-current=page]):hover{border-bottom-color:#BDBDB8}
+  .hoofdmenu a:not([aria-current=page]):hover{border-bottom-color:var(--rand)}
   .opties button{transition:box-shadow .15s}
   .opties button:hover:not(:disabled){box-shadow:inset 5px 0 0 var(--accent)}
   .kruimel a:hover,.colofon a:hover,.uitgelegd a:hover,.byline a:hover,.bronnen a:hover,.tip a:hover{color:var(--accent)}
@@ -261,7 +267,7 @@ main.editie{padding-top:26px}
   body{font-size:16px}
   .utility .binnen{padding-top:5px;padding-bottom:5px}
   .utility .binnen>span,.alleenbreed{display:none}
-  header.kop{position:sticky;top:0;z-index:20;background:#ffffff;border-bottom:1px solid var(--lijn)}
+  header.kop{position:sticky;top:0;z-index:20;background:var(--papier);border-bottom:1px solid var(--lijn)}
   header.kop .binnen{flex-wrap:nowrap;align-items:center;padding-top:4px;padding-bottom:4px;gap:8px}
   .merk{font-size:30px}
   .ondertitel,.hoofdmenu{display:none}
@@ -269,7 +275,7 @@ main.editie{padding-top:26px}
   .zoeklink,.menu summary{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 10px;font-weight:700;font-size:15px;color:var(--inkt);text-decoration:none;cursor:pointer;list-style:none}
   .menu summary::-webkit-details-marker{display:none}
   .menu[open] summary{background:var(--vlak)}
-  .menu nav{position:absolute;left:0;right:0;top:100%;display:flex;flex-direction:column;padding:4px 20px 14px;background:#ffffff;border-bottom:3px solid var(--inkt);box-shadow:0 14px 24px rgba(0,0,0,.12)}
+  .menu nav{position:absolute;left:0;right:0;top:100%;display:flex;flex-direction:column;padding:4px 20px 14px;background:var(--papier);border-bottom:3px solid var(--inkt);box-shadow:0 14px 24px rgba(0,0,0,.12)}
   .menu nav a{display:flex;align-items:center;min-height:52px;border-bottom:1px solid var(--lijn);font-weight:700;font-size:17px;color:var(--inkt);text-decoration:none}
   .menu nav a:last-child{border-bottom:0}
   .menu nav a[aria-current=page]{color:var(--accent)}
@@ -282,14 +288,14 @@ main.editie{padding-top:26px}
   .tabs button{flex:1 0 auto;padding:0 14px}
   .voortgang{width:100%}
   .balk{flex:1}
-  main.editie{padding-top:18px}
+  .editie{padding-top:18px}
   /* Het openingsbericht: de kop boven de foto, zodat het eerste nieuws ook op een kleine telefoon meteen in beeld is. */
   .opening>.kaart{display:flex;flex-direction:column}
   .opening>.kaart>*{order:4}
   .opening>.kaart>.boven{order:1;margin-top:0}
-  .opening>.kaart>h1{order:2}
+  .opening>.kaart>h2{order:2}
   .opening>.kaart>.beeld{order:3;margin-bottom:10px}
-  .kaart.groot h1{font-size:27px;margin:4px 0 12px}
+  .kaart.groot h2{font-size:27px;margin:4px 0 12px}
   .kaart.groot .lede,.kaart.groot .waarom{display:none}
   .sectie{margin-top:36px}
   .kopregel h2{font-size:26px}
@@ -317,4 +323,13 @@ main.editie{padding-top:26px}
   .verwant li a{grid-template-columns:104px 1fr}
   .weeklijst li{grid-template-columns:36px 1fr}
   .weeklijst li>.beeld,.weeklijst li>div{grid-column:2}
+}
+
+/* Donkere modus: volgt de instelling van je telefoon of computer. Rood is hier lichter, anders is het
+   te slecht leesbaar op zwart; tekst op een rode of lichte knop wordt dan donker. */
+@media (prefers-color-scheme:dark){
+  :root{--inkt:#ECECE8;--zacht:#A9A9A3;--lijn:#2E2E2B;--vlak:#1E1E1C;--accent:#FF6474;--tegel:#262624;
+    --papier:#121211;--tekst2:#D2D2CC;--rand:#5A5A54;--opaccent:#121211;--beeldvlak:#262624;--beeldrand:rgba(255,255,255,.16);
+    --goedvlak:#16391F;--goedrand:#5BBF7A;--goedtekst:#C8F2D3;--foutvlak:#3E1519;--fouttekst:#FFC9CF}
+  .tegel{box-shadow:inset 0 0 0 1px var(--beeldrand)}
 }

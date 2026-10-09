@@ -2,15 +2,17 @@
 
   site/index.html                de nieuwste editie
   site/edities/<id>.html         elke editie
-  site/artikel/<id>.html         elk bericht apart, met eerder nieuws over hetzelfde onderwerp
+  site/artikel/<id>.html         elk bericht apart, met onderaan Lees ook
   site/onderwerp/<naam>.html     alle berichten over één onderwerp
   site/week/<id>.html            De week in AI
   site/archief.html              alle edities en weken
   site/leren.html                begrippen en tips
   site/zoeken.html, zoek.json    zoeken in alle berichten
   site/zo-maken-we-dit.html      dat alles met AI geschreven is, hoe we kiezen en welke bronnen
-  site/stijl.css, site.js        opmaak en de knoppen (filters, lees meer, quiz, gelezen)
+  site/stijl.css, site.js        opmaak (licht en donker) en de knoppen (filters, quiz, gelezen, nieuwe editie)
+  site/laatste.json              welke editie de nieuwste is, voor de controle in site.js
   site/deel.png                  het plaatje bij een gedeelde link zonder eigen beeld
+  site/manifest.webmanifest      naam en icoon (icoon-*.png) voor op het beginscherm van je telefoon
 """
 import html
 import json
@@ -319,7 +321,7 @@ def kaart(item, ref, basis, site_url, groot=False):
     stijl = RUBRIEKEN[item["rubriek"]]
     link = f"{basis}artikel/{item['id']}.html"
     n = aantal_bronnen(item)
-    kop = "h1" if groot else "h3"
+    kop = "h2" if groot else "h3"
     lede = f'<p class="lede">{e(item["samenvatting"])}</p>' if groot else ""
     waarom = (f'<p class="waarom"><b>{stijl["waarom"]}:</b> {e(item["waarom"])}</p>'
               if groot and item.get("waarom") else "")
@@ -428,6 +430,10 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
     return (
         '<!doctype html><html lang="nl"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        # Licht of donker volgens de instelling van de telefoon; de balk van de browser kleurt mee.
+        '<meta name="color-scheme" content="light dark">'
+        '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">'
+        '<meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">'
         '<meta name="robots" content="noindex, nofollow">'
         # Beveiliging: alleen scripts van de site zelf, geen formulieren, geen ingesloten pagina's.
         '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; '
@@ -438,16 +444,22 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         f'<link rel="stylesheet" href="{e(FONTS)}">'
         f'<link rel="icon" href="{basis}favicon.svg" type="image/svg+xml">'
+        # Op het beginscherm van je telefoon: icoon en naam, zodat de site opent als een app.
+        f'<link rel="manifest" href="{basis}manifest.webmanifest">'
+        f'<link rel="apple-touch-icon" href="{basis}icoon-180.png">'
         f'<link rel="stylesheet" href="{basis}stijl.css">{extra}'
         # Al in de kop, want een beeld kan al mislukken voordat site.js geladen is.
         f'<script src="{basis}vroeg.js"></script></head><body{kenmerken}>'
-        f'<div class="utility"><div class="binnen">{bovenregel}'
-        f'<a class="ailabel" href="{basis}zo-maken-we-dit.html">Geschreven met AI</a></div></div>'
+        # Voor wie met het toetsenbord of een schermlezer werkt: meteen naar de inhoud, langs het menu.
+        '<a class="overslaan" href="#inhoud">Naar de inhoud</a>'
+        f'<section class="utility" aria-label="Over deze pagina"><div class="binnen">{bovenregel}'
+        f'<a class="ailabel" href="{basis}zo-maken-we-dit.html">Geschreven met AI</a></div></section>'
         f'<header class="kop"><div class="binnen"><div><a class="merk" href="{basis}index.html">AI-nieuws</a>'
         '<div class="ondertitel">Het belangrijkste AI-nieuws in gewone taal, twee keer per dag</div></div>'
         f'<nav class="hoofdmenu" aria-label="Hoofdmenu">{links}</nav>{snel}</div></header>'
-        f'{inhoud}'
-        '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude). Dat kan fouten opleveren, dus lees bij twijfel de bron. '
+        f'<main id="inhoud">{inhoud}</main>'
+        '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude), niet door een redacteur gecontroleerd. '
+        'Dat kan fouten opleveren, dus lees bij twijfel de bron. '
         'De beelden komen van de AI-bedrijven zelf of van GitHub. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
         f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></div></footer>'
         f'<script src="{basis}site.js"></script></body></html>'
@@ -479,7 +491,7 @@ def editie_html(ed, begrippen, basis, site_url):
     ref = datetime.fromisoformat(ed["tijd"])
     items = ed["items"]
     if not items and not ed["kort"]:
-        return '<main class="binnen"><p class="leeg">In deze editie stond niets dat de moeite waard was.</p></main>'
+        return '<div class="binnen"><p class="leeg">In deze editie stond niets dat de moeite waard was.</p></div>'
 
     # De opening: het belangrijkste grote nieuws, liefst met een beeld. Daarnaast het volgende grote bericht.
     groot = sorted([i for i in items if i["rubriek"] == "Het grote nieuws"], key=lambda i: -i["score"])
@@ -558,7 +570,7 @@ def editie_html(ed, begrippen, basis, site_url):
         f'<div class="voortgang"><span class="voortgangtekst">0 van {len(items)} gelezen</span>'
         f'<div class="balk" role="progressbar" aria-label="Hoeveel berichten je hebt gelezen" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div></div></div></div>'
         f'</div></div>'
-        f'<main class="binnen editie">'
+        f'<div class="binnen editie">'
         f'<div class="klaar" hidden>{VINK}<span>Je hebt alles van deze editie gelezen. De volgende verschijnt om '
         f'{"20:00" if ed["moment"] == "ochtend" else "08:00"}.</span></div>'
         f'<div id="alles">{opening}{probeer}{"".join(secties)}</div>'
@@ -567,13 +579,14 @@ def editie_html(ed, begrippen, basis, site_url):
         f'<button type="button" class="knop licht" data-kies="alles">✕ Toon alles</button></div>'
         f'<p class="filteruitleg"></p><ol class="lijst">{rijen}</ol></section>'
         f'{kort}{quiz_html(ed.get("quiz"), ed, site_url)}'
-        f'<p class="editievoet">{e(voet)}</p></main>'
+        f'<p class="editievoet">{e(voet)}</p></div>'
     )
 
 
-BYLINE = "Geschreven met AI (Claude) op basis van de bronnen hieronder"
+BYLINE = "Geschreven met AI (Claude) op basis van de bronnen hieronder, niet door een redacteur gecontroleerd"
 # Een uitlegstuk gebruikt ook algemene kennis; het nieuws uit de bronnen is het voorbeeld.
-BYLINE_UITLEG = "Uitleg geschreven met AI (Claude), met het nieuws uit de bronnen hieronder als voorbeeld"
+BYLINE_UITLEG = ("Uitleg geschreven met AI (Claude), met het nieuws uit de bronnen hieronder als voorbeeld, "
+                 "niet door een redacteur gecontroleerd")
 
 
 def artikel_html(item, ed, alle, basis, site_url):
@@ -616,7 +629,7 @@ def artikel_html(item, ed, alle, basis, site_url):
         for blok in item.get("artikel", [])
     )
     return (
-        f'<main class="artikel binnen" data-artikel="{e(item["id"])}">'
+        f'<div class="artikel binnen" data-artikel="{e(item["id"])}">'
         f'<nav class="kruimel" aria-label="Waar je bent"><a href="{basis}edities/{e(ed["id"])}.html">{e(editietitel(ed))}</a>'
         f' › <a href="{basis}edities/{e(ed["id"])}.html#{stijl["klasse"]}">{e(stijl["knop"])}</a></nav>'
         f'{beeld_html(item, "16 / 9")}'
@@ -634,7 +647,7 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p>'
         f'{f"<p class=chips>Onderwerpen: {chips}</p>" if chips else ""}'
         f'{verwant_html}'
-        f'</main>'
+        f'</div>'
     )
 
 
@@ -642,7 +655,8 @@ def onderwerp_html(naam, lijst, basis, site_url):
     kaarten = "".join(kaart(item, datetime.fromisoformat(ed["tijd"]), basis, site_url) for item, ed in lijst)
     return (f'<div class="editiekop binnen"><div class="label">Onderwerp</div><h1>{e(naam)}</h1>'
             f'<p class="teller">{len(lijst)} {"bericht" if len(lijst) == 1 else "berichten"}, het nieuwste eerst.</p></div>'
-            f'<main class="binnen"><div class="raster">{kaarten}</div></main>')
+            # Een kop die alleen een schermlezer voorleest, zodat de koppen netjes van h1 naar h3 gaan.
+            f'<div class="binnen"><h2 class="sr">Berichten over {e(naam)}</h2><div class="raster">{kaarten}</div></div>')
 
 
 def week_html(week, index, basis, site_url):
@@ -664,7 +678,7 @@ def week_html(week, index, basis, site_url):
             f'<h1>{e(dagtitel(van).capitalize())} tot en met {e(dagtitel(tot))}</h1>'
             f'<p class="intro">{e(week["intro"])}</p>'
             f'<p class="teller">De {len(rijen)} belangrijkste berichten van de week.</p></div>'
-            f'<main class="binnen"><ol class="weeklijst">{"".join(rijen)}</ol></main>')
+            f'<div class="binnen"><ol class="weeklijst">{"".join(rijen)}</ol></div>')
 
 
 def archief_html(edities, weken, basis):
@@ -689,8 +703,8 @@ def archief_html(edities, weken, basis):
                           f'{e(top)}<span class="meta">{aantal} berichten</span></a>')
         dagen.append(f'<div class="dag"><h3>{e(dagtitel(dag).capitalize())}</h3>{"".join(regels)}</div>')
     return (f'<div class="editiekop binnen"><h1>Archief</h1><p class="teller">Alle edities, de nieuwste bovenaan.</p></div>'
-            f'<main class="binnen archief">{weekblok}<section class="sectie"><div class="kopregel"><h2>Edities</h2></div>'
-            f'{"".join(dagen) or "<p class=leeg>Nog geen edities.</p>"}</section></main>')
+            f'<div class="binnen archief">{weekblok}<section class="sectie"><div class="kopregel"><h2>Edities</h2></div>'
+            f'{"".join(dagen) or "<p class=leeg>Nog geen edities.</p>"}</section></div>')
 
 
 def leren_html(begrippen, edities):
@@ -705,21 +719,21 @@ def leren_html(begrippen, edities):
     return (
         '<div class="editiekop binnen"><h1>Begrippen en tips</h1>'
         '<p class="intro">Alle woorden die in de edities zijn uitgelegd, en alle tips om zelf te proberen.</p></div>'
-        '<main class="binnen leren">'
+        '<div class="binnen leren">'
         f'<section class="sectie"><div class="kopregel"><h2>Begrippen</h2><span>{len(termen)} begrippen</span></div>'
         '<label class="zoekveld">Zoek een begrip <input id="begripzoek" type="search" autocomplete="off"></label>'
         f'<dl class="begrippen">{lijst}</dl></section>'
         f'<section class="sectie"><div class="kopregel"><h2>Probeer dit</h2></div>{"".join(tips) or "<p class=leeg>Nog geen tips.</p>"}</section>'
-        '</main>'
+        '</div>'
     )
 
 
 def zoeken_html():
     return (
         '<div class="editiekop binnen"><h1>Zoeken</h1><p class="intro">Zoek in alle berichten van alle edities.</p></div>'
-        '<main class="binnen zoeken"><label class="zoekveld">Zoekwoorden <input id="zoekveld" type="search" '
+        '<div class="binnen zoeken"><label class="zoekveld">Zoekwoorden <input id="zoekveld" type="search" '
         'autocomplete="off" placeholder="Bijvoorbeeld Claude Code of Mistral"></label>'
-        '<p id="zoekuitleg" class="teller">Typ minstens twee letters.</p><ol id="zoekresultaten" class="zoekresultaten"></ol></main>'
+        '<p id="zoekuitleg" class="teller">Typ minstens twee letters.</p><ol id="zoekresultaten" class="zoekresultaten"></ol></div>'
     )
 
 
@@ -744,7 +758,7 @@ def werkwijze_html(bronnen):
         '<div class="editiekop binnen"><h1>Zo maken we dit</h1>'
         '<p class="intro">AI-nieuws zet elke dag om 08:00 en 20:00 het belangrijkste AI-nieuws op een rij, in gewone taal. '
         'Hier lees je hoe dat gaat.</p></div>'
-        '<main class="binnen werkwijze">'
+        '<div class="binnen werkwijze">'
         '<section class="sectie"><div class="kopregel"><h2>Geschreven met AI</h2></div>'
         f'<p>Een computerprogramma haalt twee keer per dag het nieuws op uit {aantal}. Claude, de AI van het bedrijf Anthropic, '
         'kiest daaruit de belangrijkste berichten en schrijft ze in gewone taal.</p>'
@@ -771,7 +785,7 @@ def werkwijze_html(bronnen):
         'gebruiken we niet. Heeft een bericht geen beeld, dan staat er een zwart blok met de naam van de bron.</p>'
         '<p>De site zet geen cookies en houdt niet bij wat je leest. Wat je gelezen hebt en welke AI je kiest, '
         'staat alleen in je eigen browser.</p></section>'
-        '</main>'
+        '</div>'
     )
 
 
@@ -790,7 +804,18 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
     (doel / "stijl.css").write_text((bron / "stijl.css").read_text(encoding="utf-8"), encoding="utf-8")
     for bestand in ("site.js", "vroeg.js", "favicon.svg"):
         (doel / bestand).write_text((bron / bestand).read_text(encoding="utf-8"), encoding="utf-8")
-    (doel / "deel.png").write_bytes((bron / "deel.png").read_bytes())
+    for bestand in ("deel.png", "icoon-180.png", "icoon-192.png", "icoon-512.png", "icoon-512-rond.png"):
+        (doel / bestand).write_bytes((bron / bestand).read_bytes())
+    # Zo kun je de site op het beginscherm van je telefoon zetten, met naam en icoon. Bewust zonder
+    # service worker: die bewaart pagina's, en dan zie je mogelijk niet de nieuwste editie.
+    (doel / "manifest.webmanifest").write_text(json.dumps({
+        "name": "AI-nieuws", "short_name": "AI-nieuws", "description": OMSCHRIJVING, "lang": "nl",
+        "start_url": "./", "scope": "./", "display": "standalone",
+        "background_color": "#ffffff", "theme_color": "#141414",
+        "icons": [{"src": "icoon-192.png", "sizes": "192x192", "type": "image/png"},
+                  {"src": "icoon-512.png", "sizes": "512x512", "type": "image/png"},
+                  {"src": "icoon-512-rond.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}],
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
 
     edities = sorted(edities, key=lambda ed: ed["tijd"])
     for ed in edities:
@@ -826,7 +851,7 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         laatste = edities[-1]
         schrijf("index.html", "AI-nieuws", "", "Vandaag", editie_html(laatste, begrippen, "", site_url), bovenregel_editie(laatste))
     else:
-        schrijf("index.html", "AI-nieuws", "", "Vandaag", '<main class="binnen"><p class="leeg">De eerste editie verschijnt om 08:00 of 20:00.</p></main>')
+        schrijf("index.html", "AI-nieuws", "", "Vandaag", '<div class="binnen"><p class="leeg">De eerste editie verschijnt om 08:00 of 20:00.</p></div>')
 
     per_onderwerp = {}
     for item, ed in reversed(alle):
