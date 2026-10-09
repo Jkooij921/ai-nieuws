@@ -17,7 +17,7 @@ import json
 import re
 import unicodedata
 import urllib.parse
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 # Volgorde op de site. `knop`: naam op de filterbalk, `klasse`: korte naam in adressen en code,
@@ -179,7 +179,8 @@ def merk_van(item):
 def geef_ids(ed):
     """Elk bericht een vast adres: <editie>-<nummer>, korte berichten <editie>-k<nummer>.
 
-    Zet ook rubrieken die een andere naam kregen om naar de nieuwe naam.
+    Zet ook rubrieken die een andere naam kregen om naar de nieuwe naam, en haalt beelden weg die
+    niet van een AI-bedrijf of van GitHub zijn (ook in oudere edities).
     """
     for nr, item in enumerate(ed["items"], 1):
         item.setdefault("id", f"{ed['id']}-{nr}")
@@ -187,6 +188,26 @@ def geef_ids(ed):
         item.setdefault("id", f"{ed['id']}-k{nr}")
     for item in ed["items"] + ed["kort"]:
         item["rubriek"] = OUDE_RUBRIEKEN.get(item["rubriek"], item["rubriek"])
+        if item.get("beeld") and not beeld_toegestaan(item["beeld"], item.get("bronnen", [])):
+            item["beeld"] = ""
+
+
+# Alleen beelden zonder risico op een claim van een fotograaf of persbureau: het eigen deelplaatje van een
+# AI-bedrijf, en de kaart die GitHub voor elk project maakt. Al het andere wordt het zwarte blok met de bron.
+EIGEN_BEELDEN = ("anthropic.com", "claude.com", "claude.ai", "openai.com", "chatgpt.com", "blog.google",
+                 "deepmind.google", "gemini.google", "ai.google", "mistral.ai", "huggingface.co", "hf.co",
+                 "microsoft.com", "meta.com", "opengraph.githubassets.com")
+# Opslag die AI-bedrijven delen met andere sites: alleen goed als een bron van het bedrijf zelf is.
+GEDEELDE_OPSLAG = ("images.ctfassets.net", "storage.googleapis.com", "lh3.googleusercontent.com")
+
+
+def beeld_toegestaan(url, bronnen):
+    host = urllib.parse.urlsplit(url or "").netloc.lower()
+    if not host:
+        return False
+    if any(host == d or host.endswith("." + d) for d in EIGEN_BEELDEN):
+        return True
+    return host in GEDEELDE_OPSLAG and any(b.get("groep") == "lab" for b in bronnen)
 
 
 def veilig(url):
@@ -427,17 +448,25 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         f'<nav class="hoofdmenu" aria-label="Hoofdmenu">{links}</nav>{snel}</div></header>'
         f'{inhoud}'
         '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude). Dat kan fouten opleveren, dus lees bij twijfel de bron. '
-        'De beelden komen van de bronnen zelf. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
+        'De beelden komen van de AI-bedrijven zelf of van GitHub. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
         f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></div></footer>'
         f'<script src="{basis}site.js"></script></body></html>'
     )
 
 
-def bovenregel_editie(ed):
+def editietijd(ed):
+    """'08:00' of '20:00' als de editie rond de vaste tijd klaarstond, anders bijvoorbeeld 'gemaakt om 08:36'."""
     tijd = datetime.fromisoformat(ed["tijd"])
+    vast = tijd.replace(hour=8 if ed["moment"] == "ochtend" else 20, minute=0, second=0, microsecond=0)
+    if abs(tijd - vast) <= timedelta(minutes=15):
+        return f"{vast:%H:%M}"
+    return f"gemaakt om {tijd:%H:%M}"
+
+
+def bovenregel_editie(ed):
     volgende = "20:00" if ed["moment"] == "ochtend" else "08:00"
     return (f'<span>{e(dagtitel(editiedag(ed)).capitalize())} · {e(ed["moment"].capitalize())}editie · '
-            f'gemaakt om {tijd:%H:%M}</span><span>Volgende editie om {volgende}</span>')
+            f'{editietijd(ed)}</span><span>Volgende editie om {volgende}</span>')
 
 
 ALGEMENE_BOVENREGEL = '<span>Elke dag om 08:00 en 20:00 een nieuwe editie</span>'
@@ -737,8 +766,9 @@ def werkwijze_html(bronnen):
         '</ul></section>'
         f'<section class="sectie"><div class="kopregel"><h2>Waar het nieuws vandaan komt</h2></div><dl class="begrippen">{lijst}</dl></section>'
         '<section class="sectie"><div class="kopregel"><h2>Beelden en privacy</h2></div>'
-        '<p>De beelden komen van de bronnen zelf: het plaatje dat een site opgeeft voor als je een link deelt. '
-        'Heeft een bericht geen goed beeld, dan staat er een zwart blok met de naam van de bron.</p>'
+        '<p>De beelden komen alleen van de AI-bedrijven zelf (het plaatje dat ze opgeven voor als je een link deelt) '
+        'of van GitHub (de kaart die GitHub voor elk project maakt). Foto’s van nieuwssites en persbureaus '
+        'gebruiken we niet. Heeft een bericht geen beeld, dan staat er een zwart blok met de naam van de bron.</p>'
         '<p>De site zet geen cookies en houdt niet bij wat je leest. Wat je gelezen hebt en welke AI je kiest, '
         'staat alleen in je eigen browser.</p></section>'
         '</main>'

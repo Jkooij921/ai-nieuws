@@ -2,10 +2,10 @@ name: Editie maken
 
 on:
   schedule:
-    # GitHub plant in UTC, kent geen zomertijd, en start geplande runs soms uren te laat of
-    # helemaal niet, vooral op het hele uur. Daarom twee keer per uur, op rustige minuten, in
-    # de uren na 08:00 en 20:00 Nederlandse tijd. Elke run kijkt eerst of de laatste editie
-    # ontbreekt; zo niet, dan stopt hij na een paar seconden.
+    # De echte wekker staat op cron-job.org: om 07:55 en 19:55, zodat de editie om 08:00 en 20:00
+    # klaarstaat, en om 08:35 en 20:35 als reserve. Dit hier is een extra reserve: GitHub plant in
+    # UTC, kent geen zomertijd, en start geplande runs soms uren te laat of helemaal niet. Elke run
+    # kijkt eerst of de laatste editie ontbreekt; zo niet, dan stopt hij na een paar seconden.
     - cron: "7,37 6-10,18-22 * * *"
   workflow_dispatch:
     inputs:
@@ -48,6 +48,10 @@ jobs:
       # Vaste versies (commit-codes) van de onderdelen van GitHub, zodat een latere wijziging daarin niet ongemerkt meedoet.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
         with:
+          # De nieuwste versie, niet die van het moment van het startsignaal. Komen er twee signalen vlak na
+          # elkaar, dan wacht de tweede run tot de eerste klaar is (concurrency hieronder) en ziet hij hier
+          # dat de editie er al is. Anders maakte hij een tweede editie en ging er een tweede mail uit.
+          ref: main
           # De schrijfrechten blijven niet in de map staan; alleen de stap "Editie bewaren" krijgt ze.
           persist-credentials: false
 

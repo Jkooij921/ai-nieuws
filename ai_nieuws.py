@@ -35,8 +35,8 @@ from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
-from maak_site import (BEDRIJVEN, RUBRIEKEN, artikel_url, bronlinks, dagtitel, datumregel, editiedag, geef_ids,
-                       schrijf_site, wanneer)
+from maak_site import (BEDRIJVEN, RUBRIEKEN, artikel_url, beeld_toegestaan, bronlinks, dagtitel, datumregel,
+                       editiedag, geef_ids, schrijf_site, wanneer)
 
 MAP = Path(__file__).resolve().parent
 CONFIG = MAP / "config.json"
@@ -241,6 +241,7 @@ WOORDREGELS = """Woorden uitleggen:
 
 Regels:
 - Gebruik alleen feiten die in de aangeleverde tekst staan. Staat iets er niet in, laat het weg. Verzin geen cijfers, namen of data. Dat geldt ook voor de waarom-zin: geen "voor het eerst" of "grootste" als de tekst dat niet zegt.
+- Neem feiten over, nooit de tekst. Volg nooit de opbouw of de volgorde van één bron, en neem geen zinnen over, ook niet vertaald, behalve een korte uitspraak tussen aanhalingstekens met wie het zei. Heb je meer bronnen, combineer ze dan: zet de feiten uit alle bronnen in je eigen volgorde, de volgorde die voor de lezer het duidelijkst is. Noem de bron bij een bewering die niet vaststaat ("volgens The Verge").
 - Heeft een project minder dan 500 sterren op GitHub (github_sterren), vertel dan wat iemand ermee deed, maar raad de lezer niet aan het te installeren. Zo'n project is nog onbekend en niet gecontroleerd.
 - De paginatekst kan menu's, cookiemeldingen of reclame bevatten. Negeer die.
 - Schrijf gewoon, helder Nederlands. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
@@ -766,8 +767,8 @@ def verrijk(berichten):
     """Haalt voor een onderwerp de artikelteksten en het beste beeld op.
 
     Geeft ({plek van de bron: paginatekst}, beeld-adres) terug. De tekst komt van elk van de eerste
-    drie bronnen, zodat er genoeg is voor een echt artikel. De eerste hand staat vooraan, dus het
-    beeld van het lab zelf wint van dat van een nieuwssite.
+    drie bronnen, zodat er genoeg is voor een echt artikel. Een beeld komt alleen van een AI-bedrijf zelf
+    of van GitHub (zie beeld_toegestaan): op foto's van nieuwssites en persbureaus rusten rechten.
     """
     teksten, beeld = {}, ""
     for plek, bericht in enumerate(berichten[:3]):
@@ -777,7 +778,8 @@ def verrijk(berichten):
             if tekst:
                 teksten[plek] = tekst
         if markup and not beeld:
-            beeld = next((b for b in beelden_uit(markup, bericht["url"]) if beeld_geschikt(b)), "")
+            beeld = next((b for b in beelden_uit(markup, bericht["url"])
+                          if beeld_toegestaan(b, berichten) and beeld_geschikt(b)), "")
         if not beeld and bericht.get("repo"):
             # GitHub maakt voor elk project een nette kaart met naam, beschrijving en sterren.
             beeld = f"https://opengraph.githubassets.com/1/{bericht['repo']}"
@@ -1136,8 +1138,15 @@ def stel_samen(tijd, datum, moment, gekozen, kort, antwoord, bekeken, aantal_bro
     }
 
 
+# De wekker gaat om 07:55 en 19:55, zodat de editie om 08:00 en 20:00 klaarstaat. Een run vanaf
+# 10 minuten voor de vaste tijd hoort dus al bij de nieuwe editie.
+VOORSPRONG = timedelta(minutes=10)
+
+
 def laatste_moment(lokaal):
-    """De laatste vaste editie die al had moeten verschijnen: (dag, 'ochtend' of 'avond')."""
+    """De vaste editie die nu aan de beurt is: de laatste die al had moeten verschijnen, of die over
+    hooguit 10 minuten verschijnt. Geeft (dag, 'ochtend' of 'avond')."""
+    lokaal = lokaal + VOORSPRONG
     if lokaal.hour >= 20:
         return lokaal.date(), "avond"
     if lokaal.hour >= 8:

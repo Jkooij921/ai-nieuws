@@ -21,15 +21,20 @@ Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op. Wat iema
 
 ## Beelden
 
-Net als nieuwsaggregators gebruikt de site het deelbeeld dat de bron zelf opgeeft (og:image, het plaatje dat je ook ziet als je een link in WhatsApp deelt). Een beeld valt weg als het een logo is, smaller dan 600 pixels, niet ongeveer liggend, of hetzelfde als bij een ander bericht (dan is het het standaardplaatje van een site). Heeft een bericht geen goed beeld maar wel een GitHub-project, dan komt de GitHub-kaart van dat project. Anders een zwart blok met de naam van de bron. Werkt een beeld later niet meer, dan verschijnt dat blok vanzelf.
+Op foto's van nieuwssites en persbureaus rusten rechten, en daar kan een claim van komen. Daarom gebruikt de site alleen:
+
+- het deelbeeld van een AI-bedrijf zelf (og:image, het plaatje dat je ook ziet als je een link in WhatsApp deelt), bijvoorbeeld van anthropic.com of openai.com;
+- de kaart die GitHub voor elk project maakt.
+
+Welke adressen meetellen, staat in `EIGEN_BEELDEN` in `maak_site.py`. Een beeld valt ook weg als het een logo is, smaller dan 600 pixels, niet ongeveer liggend, of hetzelfde als bij een ander bericht (dan is het het standaardplaatje van een site). Anders komt er een zwart blok met de naam van de bron. Oudere edities volgen dezelfde regel: hun beelden van nieuwssites verdwijnen bij de volgende keer dat de site gemaakt wordt. Werkt een beeld later niet meer, dan verschijnt het zwarte blok vanzelf.
 
 ## Hoe het werkt
 
-1. GitHub start `.github/workflows/editie.yml` twee keer per uur in de uren na 08:00 en 20:00. Elke run kijkt eerst welke editie er als laatste had moeten zijn (08:00 of 20:00). Bestaat die al, dan stopt de run na een paar seconden.
+1. De wekker op cron-job.org start `.github/workflows/editie.yml` om 07:55 en 19:55. Het maken duurt ongeveer 3 minuten, dus om 08:00 en 20:00 staat de editie klaar. Een run vanaf 10 minuten voor de vaste tijd hoort al bij de nieuwe editie. Om 08:35 en 20:35 komt een reservestart, en GitHub start zelf ook nog een paar keer per uur. Elke run haalt eerst de nieuwste versie op en kijkt welke editie er nu aan de beurt is. Bestaat die al, dan maakt de run alleen de site opnieuw. Zo komt er nooit een tweede editie of een tweede mail, ook niet als er twee startsignalen vlak na elkaar komen.
 2. Ontbreekt de editie, dan haalt `ai_nieuws.py` het nieuws op, laat Claude kiezen en schrijven, maakt de site en mailt. Claude schrijft eerst de editie (koppen, samenvattingen, kort nieuws, quiz) en daarna elk artikel apart, vier tegelijk. Zo krijgt elk artikel zijn volle aandacht.
 3. De editie, de begrippen en de lijst met gezien nieuws worden bewaard in deze repository. De site gaat naar GitHub Pages.
 
-GitHub start geplande runs soms te laat of slaat er een over. Daarom wordt er vaak gekeken: een gemiste editie komt bij de volgende run alsnog, meestal binnen een half uur na 08:00 of 20:00.
+Mist de wekker een keer, dan komt de editie bij de reservestart om 08:35 of 20:35. Bovenaan de site staat dan "gemaakt om 08:36" in plaats van "08:00".
 
 ## Wat erin komt
 
