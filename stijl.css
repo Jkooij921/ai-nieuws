@@ -52,6 +52,11 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
 main.editie{padding-top:26px}
 .klaar{border:1px solid var(--inkt);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px;font-weight:600}
 .klaar .vink,.gelezen .vink{color:var(--accent)}
+/* Melding bij een nieuwe editie: onderaan in beeld, waar je duim is. */
+.nieuweeditie{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--inkt);color:#ffffff;font-weight:700;box-shadow:0 -2px 14px rgba(0,0,0,.25)}
+.nieuweeditie[hidden]{display:none}
+.nieuweeditie .knop{background:var(--accent);border-color:var(--accent)}
+.nieuweeditie button{min-width:48px;min-height:48px;border:0;background:none;color:#ffffff;font-size:20px;cursor:pointer}
 .opening{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
 .opening>.kaart{flex:2 1 560px;min-width:0}
 .zij{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:26px}

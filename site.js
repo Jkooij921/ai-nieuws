@@ -39,6 +39,69 @@
   // Dan alsnog de vinkjes en de voortgang bijwerken.
   window.addEventListener('pageshow', function (gebeurtenis) { if (gebeurtenis.persisted) toonGelezen(); });
 
+  // Is er een nieuwere editie? De servers van GitHub en de browser geven soms nog een oude kopie, ook na F5.
+  // Daarom vraagt de site zelf laatste.json op, met een adres dat nog nooit gebruikt is, zodat geen kopie meetelt.
+  // Op de voorpagina laadt de nieuwe editie dan vanzelf. Lukt dat niet, of ben je aan het lezen: een balk met een knop.
+  var basis = ((document.currentScript && document.currentScript.src) || '').replace(/site\.js(\?.*)?$/, '');
+  var versie = document.body.getAttribute('data-versie');
+  var voorpagina = document.body.hasAttribute('data-voorpagina');
+  var meldingNieuw = null;
+
+  function netGeladen(id) {
+    // Niet blijven herladen als de oude kopie hardnekkig is: één keer per minuut, daarna de balk.
+    try {
+      var vorige = JSON.parse(sessionStorage.getItem('ai-nieuws-herladen') || '{}');
+      if (vorige.id === id && Date.now() - vorige.tijd < 60000) return true;
+      sessionStorage.setItem('ai-nieuws-herladen', JSON.stringify({ id: id, tijd: Date.now() }));
+      return false;
+    } catch (fout) { return true; /* privévenster zonder geheugen: dan de balk */ }
+  }
+
+  function toonNieuw(nieuwste, adres) {
+    if (meldingNieuw) return;
+    meldingNieuw = document.createElement('div');
+    meldingNieuw.className = 'nieuweeditie';
+    meldingNieuw.setAttribute('role', 'status');
+    var tekst = document.createElement('span');
+    tekst.textContent = 'Er is een nieuwe editie' + (nieuwste.titel ? ': ' + nieuwste.titel : '');
+    var knop = document.createElement('a');
+    knop.className = 'knop';
+    knop.href = adres;
+    knop.textContent = 'Bekijk de nieuwe editie';
+    var sluit = document.createElement('button');
+    sluit.type = 'button';
+    sluit.setAttribute('aria-label', 'Melding sluiten');
+    sluit.textContent = '✕';
+    sluit.addEventListener('click', function () { meldingNieuw.hidden = true; });
+    meldingNieuw.appendChild(tekst);
+    meldingNieuw.appendChild(knop);
+    meldingNieuw.appendChild(sluit);
+    document.body.appendChild(meldingNieuw);
+  }
+
+  function controleer(magLaden) {
+    if (!versie || !window.fetch) return;
+    fetch(basis + 'laatste.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (antwoord) { return antwoord.ok ? antwoord.json() : null; })
+      .then(function (nieuwste) {
+        if (!nieuwste || !nieuwste.id || nieuwste.id === versie) return;
+        // Ook hier een nieuw adres, zodat de voorpagina zelf niet uit een oude kopie komt.
+        var adres = basis + 'index.html?e=' + encodeURIComponent(nieuwste.id);
+        if (voorpagina && magLaden && !netGeladen(nieuwste.id)) location.replace(adres);
+        else toonNieuw(nieuwste, adres);
+      })
+      .catch(function () { /* geen internet: de pagina blijft zoals hij is */ });
+  }
+
+  // Bij openen en verversen; bij terugkomen na slaapstand of een ander tabblad (niet als je ver gescrold bent,
+  // dan de balk); en elke 5 minuten zolang de pagina in beeld is.
+  controleer(true);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') controleer(window.scrollY < 600);
+  });
+  window.addEventListener('pageshow', function (gebeurtenis) { if (gebeurtenis.persisted) controleer(window.scrollY < 600); });
+  setInterval(function () { if (document.visibilityState === 'visible') controleer(false); }, 5 * 60 * 1000);
+
   // De filterbalk: één keuze tegelijk, een AI of een onderwerp. Het getal op een knop is precies wat je daarna ziet.
   // De keuze komt in het adres, zodat je hem kunt delen. Bij een nieuw bezoek begin je bij Alles, zodat je niets mist.
   try { localStorage.removeItem('ai-nieuws-merk'); } catch (fout) { /* de oude, onthouden AI-keuze; privévenster */ }

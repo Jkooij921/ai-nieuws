@@ -377,7 +377,8 @@ MENUSTREEPJES = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" st
                  'stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>')
 
 
-def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_url=""):
+def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_url="", versie="", voorpagina=False):
+    """`versie` is de nieuwste editie toen de site gemaakt werd. site.js vergelijkt die met laatste.json."""
     huidig = ' aria-current="page"'
     menu = (("Vandaag", "index.html"), ("De week", "week/index.html"), ("Archief", "archief.html"),
             ("Begrippen en tips", "leren.html"), ("Zoeken", "zoeken.html"))
@@ -388,6 +389,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
     snel = (f'<div class="snel"><a class="zoeklink" href="{basis}zoeken.html">{VERGROOTGLAS}<span>Zoeken</span></a>'
             f'<details class="menu"><summary>{MENUSTREEPJES}<span>Menu</span></summary>'
             f'<nav aria-label="Menu">{menulinks}</nav></details></div>')
+    kenmerken = (f' data-versie="{e(versie)}"' if versie else "") + (" data-voorpagina" if voorpagina else "")
     return (
         '<!doctype html><html lang="nl"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
@@ -403,7 +405,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         f'<link rel="icon" href="{basis}favicon.svg" type="image/svg+xml">'
         f'<link rel="stylesheet" href="{basis}stijl.css">{extra}'
         # Al in de kop, want een beeld kan al mislukken voordat site.js geladen is.
-        f'<script src="{basis}vroeg.js"></script></head><body>'
+        f'<script src="{basis}vroeg.js"></script></head><body{kenmerken}>'
         f'<div class="utility"><div class="binnen">{bovenregel}'
         f'<a class="ailabel" href="{basis}zo-maken-we-dit.html">Geschreven met AI</a></div></div>'
         f'<header class="kop"><div class="binnen"><div><a class="merk" href="{basis}index.html">AI-nieuws</a>'
@@ -746,12 +748,19 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         geef_ids(ed)
     alle = [(item, ed) for ed in edities for item in ed["items"]]
     index = {item["id"]: (item, ed) for item, ed in alle}
+    # De servers van GitHub en de browser geven soms nog even een oude kopie, ook na F5. Elke pagina weet daarom
+    # welke editie de nieuwste was toen hij gemaakt werd, en laatste.json zegt welke dat nu is (zie site.js).
+    versie = edities[-1]["id"] if edities else ""
+    (doel / "laatste.json").write_text(
+        json.dumps({"id": versie, "titel": editietitel(edities[-1]) if edities else ""}, ensure_ascii=False),
+        encoding="utf-8")
 
     def schrijf(pad, titel, basis, actief, inhoud, bovenregel=ALGEMENE_BOVENREGEL, deel=None):
         # Wat een app toont bij een gedeelde link. Zonder eigen tekst of beeld: de omschrijving en het plaatje van de site.
         deel = {"titel": titel, "tekst": OMSCHRIJVING, "soort": "website", **(deel or {}),
                 "url": site_url + ("" if pad == "index.html" else pad)}
-        (doel / pad).write_text(pagina(titel, basis, actief, inhoud, bovenregel, deel=deel, site_url=site_url),
+        (doel / pad).write_text(pagina(titel, basis, actief, inhoud, bovenregel, deel=deel, site_url=site_url,
+                                       versie=versie, voorpagina=pad == "index.html"),
                                 encoding="utf-8")
 
     for ed in edities:

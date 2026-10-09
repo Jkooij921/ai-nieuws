@@ -1109,6 +1109,9 @@ def bouw_mail(ed, site_url, week=None):
     verwijzing = f"Op de site staan {', '.join(delen[:-1]) + ' en ' + delen[-1] if len(delen) > 1 else delen[0]}." if delen else ""
 
     serif = "Georgia,'Times New Roman',serif"
+    # De knop naar de site krijgt de naam van de editie erbij. Zo'n adres is nieuw, dus geen server of browser
+    # heeft er een oude kopie van: de mail opent altijd deze editie.
+    editie_url = f"{site_url}?e={ed['id']}" if site_url and ed.get("id") else site_url
     plat = [f"AI-nieuws, {datum}, {moment}", "", intro, ""]
     blokken = []
     for nr, item in enumerate(top):
@@ -1128,7 +1131,7 @@ def bouw_mail(ed, site_url, week=None):
         )
         plat += [f"[{item['rubriek']}] {item['kop']}", f"({regel})", item["samenvatting"], url, ""]
     if verwijzing:
-        plat.append(f"{verwijzing} {site_url}")
+        plat.append(f"{verwijzing} {editie_url}")
     if week:
         plat.append(f"Ook nieuw: De week in AI, de 10 belangrijkste berichten van deze week. {site_url}week/{week['id']}.html")
     plat += ["", "Geschreven met AI (Claude). Lees bij twijfel de bron."]
@@ -1137,7 +1140,7 @@ def bouw_mail(ed, site_url, week=None):
     if verwijzing:
         knop = (
             '<div style="border-top:3px solid #141414;padding:16px 0 0;font-size:15px;line-height:1.5;color:#333333">'
-            f'{e(verwijzing)}<br><a href="{e(site_url)}" style="display:inline-block;margin-top:12px;padding:12px 18px;'
+            f'{e(verwijzing)}<br><a href="{e(editie_url)}" style="display:inline-block;margin-top:12px;padding:12px 18px;'
             'background:#141414;color:#ffffff;text-decoration:none;font-weight:bold">Lees de hele editie</a></div>'
         )
     if week:

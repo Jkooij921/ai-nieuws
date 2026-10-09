@@ -14,6 +14,8 @@ Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de beric
 - **De week:** elke zondagavond de 10 belangrijkste berichten van de week.
 - **Archief, Begrippen en tips, Zoeken:** alle edities, alle uitgelegde woorden, en zoeken in alle berichten.
 
+- **Altijd de nieuwste editie:** de servers van GitHub en je browser geven soms nog een tijdje een oude kopie, ook na F5. Daarom vraagt de site zelf `laatste.json` op, via een adres dat nog nooit gebruikt is. Dat gebeurt bij openen, bij terugkomen na slaapstand of vanuit een ander tabblad, en elke 5 minuten. Is er een nieuwere editie, dan laadt de voorpagina die vanzelf. Op andere pagina's, of als je ver naar beneden gescrold bent, komt onderaan een balk met de knop "Bekijk de nieuwe editie". De knop in de mail opent ook altijd die editie (`?e=` met de naam van de editie).
+
 Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op. Wat iemand gelezen heeft, staat alleen in de eigen browser.
 
 ## Beelden
