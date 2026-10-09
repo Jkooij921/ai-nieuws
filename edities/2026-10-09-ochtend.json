@@ -1,0 +1,214 @@
+{
+ "id": "2026-10-09-ochtend",
+ "tijd": "2026-10-09T08:05",
+ "datum": "2026-10-09",
+ "moment": "ochtend",
+ "intro": "Goedemorgen. Anthropic laat zijn sterkste AI gratis zoeken naar beveiligingslekken in gedeelde code. Bij OpenAI zegt een onderzoeker ontslagen te zijn omdat hij veiligheid vooropstelde.",
+ "items": [
+  {
+   "rubriek": "Het grote nieuws",
+   "score": 8,
+   "kop": "Anthropic laat Claude gratis open-sourcecode op beveiligingslekken controleren",
+   "uitleg": "Open-sourcecode is gratis, gedeelde programmacode waar veel software op bouwt, en die iedereen mag inzien. Anthropic werkte hier al aan met Project Glasswing, een eerder project met partners dat veel kwetsbaarheden vond. Dat project is deze week opgegaan in het Cyber Verification Program.",
+   "samenvatting": "Open-sourceprojecten kunnen zich nu gratis aanmelden voor regelmatige beveiligingsscans door de sterkste modellen van Anthropic, waaronder Claude Mythos. De dienst heet OSS Scanner. Daarnaast start Anthropic een programma om de systemen achter stroom, water en vervoer te beveiligen, samen met bedrijven als Accenture, CrowdStrike en Deloitte.",
+   "waarom": "Makers van gratis software krijgen mogelijk sneller een seintje over lekken, maar de meldingen zijn niet door mensen gecontroleerd en kunnen dus fout zijn.",
+   "artikel": [
+    {
+     "tussenkop": "Hoe werkt OSS Scanner precies?",
+     "alineas": [
+      "Wie een open-sourceproject beheert, kan zich zelf aanmelden. Anthropic belooft dan regelmatige en grondige scans door zijn sterkste modellen, zonder kosten. Claude Mythos hoort daar volgens het bedrijf bij.",
+      "De rapporten komen rechtstreeks van het model. Er kijkt geen mens naar voordat ze bij je terechtkomen. Anthropic zegt dat dit snellere en vaker herhaalde scans mogelijk maakt.",
+      "Het bedrijf geeft zelf toe dat meldingen \"incorrect of ongeldig\" kunnen zijn. Voor beheerders betekent dit dat ze elke melding zelf moeten nagaan."
+     ]
+    },
+    {
+     "tussenkop": "Waarom nu, en wat is er al geleerd?",
+     "alineas": [
+      "Anthropic wil met de nieuwe Cyber Mission verdedigers helpen met hulpmiddelen, onderzoek en geld. Uit Project Glasswing bleek dat kwetsbaarheden vinden steeds makkelijker wordt. Controleren, rangschikken en herstellen blijft volgens Anthropic lastig.",
+      "AI-hulp bij het zoeken naar fouten bestaat al langer. Volgens The Verge hielp AI in de afgelopen maanden bij het vinden van grote lekken, zoals de bug \"Copy Fail\" die in mei bijna elke Linux-versie trof. Tegelijk krijgen sommige projecten juist te veel AI-meldingen om bij te houden, waaronder dat van Linus Torvalds en van Google.",
+      "Dat maakt de ontbrekende menselijke controle een echt punt. Een scanner die veel meldingen stuurt, kan beheerders ook extra werk geven. Of OSS Scanner dat probleem oplost of vergroot, laat de bron nog niet zien."
+     ]
+    },
+    {
+     "tussenkop": "Wat gebeurt er bij stroom en water?",
+     "alineas": [
+      "Naast de scanner start het Critical Infrastructure Defense Program. Daarin krijgen beveiligingsbedrijven de nieuwste Claude-modellen, ingenieurs ter plekke en dreigingsonderzoek van Anthropic. Het gaat om de besturingssystemen achter elektriciteitsnetten, waterbedrijven en vervoer.",
+      "Partners zijn onder meer Accenture, Booz Allen, CrowdStrike, Deloitte, Dragos, Hitachi, Insane Cyber, Nozomi Networks, Palo Alto Networks, PwC en Rockwell Automation. Zulke systemen kunnen vaak niet offline om te patchen, dus bekende lekken blijven soms jaren open. Een paar partners werkt volgens Anthropic al met Claude aan reparaties.",
+      "Beheer je een open-sourceproject, dan kun je je aanmelden voor OSS Scanner. Bouwt je bedrijf beveiliging voor vitale infrastructuur, dan kun je interesse registreren voor het programma. Begin voorzichtig en controleer elke melding voordat je iets aanpast."
+     ]
+    }
+   ],
+   "bronnen": [
+    {
+     "bron": "Anthropic",
+     "groep": "lab",
+     "url": "https://www.anthropic.com/news/anthropic-cyber-mission",
+     "datum": null
+    },
+    {
+     "bron": "The Verge AI",
+     "groep": "media",
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1008521/anthropic-open-source-oss-scanner",
+     "datum": "2026-10-08T17:53:51-04:00"
+    },
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261008/p45#a261008p45",
+     "datum": "2026-10-08T16:23:09-04:00"
+    },
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261008/p43#a261008p43",
+     "datum": "2026-10-08T15:30:41-04:00"
+    }
+   ],
+   "beeld": "https://www-cdn.anthropic.com/images/4zrzovbb/website/d2af4f6715cbe9766a47430a24420cfca0a2c588-1200x630.jpg",
+   "bedrijf": "Anthropic",
+   "onderwerpen": [
+    "OSS Scanner",
+    "AI-beveiliging",
+    "Anthropic"
+   ],
+   "id": "2026-10-09-ochtend-1"
+  }
+ ],
+ "kort": [
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 6,
+   "kop": "Gebruiker laat Claude spel voor oude telefoons bouwen",
+   "zin": "Een gebruiker op Reddit vertelt dat Claude Opus 5.5 met één opdracht een 3D-schietspel maakte voor telefoons van twintig jaar oud.",
+   "bedrijf": "Anthropic",
+   "bronnen": [
+    {
+     "bron": "Reddit",
+     "groep": "community",
+     "url": "https://www.reddit.com/r/ClaudeAI/comments/1x120gj/opus_55_can_make_games_for_2_decade_old_phones/",
+     "datum": "2026-10-08T20:34:52+00:00"
+    }
+   ],
+   "id": "2026-10-09-ochtend-k1"
+  },
+  {
+   "rubriek": "Zo gebruik je AI",
+   "score": 6,
+   "kop": "LegalOn bespaart 65 procent op Codex-kosten",
+   "zin": "Volgens OpenAI verlaagde LegalOn de geschatte dagelijkse kosten van Codex met 65 procent, zonder dat het ontwikkelen trager werd.",
+   "bedrijf": "OpenAI",
+   "bronnen": [
+    {
+     "bron": "OpenAI",
+     "groep": "lab",
+     "url": "https://openai.com/index/legalon-halves-codex-costs",
+     "datum": "2026-10-08T12:00:00+00:00"
+    }
+   ],
+   "id": "2026-10-09-ochtend-k2"
+  },
+  {
+   "rubriek": "Nieuwe tools",
+   "score": 5,
+   "kop": "Claude Code kan acties blokkeren bij falende hooks",
+   "zin": "Claude Code houdt een actie nu tegen als je eigen controlestap (een hook) niet start, te lang duurt of onverwacht stopt.",
+   "bedrijf": "Anthropic",
+   "bronnen": [
+    {
+     "bron": "Claude Code",
+     "groep": "lab",
+     "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.295",
+     "datum": "2026-10-08T19:48:38+00:00",
+     "sterren": 149759
+    }
+   ],
+   "id": "2026-10-09-ochtend-k3"
+  },
+  {
+   "rubriek": "Nieuwe modellen",
+   "score": 5,
+   "kop": "Hacker News vraagt aandacht voor DeepSeek 4.1 Flash",
+   "zin": "Een gebruiker op Hacker News vraagt waarom de branche niet reageert op DeepSeek 4.1 Flash. Details uit de bron ontbreken.",
+   "bedrijf": "Anders",
+   "bronnen": [
+    {
+     "bron": "Hacker News",
+     "groep": "community",
+     "url": "https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/",
+     "datum": "2026-10-08T00:14:48+00:00",
+     "discussie": "https://news.ycombinator.com/item?id=50000488",
+     "punten": 550
+    }
+   ],
+   "id": "2026-10-09-ochtend-k4"
+  },
+  {
+   "rubriek": "Maatschappij",
+   "score": 5,
+   "kop": "Onderzoeker zegt bij OpenAI ontslagen te zijn om veiligheid",
+   "zin": "Mikita Balesni gelooft dat OpenAI hem, Tomek Korbak en Jasmine Wang ontsloeg omdat zij veiligheid vooropstelden boven de belangen van het bedrijf.",
+   "bedrijf": "OpenAI",
+   "bronnen": [
+    {
+     "bron": "Techmeme",
+     "groep": "media",
+     "url": "https://www.techmeme.com/261008/p49#a261008p49",
+     "datum": "2026-10-08T19:01:29-04:00"
+    }
+   ],
+   "id": "2026-10-09-ochtend-k5"
+  },
+  {
+   "rubriek": "AI in Nederland",
+   "score": 5,
+   "kop": "NRC schrijft over privacy en AI-training",
+   "zin": "NRC belicht privacy en werknemersgegevens bij AI, onder de titel 'You're not sending an email. You're training a model'.",
+   "bedrijf": "Anders",
+   "bronnen": [
+    {
+     "bron": "NRC",
+     "groep": "nl-eu",
+     "url": "https://www.nrc.nl/nieuws/2026/10/08/youre-not-sending-an-email-youre-training-a-model-a4938056",
+     "datum": "2026-10-08T22:00:00+02:00"
+    }
+   ],
+   "id": "2026-10-09-ochtend-k6"
+  }
+ ],
+ "probeer": null,
+ "quiz": [
+  {
+   "vraag": "Wat biedt Anthropic met OSS Scanner aan open-sourceprojecten?",
+   "opties": [
+    "Betaalde audits door menselijke experts",
+    "Gratis, regelmatige scans door zijn sterkste modellen",
+    "Een geldbedrag voor elk gevonden lek"
+   ],
+   "goed": 1,
+   "uitleg": "OSS Scanner biedt projecten die zich aanmelden gratis periodieke scans door de sterkste modellen van Anthropic."
+  },
+  {
+   "vraag": "Hoeveel procent verlaagde LegalOn volgens OpenAI de dagelijkse Codex-kosten?",
+   "opties": [
+    "25 procent",
+    "65 procent",
+    "90 procent"
+   ],
+   "goed": 1,
+   "uitleg": "LegalOn verlaagde de geschatte dagelijkse kosten met 65 procent zonder trager te ontwikkelen."
+  },
+  {
+   "vraag": "Voor welke telefoons maakte Claude volgens een Reddit-gebruiker een 3D-schietspel?",
+   "opties": [
+    "Telefoons van twintig jaar oud",
+    "De nieuwste smartphones",
+    "Spelcomputers voor thuis"
+   ],
+   "goed": 0,
+   "uitleg": "De gebruiker vertelt dat Claude het spel bouwde voor oude telefoons van zo'n twee decennia terug."
+  }
+ ],
+ "bekeken": 49,
+ "aantal_bronnen": 43,
+ "fouten": []
+}

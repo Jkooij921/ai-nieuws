@@ -219,7 +219,7 @@
   "woord": "Project Glasswing",
   "uitleg": "Een programma van Anthropic waarin organisaties die cruciale software beveiligen toegang kregen tot Claude Mythos.",
   "editie": "2026-10-07-ochtend",
-  "keer": 1
+  "keer": 2
  },
  "mistral": {
   "woord": "Mistral",
@@ -327,7 +327,7 @@
   "woord": "Codex",
   "uitleg": "Codex is het hulpmiddel van OpenAI dat code schrijft en aanpast.",
   "editie": "2026-10-07-avond",
-  "keer": 1
+  "keer": 2
  },
  "mcp-server": {
   "woord": "MCP-server",
@@ -555,6 +555,42 @@
   "woord": "Natura",
   "uitleg": "Een startup voor AI-hardware die een slimme ring van 99 dollar toont.",
   "editie": "2026-10-08-avond",
+  "keer": 1
+ },
+ "open-sourcecode": {
+  "woord": "open-sourcecode",
+  "uitleg": "Open-sourcecode is programmacode die iedereen gratis mag bekijken en gebruiken.",
+  "editie": "2026-10-09-ochtend",
+  "keer": 1
+ },
+ "oss scanner": {
+  "woord": "OSS Scanner",
+  "uitleg": "OSS Scanner is een dienst van Anthropic die open-sourceprojecten gratis laat scannen op beveiligingslekken.",
+  "editie": "2026-10-09-ochtend",
+  "keer": 1
+ },
+ "claude mythos": {
+  "woord": "Claude Mythos",
+  "uitleg": "Claude Mythos is een van de sterkste AI-modellen van Anthropic.",
+  "editie": "2026-10-09-ochtend",
+  "keer": 1
+ },
+ "critical infrastructure defense program": {
+  "woord": "Critical Infrastructure Defense Program",
+  "uitleg": "Dit programma van Anthropic geeft beveiligingsbedrijven AI-modellen, ingenieurs en onderzoek om stroom-, water- en vervoersnetwerken te beschermen.",
+  "editie": "2026-10-09-ochtend",
+  "keer": 1
+ },
+ "hook": {
+  "woord": "hook",
+  "uitleg": "Een hook is een eigen controlestap die automatisch draait voordat of nadat een programma iets doet.",
+  "editie": "2026-10-09-ochtend",
+  "keer": 1
+ },
+ "deepseek": {
+  "woord": "DeepSeek",
+  "uitleg": "DeepSeek is een AI-bedrijf dat taalmodellen maakt.",
+  "editie": "2026-10-09-ochtend",
   "keer": 1
  }
 }
