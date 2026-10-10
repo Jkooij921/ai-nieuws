@@ -4,6 +4,8 @@ Een AI-nieuwssite met elke dag om 08:00 en 20:00 een nieuwe editie: wat er sinds
 
 Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de berichten via je eigen abonnement.
 
+De site staat op https://ainieuwsvandaag.nl. Het domein is geregistreerd bij Mijndomein; daar wijzen de DNS-regels naar GitHub Pages (vier A-regels en vier AAAA-regels naar de adressen van GitHub, `www` naar `deepworkstudio.github.io`, en een TXT-regel waarmee GitHub weet dat het domein van ons is). In GitHub staat het domein onder Settings, Pages, Custom domain, met https verplicht. Het oude adres deepworkstudio.github.io/ai-nieuws stuurt vanzelf door.
+
 ## De site
 
 - **Vandaag:** de nieuwste editie, opgezet zoals NOS en nu.nl. Vier ronde knoppen, groot genoeg voor je duim: Alles, Claude, ChatGPT en Quiz. Daarna een lange lijst met de onderwerpen (Groot nieuws, Uitleg, Modellen, Tools, Zo gebruik je AI, Nederland, Maatschappij, Kort nieuws) als tussenkopjes: per bericht een foto en de kop, de samenvatting staat in het artikel. Tik of klik ergens op een bericht en je gaat naar het hele artikel. Na het kiezen van Claude of ChatGPT staat boven de lijst hoeveel berichten je ziet. Op de telefoon blijft bovenaan één regel staan met Zoeken en Menu; alles wat je aantikt is minstens 48 pixels hoog (NN/g: minstens 1 bij 1 cm). Kort nieuws heeft geen eigen pagina: een pijltje (↗) laat zien dat die link naar de bron gaat. Met elke editie één tip onder "Probeer dit vandaag" en een nieuwsquiz van 3 vragen. Na de quiz kun je je score delen via WhatsApp, met een link naar dezelfde quiz.
