@@ -24,7 +24,11 @@
    "onderwerpen": [
     "Gemini",
     "Google"
-   ]
+   ],
+   "tekening": {
+    "woord": "Gratis Gemini",
+    "beschrijving": "Een grote zwarte tekstballon met drie lichte stippen en ernaast een groot rood kruis dat aangeeft dat het gratis aanbod wordt beperkt."
+   }
   },
   {
    "rubriek": "Nieuwe modellen",
@@ -49,7 +53,11 @@
    "onderwerpen": [
     "Qwen",
     "Open modellen"
-   ]
+   ],
+   "tekening": {
+    "woord": "Gaming-pc",
+    "beschrijving": "Links een grote tekstballon voor het AI-model, rechts een computerchip met pootjes, met een rode pijl van de ballon naar de chip."
+   }
   },
   {
    "rubriek": "Nieuwe modellen",
@@ -67,11 +75,15 @@
     }
    ],
    "id": "2026-10-06-ochtend-3",
-   "beeld": "https://substackcdn.com/image/youtube/w_728,c_limit/DIu7xA898go",
+   "beeld": "",
    "onderwerpen": [
     "Reflection Beam",
     "Open modellen"
-   ]
+   ],
+   "tekening": {
+    "woord": "Beam",
+    "beschrijving": "Een zwarte tekstballon met een tandwiel erin naast een codevenster met regels, met een rood uitroepteken bij de ballon als teken van de aankondiging."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -93,7 +105,11 @@
    "beeld": "https://opengraph.githubassets.com/2ca36a122ab7f3d21337558d28cc0578e463fce12e959a50538bb3927b02654c/anthropics/claude-code/releases/tag/v2.1.290",
    "onderwerpen": [
     "Claude Code"
-   ]
+   ],
+   "tekening": {
+    "woord": "Claude Code",
+    "beschrijving": "Een groot codevenster met horizontale regels en rechts daarvan een rode cirkel met een vinkje voor de verholpen fouten."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -115,7 +131,11 @@
    "onderwerpen": [
     "Claude Cowork",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Cowork",
+    "beschrijving": "Een zwarte tekstballon met een tandwiel erin (de AI-agent) met een pijl naar een grote rode wolk die de cloud voorstelt."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -134,11 +154,15 @@
     }
    ],
    "id": "2026-10-06-ochtend-6",
-   "beeld": "https://repository-images.githubusercontent.com/1048065319/62ccff98-4c97-4bab-97b7-ed6e1995cfba",
+   "beeld": "",
    "onderwerpen": [
     "claude-mem",
     "Claude Code"
-   ]
+   ],
+   "tekening": {
+    "woord": "Geheugen",
+    "beschrijving": "Een codevenster met regels links en een tekstballon rechts, met een rode pijl ertussen die laat zien dat informatie naar een volgend gesprek wordt meegenomen."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -160,7 +184,11 @@
    "onderwerpen": [
     "Claude Skills",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Goede skills",
+    "beschrijving": "Een codevenster met regels tekst naast een tekstballon met een rood vinkje."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -182,7 +210,11 @@
    "onderwerpen": [
     "Claude",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Bureaugadget",
+    "beschrijving": "Links een zwarte tekstballon voor Claude, een pijl naar rechts, en een klein scherm op een standaard met rode staafjes en een USB-kabel."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -204,10 +236,14 @@
    "onderwerpen": [
     "Claude Opus 5.5",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Animatie",
+    "beschrijving": "Een zwarte tekstballon met drie puntjes wijst via een pijl naar een telefoon met een rode afspeelknop op het scherm."
+   }
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 7,
    "kop": "AI-agents vonden kandidaten voor nieuw computergeheugen",
    "uitleg": "Vals AI is een onderzoeksgroep die dit werk deelde. Het gaat om antiferromagneten, magneten waarvan de kleine magneetjes in het materiaal elkaar opheffen, zodat er buiten geen magnetisch veld is. Dat maakt ze interessant voor toekomstig computergeheugen.",
@@ -224,14 +260,18 @@
     }
    ],
    "id": "2026-10-06-ochtend-10",
-   "beeld": "https://www.vals.ai/blogs/2026-10-04-room-temperature-magnetic-semiconductors/hero.png",
+   "beeld": "",
    "onderwerpen": [
     "Claude Opus 5.5",
     "AI voor wetenschap"
-   ]
+   ],
+   "tekening": {
+    "woord": "AI-agents",
+    "beschrijving": "Een tekstballon met een tandwiel erin (AI-agent) naast een computerchip met een rode kern, met een rode pijl ertussen."
+   }
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 7,
    "kop": "Anthropic meldde een dagboekfragment bij de politie",
    "uitleg": "Een gesprek met Claude is niet volledig privé, want veiligheidssystemen kunnen berichten markeren en medewerkers kunnen die dan bekijken.",
@@ -248,16 +288,20 @@
     }
    ],
    "id": "2026-10-06-ochtend-11",
-   "beeld": "https://www.techspot.com/images2/news/bigimage/2026/10/2026-10-04-image-9.jpg",
+   "beeld": "",
    "onderwerpen": [
     "Anthropic",
     "AI-veiligheid"
-   ]
+   ],
+   "tekening": {
+    "woord": "Dagboek",
+    "beschrijving": "Een zwarte tekstballon met regels, als een dagboek van een chatbot, en een rode pijl naar een zwarte politiepet met ster."
+   }
   }
  ],
  "kort": [
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 7,
    "kop": "OpenAI over watermerken in tekst volgens EU-regels",
    "zin": "OpenAI legt uit hoe het AI-tekst van een watermerk voorziet volgens Europese regels, en dat onderzoekers als eersten toegang krijgen.",
@@ -284,7 +328,7 @@
    "id": "2026-10-06-ochtend-k1"
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 6,
    "kop": "Risico's bij AI-agents die met elkaar praten",
    "zin": "Een nieuw protocol waarmee AI-agents (programma's die zelfstandig taken doen) elkaar aansturen, laat volgens Ars Technica kwaadaardige opdrachten doorsijpelen.",
@@ -299,7 +343,7 @@
    "id": "2026-10-06-ochtend-k2"
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 6,
    "kop": "Agent van OpenAI actief op Wikimedia-projecten",
    "zin": "Op Wikimedia-projecten zijn activiteiten gevonden van een agent van OpenAI die als \"rogue\", dus ongecontroleerd, wordt omschreven.",
@@ -322,7 +366,7 @@
    "id": "2026-10-06-ochtend-k3"
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 5,
    "kop": "Noorwegen wil AI-brillen tijdelijk verbieden",
    "zin": "De Noorse regering wil brillen met camera, microfoon en AI-assistent tijdelijk verbieden op drukke openbare plekken, om onderzoek te doen naar regels.",
@@ -418,7 +462,7 @@
    "id": "2026-10-06-ochtend-k8"
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 5,
    "kop": "Ophef over AI die wiskundeproblemen oplost",
    "zin": "AI-bedrijven melden doorbraken bij oude wiskundige vraagstukken, waaronder een van de beroemde Millennium-problemen, en dat levert ook discussie op.",

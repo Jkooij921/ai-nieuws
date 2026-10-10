@@ -39,9 +39,18 @@ Een correctie maken: pas de tekst aan in `edities/<editie>.json` en zet bij dat 
 
 Onder het artikel verschijnt dan een blok "Correctie" met de datum, en de pagina Correcties (correcties.html) toont alle correcties, de nieuwste eerst. Dat werkt ook voor een kort bericht. Haal nooit stilletjes iets weg: zeg altijd wat er eerst stond.
 
+## Tekeningen
+
+Elk artikel krijgt een tekening van Claude (`teken` in `ai_nieuws.py`), in een vaste stijl: zwart en één rood accent op lichtgrijs, met linksboven één woord dat zegt waar het over gaat. Dat woord staat als gewone tekst op de site, niet in de tekening. In een proef raadde een lezer zonder kop maar bij 7 van de 16 tekeningen het onderwerp; een beeld met een woord erbij is wat onderzoek naar pictogrammen aanraadt.
+
+- **Regels:** Claude tekent het onderwerp zelf met hooguit 2 herkenbare voorwerpen naast elkaar, en gebruikt een vast beeldwoordenboek (een tekstballon voor een chatbot, een munt voor geld). Rood is alleen voor het nieuws zelf. Nooit mensen, logo's, letters of cijfers. Alles staat in `TEKEN_OPDRACHT`.
+- **Veilig:** `schoon_svg` laat alleen platte vormen in de drie kleuren door, zonder tekst, scripts of plaatjes van elders. Wordt een tekening afgekeurd, dan probeert Claude het één keer opnieuw. Lukt het dan nog niet, dan krijgt het artikel het beeld of het zwarte blok hieronder.
+- **Bewaard** in `tekeningen/<id>.svg`, met het woord en een beschrijving (voor schermlezers) in de editie onder `"tekening"`. In de donkere modus wisselen zwart en licht om.
+- **Label:** onder de tekening bij een artikel staat "Illustratie gemaakt met AI (Claude)".
+
 ## Beelden
 
-Op foto's van nieuwssites en persbureaus rusten rechten, en daar kan een claim van komen. Daarom gebruikt de site alleen:
+Zonder tekening gebruikt de site een beeld. Op foto's van nieuwssites en persbureaus rusten rechten, en daar kan een claim van komen. Daarom gebruikt de site alleen:
 
 - het deelbeeld van een AI-bedrijf zelf (og:image, het plaatje dat je ook ziet als je een link in WhatsApp deelt), bijvoorbeeld van anthropic.com of openai.com;
 - de kaart die GitHub voor elk project maakt.
@@ -107,6 +116,7 @@ Op de pc:
 - `python ai_nieuws.py --voorbeeld`: proefeditie in `voorbeeld\index.html`, niets wordt bewaard of gemaild.
 - `python ai_nieuws.py --alleen-site --voorbeeld`: de site opnieuw maken uit de bewaarde edities, in `voorbeeld\`. Handig na een wijziging in `maak_site.py`, `stijl.css` of `site.js`.
 - `python ai_nieuws.py --bronnen`: per bron hoeveel nieuwe berichten er zijn.
+- `python ai_nieuws.py --tekeningen`: tekeningen maken bij bewaarde artikelen die er nog geen hebben, bijvoorbeeld als het tekenen een keer mislukte. Daarna de map `tekeningen` en `edities` committen en pushen.
 
 ## Als het niet werkt
 

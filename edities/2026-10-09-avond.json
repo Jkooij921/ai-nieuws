@@ -62,7 +62,11 @@
     "nieuw_feit": "Officiële Anthropic-plugins voor kenniswerkers in Claude Cowork en Claude Code, trending op GitHub.",
     "reden": "Officieel van Anthropic met 28.000 sterren, bruikbaar voor veel werknemers."
    },
-   "id": "2026-10-09-avond-1"
+   "id": "2026-10-09-avond-1",
+   "tekening": {
+    "woord": "Plugins",
+    "beschrijving": "Een zwarte tekstballon (Claude) en een zwarte app-tegel (plugin) naast elkaar, met een rode pijl van de tegel naar de tekstballon."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -119,7 +123,11 @@
     "nieuw_feit": "Duck.ai kan nu AI-chatgesprekken delen met anderen.",
     "reden": "Nieuwe functie in privacyvriendelijke chatbot, kleinere groep."
    },
-   "id": "2026-10-09-avond-2"
+   "id": "2026-10-09-avond-2",
+   "tekening": {
+    "woord": "Versleuteld",
+    "beschrijving": "Een tekstballon met een rode pijl naar een gesloten hangslot, als beeld van een versleutelde gesprekslink."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -178,7 +186,11 @@
     "nieuw_feit": "Simon Willison bouwde een bloggfunctie met alleen spraak via Codex voice mode in de ChatGPT-app.",
     "reden": "Concreet na te doen voorbeeld van een bekende kenner met ChatGPT/Codex."
    },
-   "id": "2026-10-09-avond-3"
+   "id": "2026-10-09-avond-3",
+   "tekening": {
+    "woord": "Praten",
+    "beschrijving": "Een grote microfoon links, een rode pijl naar rechts en een codevenster met regels, voor een webpagina die met de stem is gebouwd."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -242,7 +254,11 @@
     "nieuw_feit": "Gebruikers kregen na een nachtelijke Claude-opdracht onverwachte kosten van $2.500 en 13.000 geopende vensters.",
     "reden": "Waarschuwing om bij agents limieten en model te specificeren."
    },
-   "id": "2026-10-09-avond-4"
+   "id": "2026-10-09-avond-4",
+   "tekening": {
+    "woord": "Videomodellen",
+    "beschrijving": "Een zwarte telefoon met een afspeelknop naast een grote rode munt, als teken van de torenhoge kosten van video's maken."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -300,7 +316,11 @@
     "nieuw_feit": "AP start nieuwe directie voor toezicht en coördinatie op AI en algoritmes.",
     "reden": "Nederlands toezicht op AI, bron is de AP zelf."
    },
-   "id": "2026-10-09-avond-5"
+   "id": "2026-10-09-avond-5",
+   "tekening": {
+    "woord": "AI-toezicht",
+    "beschrijving": "Een zwarte tekstballon voor AI naast een rode rechtershamer op een zwart blok, als teken van toezicht op AI."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -356,7 +376,11 @@
     "nieuw_feit": "Jan Baan en Ad Nederlof verschillen van mening over AI en banen.",
     "reden": "Meningenstuk over banen, weinig nieuw feit."
    },
-   "id": "2026-10-09-avond-6"
+   "id": "2026-10-09-avond-6",
+   "tekening": {
+    "woord": "Banen",
+    "beschrijving": "Links een zwarte tekstballon voor AI, rechts een aktetas voor banen met een groot rood kruis erbij."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -429,7 +453,11 @@
     "nieuw_feit": "OpenAI ontsloeg drie veiligheidsonderzoekers wegens schending van regels over gevoelige informatie en houdt vast aan het besluit.",
     "reden": "Bevestigd door The Verge en OpenAI zelf, raakt vertrouwen in AI-veiligheid; deels bedrijfsnieuws."
    },
-   "id": "2026-10-09-avond-7"
+   "id": "2026-10-09-avond-7",
+   "tekening": {
+    "woord": "Ontslag",
+    "beschrijving": "Een zwarte tekstballon (AI) naast een zwarte aktetas met een rode cirkel met kruis erop, voor het ontslag van de veiligheidsonderzoekers."
+   }
   },
   {
    "rubriek": "Uitleg",
@@ -495,7 +523,11 @@
     "AI-veiligheid"
    ],
    "keuze": {},
-   "id": "2026-10-09-avond-8"
+   "id": "2026-10-09-avond-8",
+   "tekening": {
+    "woord": "Sandbox",
+    "beschrijving": "Links een zwarte tekstballon met een tandwiel (AI-agent), rechts een open hangslot met rode beugel als teken van een lek."
+   }
   }
  ],
  "kort": [

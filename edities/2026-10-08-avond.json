@@ -66,7 +66,11 @@
     "Claude",
     "Anthropic"
    ],
-   "id": "2026-10-08-avond-1"
+   "id": "2026-10-08-avond-1",
+   "tekening": {
+    "woord": "Wreed gedrag",
+    "beschrijving": "Een grote zwarte tekstballon van een chatbot naast een rode waarschuwingsdriehoek met uitroepteken."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -115,13 +119,17 @@
      "datum": "2026-10-08T09:45:11-04:00"
     }
    ],
-   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK093_Google_02.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+   "beeld": "",
    "bedrijf": "Google",
    "onderwerpen": [
     "EmbeddingGemma",
     "Google"
    ],
-   "id": "2026-10-08-avond-2"
+   "id": "2026-10-08-avond-2",
+   "tekening": {
+    "woord": "Notitie-app",
+    "beschrijving": "Een microfoon en een pijl naar een app-tegel met tekstregels, als beeld van een app die gesproken vergaderingen uitschrijft."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -164,13 +172,17 @@
      "datum": "2026-10-08T10:28:03-04:00"
     }
    ],
-   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/Gemini.max-2000x2000-1.png?quality=90&strip=all&crop=0%2C3.4845840605003%2C100%2C93.030831878999&w=1200",
+   "beeld": "",
    "bedrijf": "Google",
    "onderwerpen": [
     "Gemini",
     "AI-agents"
    ],
-   "id": "2026-10-08-avond-3"
+   "id": "2026-10-08-avond-3",
+   "tekening": {
+    "woord": "Gemini-agent",
+    "beschrijving": "Een zwarte tekstballon met een rood tandwiel erin, met een pijl naar een zwarte app-tegel."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -220,7 +232,11 @@
     "Ponytail",
     "Claude Code"
    ],
-   "id": "2026-10-08-avond-4"
+   "id": "2026-10-08-avond-4",
+   "tekening": {
+    "woord": "Codeer-AI",
+    "beschrijving": "Een codevenster met regels, waarvan twee rood zijn, naast een zwarte tekstballon met een tandwiel erin."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -268,7 +284,11 @@
    "onderwerpen": [
     "Claude Opus 5.5"
    ],
-   "id": "2026-10-08-avond-5"
+   "id": "2026-10-08-avond-5",
+   "tekening": {
+    "woord": "SimCity-kloon",
+    "beschrijving": "Links een tekstballon met een tandwiel (AI-agent), rechts een app-tegel met een stadsgezicht van gebouwen, met een rode pijl ertussen."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -311,12 +331,16 @@
      "datum": "2026-10-08T15:00:00+00:00"
     }
    ],
-   "beeld": "https://www.computable.nl/wp-content/uploads/2026/10/0727-Humans-Loop-1920x1080-1.jpg",
+   "beeld": "",
    "bedrijf": "Anders",
    "onderwerpen": [
     "AI-beveiliging"
    ],
-   "id": "2026-10-08-avond-6"
+   "id": "2026-10-08-avond-6",
+   "tekening": {
+    "woord": "Beveiliging",
+    "beschrijving": "Een groot gesloten hangslot naast een tekstballon met een tandwiel erin, met een rood vinkje ertussen."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -359,13 +383,17 @@
      "datum": "2026-10-08T13:00:00+00:00"
     }
    ],
-   "beeld": "https://www.computable.nl/wp-content/uploads/2026/07/shutterstock_2791889251.jpg",
+   "beeld": "",
    "bedrijf": "Microsoft",
    "onderwerpen": [
     "Copilot",
     "Microsoft"
    ],
-   "id": "2026-10-08-avond-7"
+   "id": "2026-10-08-avond-7",
+   "tekening": {
+    "woord": "AI op je pc",
+    "beschrijving": "Een grote chip links en een tekstballon rechts, met een rode pijl die van de ballon naar de chip wijst."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -433,7 +461,11 @@
     "AI voor wetenschap",
     "OpenAI"
    ],
-   "id": "2026-10-08-avond-8"
+   "id": "2026-10-08-avond-8",
+   "tekening": {
+    "woord": "Wiskunde",
+    "beschrijving": "Een zwart vel papier met formulevormen en een rode min-streep als tekenfout, naast een vergrootglas met een rood kruis erin."
+   }
   }
  ],
  "kort": [

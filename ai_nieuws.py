@@ -9,6 +9,7 @@ Actions start dit om 08:00 en 20:00 (.github/workflows/editie.yml).
   python ai_nieuws.py --gepland    hetzelfde, maar alleen als de editie van nu er nog niet is
   python ai_nieuws.py --voorbeeld  proefeditie in de map voorbeeld/, niets mailen of bewaren
   python ai_nieuws.py --bronnen    tonen wat elke bron nu oplevert
+  python ai_nieuws.py --tekeningen tekeningen maken bij bewaarde artikelen die er nog geen hebben
 """
 import argparse
 import gzip
@@ -48,6 +49,7 @@ EDITIES = MAP / "edities"
 WEKEN = MAP / "weken"
 SITE = MAP / "site"
 VOORBEELD = MAP / "voorbeeld"
+TEKENINGEN = MAP / "tekeningen"
 
 # Onder pythonw.exe bestaan stdout en stderr niet.
 if sys.stdout is None:
@@ -788,7 +790,7 @@ def verrijk(berichten):
 
 # ---------------------------------------------------------------- Claude
 
-def vraag_claude(cfg, bericht, schema):
+def vraag_claude(cfg, bericht, schema, systeem=SYSTEEM):
     """Stelt één vraag aan Claude Code (zonder tools) en geeft het antwoord als dict terug."""
     claude = cfg["claude_pad"] or shutil.which("claude") or str(Path.home() / ".local" / "bin" / "claude.exe")
     # --safe-mode slaat hooks, plugins en MCP-servers over: sneller, en het antwoord
@@ -796,7 +798,7 @@ def vraag_claude(cfg, bericht, schema):
     opdracht = [
         claude, "-p", "--safe-mode", "--tools", "", "--model", cfg["model"],
         "--output-format", "json", "--no-session-persistence",
-        "--system-prompt", SYSTEEM, "--json-schema", json.dumps(schema),
+        "--system-prompt", systeem, "--json-schema", json.dumps(schema),
     ]
     uitkomst = subprocess.run(
         opdracht, input=bericht, capture_output=True, text=True, encoding="utf-8",
@@ -822,6 +824,149 @@ def vraag_claude(cfg, bericht, schema):
     if not gevonden:
         raise RuntimeError("Claude gaf geen JSON terug")
     return json.loads(gevonden.group(0))
+
+
+# ---------------------------------------------------------------- tekeningen
+
+# Elk artikel krijgt een tekening van Claude in een vaste stijl, met één woord erop. Dat woord staat als gewone
+# tekst op de site, niet in de tekening: in een proef raadde een lezer zonder kop maar bij 7 van de 16 tekeningen
+# het onderwerp. Een beeld met een woord erbij is wat onderzoek naar pictogrammen aanraadt.
+TEKEN_KLEUREN = {"#141414", "#f3f3f0", "#c4122f", "none"}
+TEKEN_ELEMENTEN = {"svg", "g", "path", "rect", "circle", "ellipse", "line", "polyline", "polygon"}
+TEKEN_ATTRIBUTEN = {"viewBox", "xmlns", "width", "height", "d", "x", "y", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2",
+                    "points", "fill", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin", "stroke-dasharray",
+                    "transform", "fill-rule"}
+TEKEN_SYSTEEM = ("Je bent illustrator van een Nederlandstalige AI-nieuwssite. Je tekent in SVG-code. "
+                 "Antwoord alleen met JSON volgens het schema.")
+TEKEN_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "woord": {"type": "string", "description": "Eén of twee woorden waaraan de lezer het onderwerp herkent"},
+        "beschrijving": {"type": "string", "description": "Eén Nederlandse zin: wat staat er op de tekening"},
+        "svg": {"type": "string"},
+    },
+    "required": ["woord", "beschrijving", "svg"],
+}
+TEKEN_OPDRACHT = """Maak een tekening bij dit nieuwsartikel, en kies het woord dat erop komt te staan.
+
+Het doel: wie de kop leest, ziet hem meteen terug in de tekening.
+
+Het woord:
+- Eén of twee Nederlandse woorden, hooguit 18 tekens, met een hoofdletter aan het begin. Bijvoorbeeld "Valse tip", "Cryptomunt" of "Wiskunde".
+- Het concrete onderwerp waaraan de lezer het artikel herkent, liefst een woord uit de kop. Geen bedrijfsnaam, tenzij het nieuws echt over het bedrijf zelf gaat. Niet de naam van de rubriek.
+
+De tekening:
+1. Teken het onderwerp zelf met herkenbare voorwerpen. Geen beeldspraak, geen verzonnen vergelijking, geen trechters of torens als symbool.
+2. Hooguit 2 hoofdvoorwerpen, groot en naast elkaar, niet in elkaar overlopend. Een klein hulpteken mag: een pijl, een vinkje, een kruis of een uitroepteken.
+3. Gebruik het beeldwoordenboek hieronder.
+4. Stijl: plat en geometrisch, als een krantenprent. Gevulde vlakken in zwart #141414 op de achtergrond #F3F3F0.
+5. Rood #C4122F alleen voor het nieuws zelf: wat er gebeurde of wat er mis is. Al het andere is zwart.
+6. Groot en eenvoudig: het moet ook werken op een kaartje van 160 pixels breed.
+7. Laat linksboven (x kleiner dan 520, y kleiner dan 150) leeg: daar komt het woord.
+
+Beeldwoordenboek. Gebruik voor deze onderwerpen altijd dit symbool:
+- AI, chatbot, taalmodel, AI-assistent: een tekstballon (afgeronde rechthoek met een puntje onderaan)
+- AI-agent die zelf taken uitvoert: een tekstballon met een klein tandwiel erin
+- code, programmeren: een venster (rechthoek met een balk bovenaan) met horizontale regels
+- app, software, programma: een afgeronde vierkante app-tegel
+- video, sociale media, views, influencer: een telefoon met een afspeelknop (driehoek) op het scherm
+- politie, justitie, misdaad: een politiepet (pet met klep en een ster)
+- rechtszaak, wet, regels, toezichthouder: een rechtershamer
+- geld, crypto, prijs, kosten: een munt (cirkel met een rand)
+- beveiliging, lek, hack: een hangslot (open slot als het om een lek gaat)
+- fout, gevaar, waarschuwing: een waarschuwingsdriehoek met een uitroepteken
+- onderzoek, wetenschap, wiskunde: een vel papier met formulevormen, of een erlenmeyer
+- controleren, nakijken, zoeken: een vergrootglas
+- chips, rekenkracht, datacenter: een chip (vierkant met pootjes) of een serverkast
+- energie, stroom: een bliksemschicht
+- privacy, persoonlijke gegevens: een oog
+- school, leren, studeren: een afstudeerhoed
+- werk, banen, bedrijven: een aktetas
+- beelden of foto's maken: een fotolijstje met een berg en een zon
+- stem, spraak, geluid: een microfoon
+Staat een onderwerp er niet in, kies dan het voorwerp dat de meeste Nederlanders er meteen bij noemen.
+
+Technische regels, allemaal verplicht:
+- Lever één <svg> met xmlns="http://www.w3.org/2000/svg" en viewBox="0 0 1600 1000". Begin met een <rect> van 1600 bij 1000 in #F3F3F0 als achtergrond.
+- Alleen de elementen svg, g, path, rect, circle, ellipse, line, polyline, polygon. Geen text, image, use, defs, gradients, filters, style, class, id of script.
+- Alleen deze kleuren in fill en stroke: #141414, #F3F3F0, #C4122F (of none).
+- Geen letters of cijfers, geen logo's of merktekens, geen mensen, gezichten, handen of andere lichaamsdelen.
+- Houd de voorwerpen tussen y=150 en y=850, want soms wordt het beeld bijgesneden tot 2 bij 1. Hooguit 40 elementen.
+
+In 'beschrijving' zet je in één zin wat er op de tekening staat, voor wie hem niet kan zien.
+
+Het artikel:
+"""
+
+
+def schoon_svg(svg):
+    """Laat alleen een platte SVG door met toegestane vormen en kleuren. Geeft (svg, None) of (None, reden).
+
+    De tekening komt als <img> op de site, waarin een script toch al niet werkt. Dit is een tweede slot op de deur,
+    en het houdt ook tekst, plaatjes van elders en andere kleuren buiten de tekening."""
+    svg = re.sub(r"<\?xml[^>]*\?>|<!--.*?-->", "", svg or "", flags=re.S).strip()
+    if not svg or len(svg) > 30000:
+        return None, "leeg of te groot"
+    if "<!" in svg:
+        return None, "doctype of entiteiten niet toegestaan"
+    try:
+        wortel = ET.fromstring(svg)
+    except ET.ParseError as fout:
+        return None, f"geen geldige SVG: {fout}"
+    elementen = list(wortel.iter())
+    if len(elementen) > 80:
+        return None, f"te veel elementen ({len(elementen)})"
+    for el in elementen:
+        naam = el.tag.split("}")[-1]
+        if naam not in TEKEN_ELEMENTEN:
+            return None, f"element {naam} niet toegestaan"
+        if (el.text or "").strip() or (el.tail or "").strip():
+            return None, "tekst in de tekening"
+        for attr, waarde in el.attrib.items():
+            attr = attr.split("}")[-1]
+            if attr not in TEKEN_ATTRIBUTEN:
+                return None, f"attribuut {attr} niet toegestaan"
+            if attr in ("fill", "stroke") and waarde.strip().lower() not in TEKEN_KLEUREN:
+                return None, f"kleur {waarde} niet toegestaan"
+    if wortel.tag.split("}")[-1] != "svg" or wortel.get("viewBox") != "0 0 1600 1000":
+        return None, "geen svg met de juiste viewBox"
+    ET.register_namespace("", "http://www.w3.org/2000/svg")
+    return ET.tostring(wortel, encoding="unicode"), None
+
+
+def teken(cfg, item, map_):
+    """Laat Claude een tekening bij een artikel maken, met hooguit één nieuwe poging.
+
+    Bewaart de tekening als map_/<id>.svg en zet het woord en de beschrijving in item["tekening"].
+    Lukt het niet, dan blijft het artikel zonder tekening: de site toont dan het beeld of het zwarte blok."""
+    vraag = TEKEN_OPDRACHT + json.dumps({"kop": item["kop"], "samenvatting": item["samenvatting"]}, ensure_ascii=False)
+    for poging in (1, 2):
+        try:
+            antwoord = vraag_claude(cfg, vraag, TEKEN_SCHEMA, TEKEN_SYSTEEM)
+        except Exception as fout:
+            log.warning("Tekening bij %s mislukt (poging %s): %s", item["id"], poging, fout)
+            continue
+        svg, reden = schoon_svg(antwoord.get("svg"))
+        woord = " ".join((antwoord.get("woord") or "").split())
+        if svg and 0 < len(woord) <= 18:
+            map_.mkdir(parents=True, exist_ok=True)
+            (map_ / f"{item['id']}.svg").write_text(svg, encoding="utf-8")
+            item["tekening"] = {"woord": woord, "beschrijving": (antwoord.get("beschrijving") or "").strip()}
+            return True
+        log.warning("Tekening bij %s afgekeurd (poging %s): %s", item["id"], poging, reden or f"woord '{woord}'")
+    return False
+
+
+def teken_alles(cfg, items, map_):
+    """Tekeningen bij alle artikelen, vier tegelijk. Een mislukte tekening houdt de editie nooit tegen."""
+    if not items:
+        return
+    try:
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            gelukt = sum(pool.map(lambda item: teken(cfg, item, map_), items))
+        log.info("Tekeningen gemaakt: %s van de %s", gelukt, len(items))
+    except Exception:
+        log.exception("Tekeningen mislukt; de editie gaat zonder tekeningen door")
 
 
 GEBRUIKERSPOSTS = ("reddit.com", "news.ycombinator.com")
@@ -1391,6 +1536,8 @@ def main():
     keuzes.add_argument("--alles", action="store_true", help="met --voorbeeld: doen alsof er nog niets gezien is, om alles te testen")
     keuzes.add_argument("--week", action="store_true", help="ook De week in AI maken (gebeurt vanzelf op zondagavond)")
     keuzes.add_argument("--alleen-site", action="store_true", help="geen nieuws ophalen, alleen de site opnieuw maken uit de bewaarde edities")
+    keuzes.add_argument("--tekeningen", action="store_true",
+                        help="tekeningen maken bij bewaarde artikelen die er nog geen hebben, en de site opnieuw maken")
     args = keuzes.parse_args()
     if args.alles and not args.voorbeeld:
         keuzes.error("--alles kan alleen samen met --voorbeeld; anders raakt de lijst met gezien nieuws in de war")
@@ -1412,6 +1559,19 @@ def main():
     nu = datetime.now(timezone.utc)
     lokaal = datetime.now()
     datum, moment = lokaal.date(), ("ochtend" if lokaal.hour < 14 else "avond")
+
+    if args.tekeningen:
+        # Voor artikelen van voor de tekeningen, of waarbij het tekenen mislukte.
+        edities = laad_edities()
+        zonder = [(item, ed) for ed in edities for item in ed["items"]
+                  if not item.get("tekening") or not (TEKENINGEN / f"{item['id']}.svg").exists()]
+        teken_alles(cfg, [item for item, _ in zonder], TEKENINGEN)
+        for ed in {ed["id"]: ed for item, ed in zonder if item.get("tekening")}.values():
+            bewaar_json(EDITIES / f"{ed['id']}.json", ed)
+        voorpagina = schrijf_site(VOORBEELD if args.voorbeeld else SITE, edities, laad_begrippen(), laad_weken(),
+                                  cfg["site_url"], cfg["bronnen"])
+        log.info("Site opnieuw gemaakt met tekeningen: %s", voorpagina)
+        return 0
 
     if args.alleen_site:
         doel = VOORBEELD if args.voorbeeld else SITE
@@ -1484,6 +1644,8 @@ def main():
     geef_ids(ed)
     leeg = not ed["items"] and not ed["kort"]
     if not leeg:
+        # Een proefeditie tekent in voorbeeld/, zodat er geen proeftekeningen in de map tekeningen/ belanden.
+        teken_alles(cfg, ed["items"], VOORBEELD / "tekeningen" if args.voorbeeld else TEKENINGEN)
         edities.append(ed)
         voeg_begrippen_toe(begrippen, antwoord.get("begrippen", []), ed["id"])
 

@@ -2,7 +2,8 @@
 /* Alle kleuren hebben een naam. In de donkere modus (onderaan) krijgen dezelfde namen een andere kleur. */
 :root{color-scheme:light dark;--inkt:#141414;--zacht:#555555;--lijn:#E4E4E1;--vlak:#F3F3F0;--accent:#C4122F;--tegel:#1C1C1C;
   --papier:#ffffff;--tekst2:#333333;--rand:#BDBDB8;--opaccent:#ffffff;--beeldvlak:#EDEDEA;--beeldrand:rgba(0,0,0,.14);
-  --goedvlak:#E6F4EA;--goedrand:#1E7B3A;--goedtekst:#0F4D22;--foutvlak:#FBE9EA;--fouttekst:#7A0B1D}
+  --goedvlak:#E6F4EA;--goedrand:#1E7B3A;--goedtekst:#0F4D22;--foutvlak:#FBE9EA;--fouttekst:#7A0B1D;
+  --tekeningfilter:brightness(1)}
 *{box-sizing:border-box}
 html{scroll-padding-top:70px}
 body{margin:0;background:var(--papier);color:var(--inkt);font:17px/1.6 Archivo,system-ui,sans-serif}
@@ -78,6 +79,12 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
 .tegel{background:var(--tegel);color:#ffffff;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px}
 .tegel span{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:28px;line-height:1}
 .tegel small{font-size:13px;color:#CFCFCF;margin-top:4px}
+/* Een tekening van Claude, met linksboven één woord als gewone tekst (zie beeld_html in maak_site.py). */
+.beeldwoord{position:absolute;left:0;top:0;background:var(--inkt);color:var(--papier);font-family:Newsreader,Georgia,serif;
+  font-style:italic;font-size:16px;line-height:1;padding:6px 10px 7px;pointer-events:none}
+.groot .beeldwoord,.artikel>.beeld .beeldwoord,.probeer .beeldwoord{font-size:21px;padding:8px 13px 9px}
+.verwant .beeldwoord{font-size:13px;padding:4px 7px 5px}
+.bijschrift{font-size:12px;color:var(--zacht);margin:6px 0 0}
 .boven{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-size:13px;color:var(--zacht)}
 .rubriek{color:var(--accent);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .impact{display:inline-flex;align-items:center;color:var(--zacht)}
@@ -249,6 +256,7 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
   .beeld img,.beeld .tegel{transition:transform .35s ease,filter .35s ease}
   .kaart:hover .beeld img,.kaart:hover .beeld .tegel,.weeklijst li:hover .beeld img,.weeklijst li:hover .tegel,
   .verwant li a:hover img,.verwant li a:hover .tegel{transform:scale(1.035);filter:brightness(.94)}
+  .kaart:hover .beeld img.tekening,.weeklijst li:hover .beeld img.tekening,.verwant li a:hover img.tekening{filter:var(--tekeningfilter) brightness(.94)}
   .kaartlink,.verwant b,.archief .editie b,.zoekresultaten a{transition:color .15s}
   .kaart:hover .kaartlink,.weeklijst li:hover .kaartlink,.kortnieuws li:hover .kaartlink,
   .verwant li a:hover b,.archief .editie:hover b,.zoekresultaten a:hover{
@@ -320,6 +328,7 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
   .tegel{padding:10px 12px}
   .sectie .tegel span,.zij .tegel span,.rij .tegel span{font-size:15px}
   .sectie .tegel small,.zij .tegel small,.rij .tegel small{display:none}
+  .sectie .beeldwoord,.zij .beeldwoord,.rij .beeldwoord{font-size:12px;padding:3px 6px 4px}
   .zij{gap:18px}
   .filterstand{padding:10px 12px}
   .filterstand p{font-size:15px}
@@ -337,6 +346,9 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
 @media (prefers-color-scheme:dark){
   :root{--inkt:#ECECE8;--zacht:#A9A9A3;--lijn:#2E2E2B;--vlak:#1E1E1C;--accent:#FF6474;--tegel:#262624;
     --papier:#121211;--tekst2:#D2D2CC;--rand:#5A5A54;--opaccent:#121211;--beeldvlak:#262624;--beeldrand:rgba(255,255,255,.16);
-    --goedvlak:#16391F;--goedrand:#5BBF7A;--goedtekst:#C8F2D3;--foutvlak:#3E1519;--fouttekst:#FFC9CF}
+    --goedvlak:#16391F;--goedrand:#5BBF7A;--goedtekst:#C8F2D3;--foutvlak:#3E1519;--fouttekst:#FFC9CF;
+    --tekeningfilter:invert(1) hue-rotate(180deg)}
   .tegel{box-shadow:inset 0 0 0 1px var(--beeldrand)}
+  /* Een tekening wordt donker: zwart en licht wisselen om, rood blijft rood (wordt wat lichter, net als --accent). */
+  .beeld img.tekening{filter:var(--tekeningfilter)}
 }

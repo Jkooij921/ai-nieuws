@@ -32,14 +32,18 @@
      "datum": "2026-10-07T18:23:54+00:00"
     }
    ],
-   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/Intelligent-UI.png?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200",
+   "beeld": "",
    "bedrijf": "OpenAI",
    "onderwerpen": [
     "GPT-6",
     "ChatGPT",
     "OpenAI"
    ],
-   "id": "2026-10-08-ochtend-1"
+   "id": "2026-10-08-ochtend-1",
+   "tekening": {
+    "woord": "Diagrammen",
+    "beschrijving": "Een zwarte tekstballon naast een kaart met een rood staafdiagram en een zwarte knop."
+   }
   },
   {
    "rubriek": "Nieuwe modellen",
@@ -90,7 +94,11 @@
     "Claude",
     "Anthropic"
    ],
-   "id": "2026-10-08-ochtend-2"
+   "id": "2026-10-08-ochtend-2",
+   "tekening": {
+    "woord": "Kosten",
+    "beschrijving": "Een tekstballon van een AI-model naast een grote munt met een rode pijl omlaag, ten teken van de lagere kosten."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -107,13 +115,17 @@
      "datum": "2026-10-07T14:01:20-04:00"
     }
    ],
-   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/lcimg-e4e44609-0bf6-40b2-8c24-2e8c3ce7cee8.jpeg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+   "beeld": "",
    "bedrijf": "Microsoft",
    "onderwerpen": [
     "Copilot",
     "Microsoft"
    ],
-   "id": "2026-10-08-ochtend-3"
+   "id": "2026-10-08-ochtend-3",
+   "tekening": {
+    "woord": "Copilot",
+    "beschrijving": "Een zwarte tekstballon met een rood tandwiel erin, met een rode pijl naar een vel papier met regels dat de bestanden op de pc voorstelt."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -139,7 +151,11 @@
     "Docker Agent",
     "AI-agents"
    ],
-   "id": "2026-10-08-ochtend-4"
+   "id": "2026-10-08-ochtend-4",
+   "tekening": {
+    "woord": "AI-agents",
+    "beschrijving": "Links een configuratiebestand als venster met regels tekst, een pijl naar rechts naar een tekstballon met een rood tandwiel erin, een AI-agent."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -162,7 +178,11 @@
     "Claude",
     "Anthropic"
    ],
-   "id": "2026-10-08-ochtend-5"
+   "id": "2026-10-08-ochtend-5",
+   "tekening": {
+    "woord": "DOS-spel",
+    "beschrijving": "Links een zwarte tekstballon voor Claude, rechts een programmavenster met regels code waarvan één korte regel rood is als de herstelde plek."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -184,7 +204,11 @@
    "onderwerpen": [
     "AI-misbruik"
    ],
-   "id": "2026-10-08-ochtend-6"
+   "id": "2026-10-08-ochtend-6",
+   "tekening": {
+    "woord": "Online pesten",
+    "beschrijving": "Een telefoon met een rood uitroepteken op het scherm naast een fotolijstje met een berg en een zon, voor online pesten met AI-beelden."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -207,7 +231,11 @@
     "Mistral",
     "Open modellen"
    ],
-   "id": "2026-10-08-ochtend-7"
+   "id": "2026-10-08-ochtend-7",
+   "tekening": {
+    "woord": "Zoekmachine",
+    "beschrijving": "Een groot vergrootglas en een zwarte tekstballon (AI-model) met een rode pijl ertussen die naar de tekstballon wijst."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -238,7 +266,11 @@
     "AI voor wetenschap",
     "OpenAI"
    ],
-   "id": "2026-10-08-ochtend-8"
+   "id": "2026-10-08-ochtend-8",
+   "tekening": {
+    "woord": "Wiskunde",
+    "beschrijving": "Links een zwarte tekstballon als symbool voor AI, rechts een zwart vel papier met formulevormen, waarvan enkele in rood."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -266,7 +298,11 @@
    "onderwerpen": [
     "AI-beveiliging"
    ],
-   "id": "2026-10-08-ochtend-9"
+   "id": "2026-10-08-ochtend-9",
+   "tekening": {
+    "woord": "Versleuteling",
+    "beschrijving": "Een zwarte tekstballon met een rode pijl naar een hangslot met een rood geopende beugel, als teken dat AI versleuteling kraakt."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -285,13 +321,17 @@
      "punten": 331
     }
    ],
-   "beeld": "https://cdn.rswebsols.com/wp-content/uploads/2025/10/otr1by4mkru.jpg",
+   "beeld": "",
    "bedrijf": "Anders",
    "onderwerpen": [
     "Claude Code",
     "Anthropic"
    ],
-   "id": "2026-10-08-ochtend-10"
+   "id": "2026-10-08-ochtend-10",
+   "tekening": {
+    "woord": "AI-limiet",
+    "beschrijving": "Een zwarte tekstballon naast een zwarte munt met een rode pijl naar beneden, als teken dat het AI-gebruik en het budget omlaag gaan."
+   }
   }
  ],
  "kort": [

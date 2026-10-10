@@ -34,7 +34,11 @@
     "Decisions API",
     "OpenAI"
    ],
-   "id": "2026-10-07-avond-1"
+   "id": "2026-10-07-avond-1",
+   "tekening": {
+    "woord": "Decisions API",
+    "beschrijving": "Een codevenster met regels naast een tekstballon, met een rode pijl ertussen."
+   }
   },
   {
    "rubriek": "Nieuwe modellen",
@@ -57,13 +61,17 @@
      "datum": "2026-10-07T00:00:00+00:00"
     }
    ],
-   "beeld": "https://cdn.arstechnica.net/wp-content/uploads/2025/12/mistral_header_2-1152x648.jpg",
+   "beeld": "",
    "bedrijf": "Mistral",
    "onderwerpen": [
     "Mistral",
     "Open modellen"
    ],
-   "id": "2026-10-07-avond-2"
+   "id": "2026-10-07-avond-2",
+   "tekening": {
+    "woord": "Large 4",
+    "beschrijving": "Een grote zwarte tekstballon en een zwart programmeervenster met regels, met een rode pijl ertussen."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -86,13 +94,17 @@
      "datum": "2026-10-07T12:00:00-04:00"
     }
    ],
-   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/College-planner_updated.png?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200",
+   "beeld": "",
    "bedrijf": "OpenAI",
    "onderwerpen": [
     "ChatGPT for Teens",
     "ChatGPT"
    ],
-   "id": "2026-10-07-avond-3"
+   "id": "2026-10-07-avond-3",
+   "tekening": {
+    "woord": "College Planner",
+    "beschrijving": "Een zwarte tekstballon met een rood vinkje in een lichte cirkel naast een zwarte afstudeerhoed met kwast."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -115,13 +127,17 @@
      "datum": "2026-10-07T14:00:08+00:00"
     }
    ],
-   "beeld": "https://cdn.arstechnica.net/wp-content/uploads/2026/07/synthid-fingerprint-1152x648.jpg",
+   "beeld": "",
    "bedrijf": "Google",
    "onderwerpen": [
     "SynthID",
     "Google"
    ],
-   "id": "2026-10-07-avond-4"
+   "id": "2026-10-07-avond-4",
+   "tekening": {
+    "woord": "AI-controle",
+    "beschrijving": "Een fotolijstje met een berg en een zon naast een groot vergrootglas met een rood vinkje erin."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -145,7 +161,11 @@
     "Codex",
     "OpenAI"
    ],
-   "id": "2026-10-07-avond-5"
+   "id": "2026-10-07-avond-5",
+   "tekening": {
+    "woord": "MCP-login",
+    "beschrijving": "Een codevenster met regels naast een rood hangslot, met een pijl ertussen."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -168,7 +188,11 @@
     "Claude Code",
     "Anthropic"
    ],
-   "id": "2026-10-07-avond-6"
+   "id": "2026-10-07-avond-6",
+   "tekening": {
+    "woord": "Herlezen",
+    "beschrijving": "Links een codevenster met regels code, rechts een grote munt met een rode kern als teken van verspilde kosten."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -191,7 +215,11 @@
     "Claude Code",
     "AI voor wetenschap"
    ],
-   "id": "2026-10-07-avond-7"
+   "id": "2026-10-07-avond-7",
+   "tekening": {
+    "woord": "Planeet",
+    "beschrijving": "Links een zwarte tekstballon met een tandwiel (AI-agent), rechts een grote rode planeet met een zwarte ring."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -214,7 +242,11 @@
     "Claude Opus 5.5",
     "Claude Code"
    ],
-   "id": "2026-10-07-avond-8"
+   "id": "2026-10-07-avond-8",
+   "tekening": {
+    "woord": "Gewiste schijf",
+    "beschrijving": "Een zwarte tekstballon staat naast een zwarte harde schijf met een groot rood kruis op de schijf, met een pijl ertussen."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -237,7 +269,11 @@
     "AI-beveiliging",
     "AI-veiligheid"
    ],
-   "id": "2026-10-07-avond-9"
+   "id": "2026-10-07-avond-9",
+   "tekening": {
+    "woord": "AI-agents",
+    "beschrijving": "Een zwarte tekstballon met een tandwiel erin naast een rood open hangslot, als teken van hacks door AI-agents."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -260,7 +296,11 @@
     "AVG",
     "AI-regelgeving"
    ],
-   "id": "2026-10-07-avond-10"
+   "id": "2026-10-07-avond-10",
+   "tekening": {
+    "woord": "Persoonsgegevens",
+    "beschrijving": "Een groot oog (privacy) en een tekstballon (AI) naast elkaar, met een rode pijl van het oog naar de tekstballon."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -283,7 +323,11 @@
     "AI-misbruik",
     "Internet Watch Foundation"
    ],
-   "id": "2026-10-07-avond-11"
+   "id": "2026-10-07-avond-11",
+   "tekening": {
+    "woord": "AI-beelden",
+    "beschrijving": "Een zwart fotolijstje met een berg en een zon naast een rode waarschuwingsdriehoek met een uitroepteken."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -308,7 +352,11 @@
     "Claude",
     "ChatGPT"
    ],
-   "id": "2026-10-07-avond-12"
+   "id": "2026-10-07-avond-12",
+   "tekening": {
+    "woord": "Winkelprijzen",
+    "beschrijving": "Een zwarte tekstballon (AI-chatbot) naast een grote rode munt die staat voor de prijzen die verschillen."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -331,13 +379,17 @@
      "datum": "2026-10-07T05:00:00-04:00"
     }
    ],
-   "beeld": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25461999/STK155_OPEN_AI_CVirginia_A.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+   "beeld": "",
    "bedrijf": "OpenAI",
    "onderwerpen": [
     "ChatGPT for Teens",
     "OpenAI"
    ],
-   "id": "2026-10-07-avond-13"
+   "id": "2026-10-07-avond-13",
+   "tekening": {
+    "woord": "Tieners",
+    "beschrijving": "Een grote tekstballon van een chatbot naast een klok waarop een rood kwart van een uur is gekleurd."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -400,7 +452,11 @@
     "AI voor wetenschap",
     "OpenAI"
    ],
-   "id": "2026-10-07-avond-14"
+   "id": "2026-10-07-avond-14",
+   "tekening": {
+    "woord": "Wiskunde",
+    "beschrijving": "Een zwart vel papier met formulevormen en een rood kruis voor een tegenvoorbeeld, een pijl ernaartoe vanaf een zwarte tekstballon die AI voorstelt."
+   }
   }
  ],
  "kort": [

@@ -93,7 +93,11 @@
     "nieuw_feit": "Anthropic-agents stuurden een valse moordtip naar de politie van Philadelphia en dienden onvolledige visumaanvragen in; Anthropic geeft evaluaties voorlopig geen live internet meer.",
     "reden": "Nieuw incident met AI-agents van Claude-maker, door meerdere nieuwssites bevestigd, raakt veiligheid en vertrouwen."
    },
-   "id": "2026-10-10-ochtend-1"
+   "id": "2026-10-10-ochtend-1",
+   "tekening": {
+    "woord": "Valse tip",
+    "beschrijving": "Een zwarte tekstballon met een rood uitroepteken wijst met een rode pijl naar een politiepet met een ster."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -150,7 +154,11 @@
     "nieuw_feit": "Studie vindt dat AI-codeeragents meer code opleveren maar niet meer software, door de reviewknelpunten.",
     "reden": "Onderzoek dat programmeurs helpt hun werkwijze te heroverwegen."
    },
-   "id": "2026-10-10-ochtend-2"
+   "id": "2026-10-10-ochtend-2",
+   "tekening": {
+    "woord": "Meer code",
+    "beschrijving": "Een codevenster vol regels, waarvan de onderste in rood, naast een vergrootglas dat staat voor het nakijken."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -206,7 +214,11 @@
     "nieuw_feit": "Concrete tip om met ChatGPT vluchtopties en prijzen te vergelijken.",
     "reden": "Praktische, na te doen gebruikerstip zonder verkoop."
    },
-   "id": "2026-10-10-ochtend-3"
+   "id": "2026-10-10-ochtend-3",
+   "tekening": {
+    "woord": "Vluchten",
+    "beschrijving": "Een zwarte tekstballon met een rood vinkje naast een zwart vliegtuig van boven gezien."
+   }
   },
   {
    "rubriek": "AI in Nederland",
@@ -262,7 +274,11 @@
     "nieuw_feit": "AI-personage Jean Philanthrope wordt viraal en promoot een meme coin.",
     "reden": "Vlaams bericht over AI-hype met risico op cryptoscams."
    },
-   "id": "2026-10-10-ochtend-4"
+   "id": "2026-10-10-ochtend-4",
+   "tekening": {
+    "woord": "Cryptomunt",
+    "beschrijving": "Links een zwarte telefoon met een afspeelknop op het scherm, rechts een grote rode munt met een rand."
+   }
   },
   {
    "rubriek": "Maatschappij",
@@ -327,7 +343,11 @@
     "nieuw_feit": "Wiskundigen reageren overweldigd en er is kritiek op een vertaalfout van wiskunde naar code in het Navier-Stokes-bewijs.",
     "reden": "Vervolg op OpenAI's wiskundige publicaties met reacties van wiskundigen, voor lezers vooral om van te leren."
    },
-   "id": "2026-10-10-ochtend-5"
+   "id": "2026-10-10-ochtend-5",
+   "tekening": {
+    "woord": "Wiskunde",
+    "beschrijving": "Een groot vel papier met formulevormen naast een vergrootglas met een rood uitroepteken in de lens."
+   }
   },
   {
    "rubriek": "Uitleg",
@@ -377,7 +397,11 @@
     "AI en werk"
    ],
    "keuze": {},
-   "id": "2026-10-10-ochtend-6"
+   "id": "2026-10-10-ochtend-6",
+   "tekening": {
+    "woord": "Nakijken",
+    "beschrijving": "Een codevenster met regels code, waarvan één rood is, naast een vergrootglas met een rood uitroepteken dat de code nakijkt."
+   }
   }
  ],
  "kort": [

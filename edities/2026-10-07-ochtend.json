@@ -37,7 +37,11 @@
    "onderwerpen": [
     "Claude Mythos",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Mythos",
+    "beschrijving": "Een grote zwarte tekstballon met drie puntjes en rechtsboven een rode ronde badge met een plusteken, als teken van een nieuw model in de chat."
+   }
   },
   {
    "rubriek": "Het grote nieuws",
@@ -60,7 +64,11 @@
     "Claude Mythos",
     "AI-beveiliging",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Toegang",
+    "beschrijving": "Een zwarte tekstballon naast een hangslot met een geopende rode beugel, als teken van toegang tot AI-modellen voor beveiligingsexperts."
+   }
   },
   {
    "rubriek": "Nieuwe modellen",
@@ -102,7 +110,11 @@
    "onderwerpen": [
     "Mistral",
     "Open modellen"
-   ]
+   ],
+   "tekening": {
+    "woord": "Nieuw model",
+    "beschrijving": "Een grote zwarte tekstballon (het AI-model) naast een codevenster met regels, waarvan één rode regel het nieuwe model aanduidt."
+   }
   },
   {
    "rubriek": "Nieuwe modellen",
@@ -130,7 +142,11 @@
    "onderwerpen": [
     "EmbeddingGemma",
     "Google"
-   ]
+   ],
+   "tekening": {
+    "woord": "Zoekmodel",
+    "beschrijving": "Een grote zwarte tekstballon met lichte tekstregels naast een groot vergrootglas."
+   }
   },
   {
    "rubriek": "Nieuwe tools",
@@ -152,7 +168,11 @@
    "beeld": "https://opengraph.githubassets.com/62ddbc248d3fda7cedceec7966946c6e8487ea9492943545b0c5fccdc33c5438/anthropics/claude-code/releases/tag/v2.1.292",
    "onderwerpen": [
     "Claude Code"
-   ]
+   ],
+   "tekening": {
+    "woord": "Beveiliging",
+    "beschrijving": "Een codevenster met regels, waarvan één rood, naast een zwart hangslot met een rood vinkje als teken van verholpen beveiligingslekken."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -174,7 +194,11 @@
    "onderwerpen": [
     "Claude",
     "AI-beveiliging"
-   ]
+   ],
+   "tekening": {
+    "woord": "Gehackt",
+    "beschrijving": "Een zwarte tekstballon met een uitroepteken naast een rood open hangslot, als teken dat Claude een lek en hack meldde."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -195,7 +219,11 @@
    "beeld": "",
    "onderwerpen": [
     "Claude Code"
-   ]
+   ],
+   "tekening": {
+    "woord": "Computerspel",
+    "beschrijving": "Links een codevenster met regels code, rechts een zwart gat met een ring eromheen, met een rode pijl ertussen."
+   }
   },
   {
    "rubriek": "Zo gebruik je AI",
@@ -213,14 +241,18 @@
     }
    ],
    "id": "2026-10-07-ochtend-8",
-   "beeld": "https://static.simonwillison.net/static/2026/scrimshaw-card.jpg",
+   "beeld": "",
    "onderwerpen": [
     "Claude Opus 5.5",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Spelmuziek",
+    "beschrijving": "Links een zwarte tekstballon als symbool voor de AI, rechts twee rode verbonden muzieknoten voor de spelmuziek."
+   }
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 7,
    "kop": "OpenAI publiceert honderden wiskundige uitkomsten van een nog onuitgebracht model",
    "uitleg": "Wiskundigen hebben lange lijsten met open problemen, vragen waar nog niemand het antwoord op weet. OpenAI zegt dat een intern model, dat nog niet is uitgebracht, er veel heeft opgelost.",
@@ -251,10 +283,14 @@
    "onderwerpen": [
     "OpenAI",
     "AI voor wetenschap"
-   ]
+   ],
+   "tekening": {
+    "woord": "Wiskunde",
+    "beschrijving": "Een zwart vel papier met wiskundige formulevormen, met rechts een tekstballon van een AI-model en een rode pijl van de ballon naar het papier."
+   }
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 6,
    "kop": "Analyse: Claude-abonnementen geven veel meer gebruiksruimte dan die van OpenAI",
    "uitleg": "Bij een abonnement betaal je een vast bedrag per maand en mag je daarvoor een bepaalde hoeveelheid gebruiken, voordat je een limiet bereikt. SemiAnalysis, dat een betaalde nieuwsbrief over AI-bedrijven schrijft, heeft die limieten bij veel aanbieders gemeten.",
@@ -277,16 +313,20 @@
     }
    ],
    "id": "2026-10-07-ochtend-10",
-   "beeld": "https://substackcdn.com/image/fetch/$s_!0Lmd!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9dbae198-0201-4307-b79a-55c3d79c8f85_1672x941.png",
+   "beeld": "",
    "onderwerpen": [
     "Claude-abonnementen",
     "Anthropic"
-   ]
+   ],
+   "tekening": {
+    "woord": "Abonnementen",
+    "beschrijving": "Een grote zwarte tekstballon naast een kleine zwarte tekstballon, met een rode pijl omlaag voor de stilletjes verlaagde limieten."
+   }
   }
  ],
  "kort": [
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 6,
    "kop": "Iemand houdt bij of Opus 5.5 slechter wordt",
    "zin": "LiveNerf is een project dat dag voor dag meet of Claude Opus 5.5 na de release slechter wordt, met een basisscore van 58,4 procent.",
@@ -364,7 +404,7 @@
    "id": "2026-10-07-ochtend-k5"
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 5,
    "kop": "Claude lijkt werkgever te kennen in incognitochat",
    "zin": "Een gebruiker meldt dat Claude in een incognitochat, die buiten geschiedenis en geheugen zou blijven, toch zijn werkgever noemde, en vraagt hoe dat kan.",
@@ -379,7 +419,7 @@
    "id": "2026-10-07-ochtend-k6"
   },
   {
-   "rubriek": "Onderzoek en regels",
+   "rubriek": "Maatschappij",
    "score": 5,
    "kop": "Nieuwsbrief over AI-onderzoek behandelt zwermen en watermerken",
    "zin": "Import AI, een nieuwsbrief over AI-onderzoek, bespreekt in nummer 475 onder meer wanneer je zwermen van AI's inzet en watermerken voor biologie van Google DeepMind.",

@@ -13,6 +13,7 @@
   site/stijl.css, site.js        opmaak (licht en donker) en de knoppen (filters, quiz, gelezen, nieuwe editie)
   site/count.js                  de teller van GoatCounter (statistieken zonder cookies), ingesteld in vroeg.js
   site/laatste.json              welke editie de nieuwste is, voor de controle in site.js
+  site/tekeningen/*.svg          de tekeningen van Claude bij de artikelen (uit de map tekeningen/)
   site/deel.png                  het plaatje bij een gedeelde link zonder eigen beeld
   site/manifest.webmanifest      naam en icoon (icoon-*.png) voor op het beginscherm van je telefoon
   site/sitemap.xml, robots.txt   voor Google: welke pagina's er zijn (alleen de vindbare, zie VINDBAAR)
@@ -331,12 +332,26 @@ VINK = ('<svg class="vink" width="15" height="15" viewBox="0 0 24 24" fill="none
         'stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"></path></svg>')
 
 
-def beeld_html(item, verhouding="16 / 10"):
-    """Het beeld van een bericht, of een zwart blok met de bron als er geen (werkend) beeld is."""
+def heeft_beeld(item):
+    """Of een bericht een tekening of een beeld heeft (anders krijgt het het zwarte blok)."""
+    return bool(item.get("tekening") or item.get("beeld"))
+
+
+def beeld_html(item, verhouding="16 / 10", basis="", beschrijf=False):
+    """De tekening van een bericht, anders het beeld, anders een zwart blok met de bron.
+
+    Met beschrijf (op de pagina van het artikel zelf) krijgt de tekening een beschrijving voor wie hem niet kan zien;
+    in lijstjes staat de kop er al naast."""
     groot, klein = tegeltekst(item)
     tegel = (f'<div class="tegel" style="aspect-ratio: {verhouding}"><span>{e(groot)}</span>'
              f'<small>{e(klein)}</small></div>')
-    if item.get("beeld") and veilig(item["beeld"]) != "#":
+    if item.get("tekening"):
+        # Het woord staat als tekst op de site, niet in de tekening. Voor een schermlezer herhaalt het alleen de kop.
+        alt = e(item["tekening"].get("beschrijving", "")) if beschrijf else ""
+        inhoud = (f'<img src="{basis}tekeningen/{e(item["id"])}.svg" class="tekening" alt="{alt}" loading="lazy" '
+                  f'style="aspect-ratio: {verhouding}" data-groot="{e(groot)}" data-klein="{e(klein)}">'
+                  f'<span class="beeldwoord" aria-hidden="true">{e(item["tekening"]["woord"])}</span>')
+    elif item.get("beeld") and veilig(item["beeld"]) != "#":
         # Werkt het beeld later niet meer, dan zet vroeg.js er alsnog het blok voor in de plaats.
         # Een GitHub-kaart is tekst op wit: heel laten in plaats van bijsnijden, anders valt de tekst half weg.
         heel = ' class="heel"' if "opengraph.githubassets.com" in item["beeld"] else ""
@@ -386,7 +401,7 @@ def kaart(item, ref, basis, site_url, groot=False):
     productlabel = f'<span class="product">{e(product)}</span>' if product else ""
     return (
         f'<article class="kaart{" groot" if groot else ""}" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}">'
-        f'{beeld_html(item, "16 / 9" if groot else "16 / 10")}'
+        f'{beeld_html(item, "16 / 9" if groot else "16 / 10", basis)}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>{productlabel}'
         f'<span>{e(datumtekst(item, ref))}</span>{impact_html(item)}</div>'
         f'<{kop}><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></{kop}>'
@@ -404,7 +419,7 @@ def rij_html(item, ref, basis):
     n = aantal_bronnen(item)
     return (
         f'<li class="kaart rij" data-id="{e(item["id"])}" data-rubriek="{stijl["klasse"]}" data-merk="{merk_van(item)}">'
-        f'{beeld_html(item)}<div class="rijtekst">'
+        f'{beeld_html(item, basis=basis)}<div class="rijtekst">'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
         f'{f"<span class=product>{e(product)}</span>" if product else ""}'
         f'<span>{e(datumtekst(item, ref))}</span></div>'
@@ -532,7 +547,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude), niet door een redacteur gecontroleerd. '
         'Dat kan fouten opleveren, dus lees bij twijfel de bron. '
         f'Fout gezien? Mail <a href="mailto:{FOUTEN_ADRES}">{FOUTEN_ADRES}</a>. '
-        'De beelden komen van de AI-bedrijven zelf of van GitHub. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
+        'De tekeningen zijn gemaakt met AI (Claude). Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
         'Bezoeken tellen we anoniem, zonder cookies. '
         f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a> · <a href="{basis}correcties.html">Correcties</a></div></footer>'
         f'<script data-goatcounter="{TELLER}" async src="{basis}count.js"></script>'
@@ -570,7 +585,7 @@ def editie_html(ed, begrippen, basis, site_url):
     # De opening: het belangrijkste grote nieuws, liefst met een beeld. Daarnaast het volgende grote bericht.
     groot = sorted([i for i in items if i["rubriek"] == "Het grote nieuws"], key=lambda i: -i["score"])
     rest = sorted(items, key=lambda i: -i["score"])
-    lead = next((i for i in groot if i.get("beeld")), groot[0] if groot else (rest[0] if rest else None))
+    lead = next((i for i in groot if heeft_beeld(i)), groot[0] if groot else (rest[0] if rest else None))
     tweede = next((i for i in groot + rest if lead is not None and i is not lead), None)
     getoond = {id(lead), id(tweede)}
 
@@ -609,7 +624,7 @@ def editie_html(ed, begrippen, basis, site_url):
     if ed.get("probeer"):
         p = ed["probeer"]
         bij = next((i for i in items if any(b["url"] == p["url"] for b in i["bronnen"])), None)
-        beeld = beeld_html(bij, "2 / 1") if bij and bij.get("beeld") else ""
+        beeld = beeld_html(bij, "2 / 1", basis) if bij and heeft_beeld(bij) else ""
         probeer = (f'<section class="probeer{" metbeeld" if beeld else ""}" aria-label="Probeer dit vandaag">{beeld}<div class="tekst">'
                    f'<div class="label">Probeer dit vandaag · ongeveer 10 minuten</div><h2>{e(p["titel"])}</h2>'
                    f'<p>{e(p["tekst"])}</p><p><a class="knop licht" href="{e(veilig(p["url"]))}">Bekijk de bron{EXTERN}</a></p></div></section>')
@@ -661,6 +676,7 @@ BYLINE = "Geschreven met AI (Claude) op basis van de bronnen hieronder, niet doo
 # Een uitlegstuk gebruikt ook algemene kennis; het nieuws uit de bronnen is het voorbeeld.
 BYLINE_UITLEG = ("Uitleg geschreven met AI (Claude), met het nieuws uit de bronnen hieronder als voorbeeld, "
                  "niet door een redacteur gecontroleerd")
+BIJSCHRIFT_TEKENING = '<p class="bijschrift">Illustratie gemaakt met AI (Claude)</p>'
 
 
 def artikel_html(item, ed, alle, basis, site_url):
@@ -690,7 +706,7 @@ def artikel_html(item, ed, alle, basis, site_url):
     verwant_html = ""
     if verwant:
         rijen = "".join(
-            f'<li data-id="{e(a["id"])}"><a href="{basis}artikel/{e(a["id"])}.html">{beeld_html(a, "16 / 10")}'
+            f'<li data-id="{e(a["id"])}"><a href="{basis}artikel/{e(a["id"])}.html">{beeld_html(a, "16 / 10", basis)}'
             f'<span><span class="meta">{e(dagtitel(editiedag(a_ed)).capitalize())} · {e(RUBRIEKEN[a["rubriek"]]["knop"])}</span>'
             f'<b>{e(a["kop"])}</b></span></a></li>'
             for a, a_ed in verwant
@@ -706,7 +722,8 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'<div class="artikel binnen" data-artikel="{e(item["id"])}">'
         f'<nav class="kruimel" aria-label="Waar je bent"><a href="{basis}edities/{e(ed["id"])}.html">{e(editietitel(ed))}</a>'
         f' › <a href="{basis}edities/{e(ed["id"])}.html#{stijl["klasse"]}">{e(stijl["knop"])}</a></nav>'
-        f'{beeld_html(item, "16 / 9")}'
+        f'{beeld_html(item, "16 / 9", basis, beschrijf=True)}'
+        f'{BIJSCHRIFT_TEKENING if item.get("tekening") else ""}'
         f'<div class="boven"><span class="rubriek">{e(stijl["knop"])}</span>'
         f'<span>{e(datumtekst(item, ref))}</span><span>{leestijd(item)} min lezen</span>{impact_html(item)}</div>'
         f'<h1>{e(item["kop"])}</h1>'
@@ -770,7 +787,7 @@ def week_html(week, index, basis, site_url):
         item, ed = index[item_id]
         link = f"{basis}artikel/{item['id']}.html"
         rijen.append(
-            f'<li data-id="{e(item["id"])}"><span class="nummer">{nr}</span>{beeld_html(item, "16 / 10")}'
+            f'<li data-id="{e(item["id"])}"><span class="nummer">{nr}</span>{beeld_html(item, "16 / 10", basis)}'
             f'<div><div class="boven"><span class="rubriek">{e(RUBRIEKEN[item["rubriek"]]["knop"])}</span>'
             f'<span>{e(dagtitel(editiedag(ed)).capitalize())}</span>{impact_html(item)}</div>'
             f'<h3><a class="kaartlink" href="{e(link)}">{e(item["kop"])}</a></h3><p>{e(item["samenvatting"])}</p></div></li>'
@@ -887,10 +904,14 @@ def werkwijze_html(bronnen):
         'Klopt hij, dan verbeteren we het bericht en zetten we eronder wat er veranderd is. Alle verbeteringen staan op '
         '<a href="correcties.html">Correcties</a>. Je mail gebruiken we alleen om de melding te bekijken en je eventueel '
         'te antwoorden.</p></section>'
-        '<section class="sectie"><div class="kopregel"><h2>Beelden en privacy</h2></div>'
-        '<p>De beelden komen alleen van de AI-bedrijven zelf (het plaatje dat ze opgeven voor als je een link deelt) '
-        'of van GitHub (de kaart die GitHub voor elk project maakt). Foto’s van nieuwssites en persbureaus '
-        'gebruiken we niet. Heeft een bericht geen beeld, dan staat er een zwart blok met de naam van de bron.</p>'
+        '<section class="sectie"><div class="kopregel"><h2>Tekeningen, beelden en privacy</h2></div>'
+        '<p>Bij elk artikel staat een tekening die Claude maakt, in een vaste stijl: zwart, rood en één woord dat zegt '
+        'waar het over gaat. Claude tekent het onderwerp met herkenbare voorwerpen, en altijd met dezelfde voorwerpen '
+        'voor hetzelfde onderwerp, zoals een tekstballon voor een chatbot en een munt voor geld. Er staan nooit mensen, '
+        'logo’s of tekst in. Onder de tekening bij een artikel staat dat hij met AI gemaakt is.</p>'
+        '<p>Lukt het tekenen een keer niet, dan staat er het beeld van het AI-bedrijf zelf '
+        '(het plaatje dat ze opgeven voor als je een link deelt) of van GitHub. Foto’s van nieuwssites en persbureaus '
+        'gebruiken we niet. Is er niets, dan staat er een zwart blok met de naam van de bron.</p>'
         '<p>De site zet geen cookies en houdt niet bij wie wat leest. Wat je gelezen hebt en welke AI je kiest, '
         'staat alleen in je eigen browser.</p>'
         '<p>We tellen wel hoe vaak elke pagina bekeken wordt, met GoatCounter. Dat werkt zonder cookies en zonder '
@@ -917,6 +938,10 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         (doel / bestand).write_text((bron / bestand).read_text(encoding="utf-8"), encoding="utf-8")
     for bestand in ("deel.png", "icoon-180.png", "icoon-192.png", "icoon-512.png", "icoon-512-rond.png"):
         (doel / bestand).write_bytes((bron / bestand).read_bytes())
+    # De tekeningen van Claude. Bij een proefeditie staan de nieuwe al in doel/tekeningen.
+    (doel / "tekeningen").mkdir(exist_ok=True)
+    for svg in (bron / "tekeningen").glob("*.svg"):
+        (doel / "tekeningen" / svg.name).write_bytes(svg.read_bytes())
     # Zo kun je de site op het beginscherm van je telefoon zetten, met naam en icoon. Bewust zonder
     # service worker: die bewaart pagina's, en dan zie je mogelijk niet de nieuwste editie.
     (doel / "manifest.webmanifest").write_text(json.dumps({
@@ -933,6 +958,9 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         geef_ids(ed)
     alle = [(item, ed) for ed in edities for item in ed["items"]]
     index = {item["id"]: (item, ed) for item, ed in alle}
+    for item, _ in alle:
+        if item.get("tekening") and not (doel / "tekeningen" / f"{item['id']}.svg").exists():
+            item.pop("tekening")  # Het bestand ontbreekt: dan het beeld of het zwarte blok, geen kapot plaatje.
     # De servers van GitHub en de browser geven soms nog even een oude kopie, ook na F5. Elke pagina weet daarom
     # welke editie de nieuwste was toen hij gemaakt werd, en laatste.json zegt welke dat nu is (zie site.js).
     versie = edities[-1]["id"] if edities else ""
