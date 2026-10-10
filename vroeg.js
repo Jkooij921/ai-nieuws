@@ -14,3 +14,16 @@ document.addEventListener('error', function (gebeurtenis) {
   tegel.appendChild(klein);
   beeld.replaceWith(tegel);
 }, true);
+
+// Instellingen voor de teller (count.js van GoatCounter, zonder cookies). Een pagina telt zonder
+// ?e= of ?t= in het adres, en index.html telt als de voorpagina. Herlaadt site.js de voorpagina
+// voor een nieuwe editie, dan is dat geen nieuw bezoek en telt de nieuwe pagina niet mee.
+window.goatcounter = {
+  path: function () { return location.pathname.replace(/index\.html$/, '') || '/'; }
+};
+try {
+  if (sessionStorage.getItem('ai-nieuws-niet-tellen')) {
+    sessionStorage.removeItem('ai-nieuws-niet-tellen');
+    window.goatcounter.no_onload = true;
+  }
+} catch (fout) { /* privévenster zonder geheugen: dan gewoon tellen */ }

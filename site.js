@@ -87,8 +87,11 @@
         if (!nieuwste || !nieuwste.id || nieuwste.id === versie) return;
         // Ook hier een nieuw adres, zodat de voorpagina zelf niet uit een oude kopie komt.
         var adres = basis + 'index.html?e=' + encodeURIComponent(nieuwste.id);
-        if (voorpagina && magLaden && !netGeladen(nieuwste.id)) location.replace(adres);
-        else toonNieuw(nieuwste, adres);
+        if (voorpagina && magLaden && !netGeladen(nieuwste.id)) {
+          // Dit herladen is geen nieuw bezoek; vroeg.js laat de teller de volgende pagina overslaan.
+          try { sessionStorage.setItem('ai-nieuws-niet-tellen', '1'); } catch (fout) {}
+          location.replace(adres);
+        } else toonNieuw(nieuwste, adres);
       })
       .catch(function () { /* geen internet: de pagina blijft zoals hij is */ });
   }

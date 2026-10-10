@@ -10,6 +10,7 @@
   site/zoeken.html, zoek.json    zoeken in alle berichten
   site/zo-maken-we-dit.html      dat alles met AI geschreven is, hoe we kiezen en welke bronnen
   site/stijl.css, site.js        opmaak (licht en donker) en de knoppen (filters, quiz, gelezen, nieuwe editie)
+  site/count.js                  de teller van GoatCounter (statistieken zonder cookies), ingesteld in vroeg.js
   site/laatste.json              welke editie de nieuwste is, voor de controle in site.js
   site/deel.png                  het plaatje bij een gedeelde link zonder eigen beeld
   site/manifest.webmanifest      naam en icoon (icoon-*.png) voor op het beginscherm van je telefoon
@@ -61,6 +62,11 @@ e = html.escape
 
 FONTS = ("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..700"
          "&family=Archivo:wdth,wght@62..125,400..800&display=swap")
+
+# Statistieken met GoatCounter: hoe vaak elke pagina bekeken wordt, zonder cookies en zonder bij te
+# houden wie je bent. count.js staat op de site zelf; alleen de telling gaat naar dit adres.
+TELLER = "https://ainieuwsvandaag.goatcounter.com/count"
+TELLER_SERVER = TELLER.rsplit("/", 1)[0]
 
 
 # ---------------------------------------------------------------- datums en bronnen
@@ -436,9 +442,10 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         '<meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">'
         '<meta name="robots" content="noindex, nofollow">'
         # Beveiliging: alleen scripts van de site zelf, geen formulieren, geen ingesloten pagina's.
+        # De enige verbinding naar buiten is de telling van GoatCounter.
         '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; '
         'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; '
-        'img-src \'self\' https: data:; connect-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">'
+        f'img-src \'self\' https: data:; connect-src \'self\' {TELLER_SERVER}; object-src \'none\'; base-uri \'none\'; form-action \'none\'">'
         f'<title>{e(titel)}</title>{deel_tags(deel, site_url) if deel else ""}'
         '<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -461,7 +468,9 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude), niet door een redacteur gecontroleerd. '
         'Dat kan fouten opleveren, dus lees bij twijfel de bron. '
         'De beelden komen van de AI-bedrijven zelf of van GitHub. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
+        'Bezoeken tellen we anoniem, zonder cookies. '
         f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></div></footer>'
+        f'<script data-goatcounter="{TELLER}" async src="{basis}count.js"></script>'
         f'<script src="{basis}site.js"></script></body></html>'
     )
 
@@ -783,8 +792,11 @@ def werkwijze_html(bronnen):
         '<p>De beelden komen alleen van de AI-bedrijven zelf (het plaatje dat ze opgeven voor als je een link deelt) '
         'of van GitHub (de kaart die GitHub voor elk project maakt). Foto’s van nieuwssites en persbureaus '
         'gebruiken we niet. Heeft een bericht geen beeld, dan staat er een zwart blok met de naam van de bron.</p>'
-        '<p>De site zet geen cookies en houdt niet bij wat je leest. Wat je gelezen hebt en welke AI je kiest, '
-        'staat alleen in je eigen browser.</p></section>'
+        '<p>De site zet geen cookies en houdt niet bij wie wat leest. Wat je gelezen hebt en welke AI je kiest, '
+        'staat alleen in je eigen browser.</p>'
+        '<p>We tellen wel hoe vaak elke pagina bekeken wordt, met GoatCounter. Dat werkt zonder cookies en zonder '
+        'bij te houden wie je bent. Zo zien we welke berichten gelezen worden, waar bezoekers vandaan komen '
+        '(bijvoorbeeld WhatsApp of Google) en of ze op een telefoon of een computer lezen.</p></section>'
         '</div>'
     )
 
@@ -802,7 +814,7 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         (doel / map_).mkdir(parents=True, exist_ok=True)
     bron = Path(__file__).resolve().parent
     (doel / "stijl.css").write_text((bron / "stijl.css").read_text(encoding="utf-8"), encoding="utf-8")
-    for bestand in ("site.js", "vroeg.js", "favicon.svg"):
+    for bestand in ("site.js", "vroeg.js", "count.js", "favicon.svg"):
         (doel / bestand).write_text((bron / bestand).read_text(encoding="utf-8"), encoding="utf-8")
     for bestand in ("deel.png", "icoon-180.png", "icoon-192.png", "icoon-512.png", "icoon-512-rond.png"):
         (doel / bestand).write_bytes((bron / bestand).read_bytes())

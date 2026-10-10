@@ -25,6 +25,8 @@ De site staat op https://ainieuwsvandaag.nl. Het domein is geregistreerd bij Mij
 
 Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op. Wat iemand gelezen heeft, staat alleen in de eigen browser.
 
+Statistieken: GoatCounter telt hoe vaak elke pagina bekeken wordt, zonder cookies en zonder bij te houden wie iemand is. Je ziet het op https://ainieuwsvandaag.goatcounter.com (inloggen met het Proton-adres). De teller (count.js) staat op de site zelf; vroeg.js zorgt dat een pagina telt zonder ?e= of ?t=, en dat het vanzelf herladen voor een nieuwe editie niet als tweede bezoek telt. Je eigen bezoeken tel je niet mee door op elk apparaat één keer https://ainieuwsvandaag.nl/#toggle-goatcounter te openen.
+
 ## Beelden
 
 Op foto's van nieuwssites en persbureaus rusten rechten, en daar kan een claim van komen. Daarom gebruikt de site alleen:
