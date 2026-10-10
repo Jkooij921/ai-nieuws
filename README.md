@@ -29,6 +29,16 @@ Vindbaar in Google: alleen de voorpagina, de artikelen (ook de uitlegstukken) en
 
 Statistieken: GoatCounter telt hoe vaak elke pagina bekeken wordt, zonder cookies en zonder bij te houden wie iemand is. Je ziet het op https://ainieuwsvandaag.goatcounter.com (inloggen met het Proton-adres). De teller (count.js) staat op de site zelf; vroeg.js zorgt dat een pagina telt zonder ?e= of ?t=, en dat het vanzelf herladen voor een nieuwe editie niet als tweede bezoek telt. Je eigen bezoeken tel je niet mee door op elk apparaat één keer https://ainieuwsvandaag.nl/#toggle-goatcounter te openen; je krijgt dan een melding. Nog een keer openen zet het tellen weer aan. Dat regelt vroeg.js, want site.js haalt het #-stuk weg voordat count.js het ziet.
 
+## Fouten en correcties
+
+Onder elk artikel staat de knop "Klopt er iets niet?". Die opent een mail aan fouten@ainieuwsvandaag.nl met de kop en de link al ingevuld; Cloudflare (Email Routing) stuurt dat adres door naar de Proton-mailbox. Het adres staat ook in de voettekst en op Zo maken we dit.
+
+Een correctie maken: pas de tekst aan in `edities/<editie>.json` en zet bij dat bericht
+
+    "correcties": [{"datum": "2026-10-10", "tekst": "Eerst stond hier dat ... Dat moet ... zijn."}]
+
+Onder het artikel verschijnt dan een blok "Correctie" met de datum, en de pagina Correcties (correcties.html) toont alle correcties, de nieuwste eerst. Dat werkt ook voor een kort bericht. Haal nooit stilletjes iets weg: zeg altijd wat er eerst stond.
+
 ## Beelden
 
 Op foto's van nieuwssites en persbureaus rusten rechten, en daar kan een claim van komen. Daarom gebruikt de site alleen:

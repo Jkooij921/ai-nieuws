@@ -177,8 +177,15 @@ header.kop .binnen{display:flex;flex-wrap:wrap;align-items:flex-end;justify-cont
 .byline a{font-weight:700;color:var(--inkt)}
 .uitlegblok{background:var(--vlak);padding:16px 20px;margin:18px 0}
 .uitlegblok p{margin:4px 0 0}
+/* Een verbetering na een melding: goed zichtbaar, met een streep in de kleur van de site. */
+.correctie{border-left:4px solid var(--accent);background:var(--vlak);padding:14px 18px;margin:18px 0}
+.correctie p{margin:4px 0 0}
+.correctielijst{list-style:none;padding:0;margin:0;max-width:650px}
+.correctielijst li{border-top:1px solid var(--lijn);padding:16px 0}
+.correctielijst a{display:block;font-weight:700;color:var(--inkt);margin:4px 0}
+.correctielijst p{margin:0}
 /* Het artikel zelf: grotere letters en regels van hooguit ongeveer 70 tekens, dat leest het prettigst. */
-.artikel .lede,.artikel .waarom,.uitlegblok,.lijf{max-width:650px}
+.artikel .lede,.artikel .waarom,.uitlegblok,.correctie,.lijf{max-width:650px}
 .artikel .waarom{font-size:18px;line-height:1.6;margin:0 0 6px}
 .lijf h2{font:800 21px/1.25 Archivo,sans-serif;margin:30px 0 8px}
 .lijf p{font-size:18px;line-height:1.65;margin:0 0 16px}

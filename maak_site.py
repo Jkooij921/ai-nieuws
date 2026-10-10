@@ -9,6 +9,7 @@
   site/leren.html                begrippen en tips
   site/zoeken.html, zoek.json    zoeken in alle berichten
   site/zo-maken-we-dit.html      dat alles met AI geschreven is, hoe we kiezen en welke bronnen
+  site/correcties.html           wat er verbeterd is na een melding ("correcties" bij een bericht in edities/*.json)
   site/stijl.css, site.js        opmaak (licht en donker) en de knoppen (filters, quiz, gelezen, nieuwe editie)
   site/count.js                  de teller van GoatCounter (statistieken zonder cookies), ingesteld in vroeg.js
   site/laatste.json              welke editie de nieuwste is, voor de controle in site.js
@@ -68,6 +69,9 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6
 # houden wie je bent. count.js staat op de site zelf; alleen de telling gaat naar dit adres.
 TELLER = "https://ainieuwsvandaag.goatcounter.com/count"
 TELLER_SERVER = TELLER.rsplit("/", 1)[0]
+
+# Waar lezers een fout melden. Cloudflare stuurt dit adres door naar de mailbox van de redactie.
+FOUTEN_ADRES = "fouten@ainieuwsvandaag.nl"
 
 # De code van Google Search Console (methode HTML-tag), zodat Google weet dat de site van ons is.
 # Hij staat alleen op de voorpagina en is niet geheim.
@@ -240,6 +244,22 @@ def slug(tekst):
 def deel_link(item, site_url):
     tekst = f"{item['kop']} {artikel_url(site_url, item)}"
     return "https://wa.me/?text=" + urllib.parse.quote(tekst)
+
+
+def fout_link(item, site_url):
+    """Een mail aan de redactie met de kop en de link al ingevuld, zodat de lezer alleen de fout hoeft te noemen."""
+    onderwerp = f"Klopt er iets niet: {item['kop']}"
+    tekst = f"Artikel: {artikel_url(site_url, item)}\n\nWat klopt er niet?\n\n\nWaar staat het goed? Een link helpt.\n"
+    return f"mailto:{FOUTEN_ADRES}?subject={urllib.parse.quote(onderwerp)}&body={urllib.parse.quote(tekst)}"
+
+
+def correcties_html(item):
+    """Wat er na een melding verbeterd is, onder het artikel. We halen nooit stilletjes iets weg."""
+    return "".join(
+        f'<div class="correctie"><div class="label">Correctie, {e(dagtitel(date.fromisoformat(c["datum"])))}</div>'
+        f'<p>{e(c["tekst"])}</p></div>'
+        for c in item.get("correcties", [])
+    )
 
 
 def inkorten(tekst, lengte=200):
@@ -504,9 +524,10 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         f'<main id="inhoud">{inhoud}</main>'
         '<footer class="colofon"><div class="binnen">Geschreven door AI (Claude), niet door een redacteur gecontroleerd. '
         'Dat kan fouten opleveren, dus lees bij twijfel de bron. '
+        f'Fout gezien? Mail <a href="mailto:{FOUTEN_ADRES}">{FOUTEN_ADRES}</a>. '
         'De beelden komen van de AI-bedrijven zelf of van GitHub. Wat je gelezen hebt, wordt alleen in je eigen browser bewaard. '
         'Bezoeken tellen we anoniem, zonder cookies. '
-        f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a></div></footer>'
+        f'<a href="{basis}zo-maken-we-dit.html">Zo maken we dit</a> · <a href="{basis}correcties.html">Correcties</a></div></footer>'
         f'<script data-goatcounter="{TELLER}" async src="{basis}count.js"></script>'
         f'<script src="{basis}site.js"></script></body></html>'
     )
@@ -688,12 +709,40 @@ def artikel_html(item, ed, alle, basis, site_url):
         f'{waarom}'
         f'<div class="uitlegblok"><div class="label">Even uitgelegd</div><p>{e(item["uitleg"])}</p></div>'
         f'{f"<div class=lijf>{lijf}</div>" if lijf else ""}'
+        f'{correcties_html(item)}'
         f'<p class="bronnen">{bronnen_html(item)}</p>'
         f'<p class="acties"><a class="knop" href="{e(veilig(item["bronnen"][0]["url"]))}">Lees de bron{EXTERN}</a>'
-        f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a></p>'
+        f'<a class="knop licht" href="{e(deel_link(item, site_url))}" target="_blank" rel="noopener">Deel via WhatsApp</a>'
+        f'<a class="knop licht" href="{e(fout_link(item, site_url))}">Klopt er iets niet?</a></p>'
         f'{f"<p class=chips>Onderwerpen: {chips}</p>" if chips else ""}'
         f'{verwant_html}'
         f'</div>'
+    )
+
+
+def correctiepagina_html(edities, basis):
+    """Alle verbeteringen, de nieuwste eerst. Een artikel linkt naar zijn pagina, een kort bericht naar de bron."""
+    lijst = []
+    for ed in edities:
+        for item in ed["items"]:
+            for c in item.get("correcties", []):
+                lijst.append((c, item["kop"], f'{basis}artikel/{item["id"]}.html'))
+        for kort in ed.get("kort", []):
+            for c in kort.get("correcties", []):
+                lijst.append((c, kort["kop"], veilig(kort["bronnen"][0]["url"]) if kort.get("bronnen") else "#"))
+    lijst.sort(key=lambda rij: rij[0]["datum"], reverse=True)
+    rijen = "".join(
+        f'<li><span class="meta">{e(dagtitel(date.fromisoformat(c["datum"])).capitalize())}</span>'
+        f'<a href="{e(adres)}">{e(kop)}</a><p>{e(c["tekst"])}</p></li>'
+        for c, kop, adres in lijst
+    )
+    return (
+        '<div class="editiekop binnen"><div class="label">Correcties</div><h1>Wat we verbeterd hebben</h1>'
+        '<p class="intro">AI-nieuws wordt met AI geschreven en niet door een redacteur gecontroleerd. Daardoor kan er '
+        'een fout in een bericht staan. Zie je er een? Klik onder het artikel op "Klopt er iets niet?" of mail naar '
+        f'<a href="mailto:{FOUTEN_ADRES}">{FOUTEN_ADRES}</a>. Klopt de melding, dan verbeteren we het bericht en zetten '
+        'we eronder wat er veranderd is. We halen nooit stilletjes iets weg.</p></div>'
+        f'<div class="binnen">{f"<ol class=correctielijst>{rijen}</ol>" if rijen else "<p class=leeg>Er zijn nog geen correcties.</p>"}</div>'
     )
 
 
@@ -825,6 +874,12 @@ def werkwijze_html(bronnen):
         '<li>Nieuws over geld, zoals investeringen en beurskoersen, tenzij het verandert wat jij kunt gebruiken.</li>'
         '</ul></section>'
         f'<section class="sectie"><div class="kopregel"><h2>Waar het nieuws vandaan komt</h2></div><dl class="begrippen">{lijst}</dl></section>'
+        '<section class="sectie"><div class="kopregel"><h2>Fouten en correcties</h2></div>'
+        '<p>Claude kan fouten maken, en er kijkt geen redacteur mee. Zie je een fout? Klik onder het artikel op '
+        f'"Klopt er iets niet?" of mail naar <a href="mailto:{FOUTEN_ADRES}">{FOUTEN_ADRES}</a>. We bekijken elke melding. '
+        'Klopt hij, dan verbeteren we het bericht en zetten we eronder wat er veranderd is. Alle verbeteringen staan op '
+        '<a href="correcties.html">Correcties</a>. Je mail gebruiken we alleen om de melding te bekijken en je eventueel '
+        'te antwoorden.</p></section>'
         '<section class="sectie"><div class="kopregel"><h2>Beelden en privacy</h2></div>'
         '<p>De beelden komen alleen van de AI-bedrijven zelf (het plaatje dat ze opgeven voor als je een link deelt) '
         'of van GitHub (de kaart die GitHub voor elk project maakt). Foto’s van nieuwssites en persbureaus '
@@ -936,6 +991,8 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
     schrijf("archief.html", "Archief | AI-nieuws", "", "Archief", archief_html(edities, weken, ""))
     schrijf("leren.html", "Begrippen en tips | AI-nieuws", "", "Begrippen en tips", leren_html(begrippen, edities))
     schrijf("zoeken.html", "Zoeken | AI-nieuws", "", "Zoeken", zoeken_html())
+    schrijf("correcties.html", "Correcties | AI-nieuws", "", None, correctiepagina_html(edities, ""),
+            deel={"tekst": "Wat AI-nieuws verbeterd heeft na een melding van een lezer, en hoe je een fout meldt."})
     schrijf("zo-maken-we-dit.html", "Zo maken we dit | AI-nieuws", "", None, werkwijze_html(bronnen),
             deel={"tekst": "Hoe AI-nieuws met AI het belangrijkste AI-nieuws kiest en schrijft, en waar het nieuws vandaan komt."})
     zoek = [
