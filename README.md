@@ -4,7 +4,7 @@ Een AI-nieuwssite met elke dag om 08:00 en 20:00 een nieuwe editie: wat er sinds
 
 Alles draait in de cloud bij GitHub. Je laptop mag uit. Claude schrijft de berichten via je eigen abonnement.
 
-De site staat op https://ainieuwsvandaag.nl. Het domein is geregistreerd bij Mijndomein; daar wijzen de DNS-regels naar GitHub Pages (vier A-regels en vier AAAA-regels naar de adressen van GitHub, `www` naar `deepworkstudio.github.io`, en een TXT-regel waarmee GitHub weet dat het domein van ons is). In GitHub staat het domein onder Settings, Pages, Custom domain, met https verplicht. Het oude adres deepworkstudio.github.io/ai-nieuws stuurt vanzelf door.
+De site staat op https://ainieuwsvandaag.nl. Het domein is geregistreerd bij Mijndomein; het adresboek (DNS) staat bij Cloudflare, want het domein gebruikt de nameservers van Cloudflare. Daar wijzen de DNS-regels naar GitHub Pages (vier A-regels en vier AAAA-regels naar de adressen van GitHub, `www` naar `deepworkstudio.github.io`, en een TXT-regel waarmee GitHub weet dat het domein van ons is). Zet bij die regels in Cloudflare altijd het grijze wolkje (DNS only), anders kan GitHub het https-certificaat niet vernieuwen. In GitHub staat het domein onder Settings, Pages, Custom domain, met https verplicht. Het oude adres deepworkstudio.github.io/ai-nieuws stuurt vanzelf door.
 
 ## De site
 
@@ -27,7 +27,7 @@ Iedereen kan de site lezen. Wat iemand gelezen heeft, staat alleen in de eigen b
 
 Vindbaar in Google: alleen de voorpagina, de artikelen (ook de uitlegstukken) en Zo maken we dit. Edities, onderwerpen, De week, het archief, Begrippen en tips en Zoeken herhalen dezelfde berichten in lijstjes; die krijgen `noindex`, zodat de site niet lijkt op een stapel automatisch gemaakte pagina's. Google mag hun links wel volgen. De vindbare pagina's hebben een vast adres (canonical) en staan in sitemap.xml; robots.txt wijst daarheen. Elk artikel vertelt Google in schema.org wat het is: NewsArticle, of Article voor een uitlegstuk, met AI-nieuws als schrijver. De code van Google Search Console staat in GOOGLE_VERIFICATIE in maak_site.py.
 
-Statistieken: GoatCounter telt hoe vaak elke pagina bekeken wordt, zonder cookies en zonder bij te houden wie iemand is. Je ziet het op https://ainieuwsvandaag.goatcounter.com (inloggen met het Proton-adres). De teller (count.js) staat op de site zelf; vroeg.js zorgt dat een pagina telt zonder ?e= of ?t=, en dat het vanzelf herladen voor een nieuwe editie niet als tweede bezoek telt. Je eigen bezoeken tel je niet mee door op elk apparaat één keer https://ainieuwsvandaag.nl/#toggle-goatcounter te openen; je krijgt dan een melding. Nog een keer openen zet het tellen weer aan. Dat regelt vroeg.js, want site.js haalt het #-stuk weg voordat count.js het ziet.
+Statistieken: GoatCounter telt hoe vaak elke pagina bekeken wordt, zonder cookies en zonder bij te houden wie iemand is. Je ziet het op https://ainieuwsvandaag.goatcounter.com (inloggen met het mailadres van de redactie). De teller (count.js) staat op de site zelf; vroeg.js zorgt dat een pagina telt zonder ?e= of ?t=, en dat het vanzelf herladen voor een nieuwe editie niet als tweede bezoek telt. Je eigen bezoeken tel je niet mee door op elk apparaat één keer https://ainieuwsvandaag.nl/#toggle-goatcounter te openen; je krijgt dan een melding. Nog een keer openen zet het tellen weer aan. Dat regelt vroeg.js, want site.js haalt het #-stuk weg voordat count.js het ziet.
 
 ## Beelden
 
