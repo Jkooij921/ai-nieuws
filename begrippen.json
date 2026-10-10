@@ -27,7 +27,7 @@
   "woord": "open source",
   "uitleg": "Open source betekent dat de code voor iedereen in te zien en te gebruiken is.",
   "editie": "2026-10-06-ochtend",
-  "keer": 3
+  "keer": 4
  },
  "lokaal draaien": {
   "woord": "lokaal draaien",
@@ -51,7 +51,7 @@
   "woord": "token",
   "uitleg": "Een token is een stukje tekst waarmee een AI rekent, ongeveer driekwart woord.",
   "editie": "2026-10-06-ochtend",
-  "keer": 4
+  "keer": 5
  },
  "videokaart": {
   "woord": "videokaart",
@@ -135,7 +135,7 @@
   "woord": "skill",
   "uitleg": "Een skill is een map met instructies die Claude erbij pakt als een taak erom vraagt.",
   "editie": "2026-10-06-ochtend",
-  "keer": 3
+  "keer": 4
  },
  "mod": {
   "woord": "mod",
@@ -351,7 +351,7 @@
   "woord": "AI-agent",
   "uitleg": "Een AI-agent is een AI die zelfstandig taken uitvoert.",
   "editie": "2026-10-07-avond",
-  "keer": 2
+  "keer": 3
  },
  "avg": {
   "woord": "AVG",
@@ -387,7 +387,7 @@
   "woord": "Muse",
   "uitleg": "Muse is een AI-app van Meta die taken zelfstandig uitvoert.",
   "editie": "2026-10-07-avond",
-  "keer": 1
+  "keer": 2
  },
  "grok bot": {
   "woord": "Grok Bot",
@@ -669,6 +669,48 @@
   "woord": "Formaliseren",
   "uitleg": "Een wiskundig bewijs omzetten naar code, zodat een computer het kan controleren.",
   "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "code review": {
+  "woord": "Code review",
+  "uitleg": "Het nakijken van nieuwe code door iemand anders om fouten te vinden.",
+  "editie": "2026-10-10-avond",
+  "keer": 1
+ },
+ "swiftui": {
+  "woord": "SwiftUI",
+  "uitleg": "Een manier om apps voor iPhone, iPad en Mac te bouwen.",
+  "editie": "2026-10-10-avond",
+  "keer": 1
+ },
+ "voiceover": {
+  "woord": "VoiceOver",
+  "uitleg": "De voorleesfunctie van Apple voor mensen die slecht zien.",
+  "editie": "2026-10-10-avond",
+  "keer": 1
+ },
+ "alibaba": {
+  "woord": "Alibaba",
+  "uitleg": "Een groot Chinees techbedrijf.",
+  "editie": "2026-10-10-avond",
+  "keer": 1
+ },
+ "dots": {
+  "woord": "Dots",
+  "uitleg": "Een AI-agent van OpenAI.",
+  "editie": "2026-10-10-avond",
+  "keer": 1
+ },
+ "openclaw": {
+  "woord": "OpenClaw",
+  "uitleg": "Een AI-agent waar Meta zijn agent Muse veiliger dan wilde maken.",
+  "editie": "2026-10-10-avond",
+  "keer": 1
+ },
+ "litellm": {
+  "woord": "LiteLLM",
+  "uitleg": "Een open source tool die als poort werkt tussen je programma en meer dan 100 AI-diensten.",
+  "editie": "2026-10-10-avond",
   "keer": 1
  }
 }
