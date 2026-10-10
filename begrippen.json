@@ -351,7 +351,7 @@
   "woord": "AI-agent",
   "uitleg": "Een AI-agent is een AI die zelfstandig taken uitvoert.",
   "editie": "2026-10-07-avond",
-  "keer": 1
+  "keer": 2
  },
  "avg": {
   "woord": "AVG",
@@ -537,7 +537,7 @@
   "woord": "Lean",
   "uitleg": "Een programma waarmee een computer wiskundige bewijzen stap voor stap controleert.",
   "editie": "2026-10-08-avond",
-  "keer": 1
+  "keer": 2
  },
  "association for human mathematics": {
   "woord": "Association for Human Mathematics",
@@ -627,6 +627,48 @@
   "woord": "CrowdStrike",
   "uitleg": "Een beveiligingsbedrijf dat cyberaanvallen onderzoekt.",
   "editie": "2026-10-09-avond",
+  "keer": 1
+ },
+ "claude haiku 4.5": {
+  "woord": "Claude Haiku 4.5",
+  "uitleg": "Een kleiner AI-model van Anthropic.",
+  "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "anthropic": {
+  "woord": "Anthropic",
+  "uitleg": "Een AI-bedrijf dat de chatbot Claude maakt.",
+  "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "pull request": {
+  "woord": "Pull request",
+  "uitleg": "Een voorstel van een programmeur om nieuwe code toe te voegen, dat eerst wordt nagekeken.",
+  "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "jellyfish": {
+  "woord": "Jellyfish",
+  "uitleg": "Een bedrijf dat meet hoe softwareteams werken.",
+  "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "connector": {
+  "woord": "Connector",
+  "uitleg": "Een koppeling waarmee een chatbot live gegevens van een andere dienst kan ophalen.",
+  "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "meme coin": {
+  "woord": "Meme coin",
+  "uitleg": "Een digitale munt die populair wordt door grappen en hypes op sociale media en veel risico heeft.",
+  "editie": "2026-10-10-ochtend",
+  "keer": 1
+ },
+ "formaliseren": {
+  "woord": "Formaliseren",
+  "uitleg": "Een wiskundig bewijs omzetten naar code, zodat een computer het kan controleren.",
+  "editie": "2026-10-10-ochtend",
   "keer": 1
  }
 }
