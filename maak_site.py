@@ -248,8 +248,15 @@ def deel_link(item, site_url):
 
 def fout_link(item, site_url):
     """Een mail aan de redactie met de kop en de link al ingevuld, zodat de lezer alleen de fout hoeft te noemen."""
-    onderwerp = f"Klopt er iets niet: {item['kop']}"
-    tekst = f"Artikel: {artikel_url(site_url, item)}\n\nWat klopt er niet?\n\n\nWaar staat het goed? Een link helpt.\n"
+    # Wie op de knop klikt, heeft al een fout gezien: het onderwerp stelt het vast in plaats van het te vragen.
+    onderwerp = f"Er klopt iets niet: {item['kop']}"
+    tekst = (
+        f"Artikel: {artikel_url(site_url, item)}\n\n"
+        "Wat klopt er niet?\n"
+        "Tip: kopieer de zin met de fout hierheen, of zeg in je eigen woorden wat er mis is.\n\n\n"
+        "Hoe zit het wel? (mag je overslaan)\n"
+        "Weet je waar het goed staat? Zet de link erbij, dan kunnen we het sneller nakijken.\n"
+    )
     return f"mailto:{FOUTEN_ADRES}?subject={urllib.parse.quote(onderwerp)}&body={urllib.parse.quote(tekst)}"
 
 
