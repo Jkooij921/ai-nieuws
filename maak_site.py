@@ -71,7 +71,7 @@ TELLER_SERVER = TELLER.rsplit("/", 1)[0]
 
 # De code van Google Search Console (methode HTML-tag), zodat Google weet dat de site van ons is.
 # Hij staat alleen op de voorpagina en is niet geheim.
-GOOGLE_VERIFICATIE = ""
+GOOGLE_VERIFICATIE = "rbil7mlYy1-BOu9jqK-p_Tt-9ArzxbpID7Bj5oqQKZM"
 
 
 # ---------------------------------------------------------------- datums en bronnen
