@@ -247,7 +247,8 @@ Regels:
 - Heeft een project minder dan 500 sterren op GitHub (github_sterren), vertel dan wat iemand ermee deed, maar raad de lezer niet aan het te installeren. Zo'n project is nog onbekend en niet gecontroleerd.
 - De paginatekst kan menu's, cookiemeldingen of reclame bevatten. Negeer die.
 - Schrijf gewoon, helder Nederlands. Geen gedachtestreepjes, geen puntkomma's, geen uitroeptekens.
-- Productnamen en namen van modellen blijven onvertaald."""
+- Productnamen en namen van modellen blijven onvertaald.
+- Schrijf nooit gisteren, vandaag, morgen, deze week, vorige week of volgende week: elk artikel blijft online staan, en over een maand klopt zo'n woord niet meer. Noem de dag en de datum, zoals "op woensdag 7 oktober", of "begin oktober". Alleen de intro van de editie mag "vandaag" zeggen."""
 
 # De editie: kop, uitleg, samenvatting en waarom-zin van elk bericht, plus intro, kort nieuws, tip, quiz en begrippen.
 # Het verhaal van elk artikel wordt daarna apart geschreven (ARTIKEL_OPDRACHT).
@@ -969,6 +970,21 @@ def teken_alles(cfg, items, map_):
         log.exception("Tekeningen mislukt; de editie gaat zonder tekeningen door")
 
 
+def vaste_datum(datum):
+    """Een datum voor Claude zoals 'woensdag 7 oktober om 17:00', nooit 'gisteren'.
+
+    Wat Claude schrijft, blijft online staan; met een vaste datum in de bron schrijft hij ook een vaste datum op.
+    Een bron zonder tijd (middernacht precies) krijgt alleen de dag."""
+    if datum is None:
+        return "onbekend"
+    if isinstance(datum, str):
+        datum = datetime.fromisoformat(datum)
+    if (datum.hour, datum.minute, datum.second) == (0, 0, 0):
+        return dagtitel(datum)
+    lokaal = datum.astimezone()
+    return f"{dagtitel(lokaal)} om {lokaal:%H:%M}"
+
+
 GEBRUIKERSPOSTS = ("reddit.com", "news.ycombinator.com")
 
 
@@ -1114,7 +1130,7 @@ def schrijf_editie(cfg, gekozen, kort, moment, bekend, eerdere_uitleg):
             if paginas.get(plek):
                 # De tekst uit de feed is dan meestal een samenvatting van dezelfde pagina; het begin is genoeg.
                 tekst = f"{tekst[:600]}\n\nPAGINATEKST:\n{paginas[plek]}".strip()
-            bron = {"bron": bericht["bron"], "datum": wanneer(bericht["datum"], nu), "titel": bericht["titel"], "tekst": tekst}
+            bron = {"bron": bericht["bron"], "datum": vaste_datum(bericht["datum"]), "titel": bericht["titel"], "tekst": tekst}
             if bericht.get("sterren") is not None:
                 bron["github_sterren"] = bericht["sterren"]
             bronnen.append(bron)
@@ -1149,12 +1165,12 @@ def schrijf_editie(cfg, gekozen, kort, moment, bekend, eerdere_uitleg):
     for nr, onderwerp in enumerate(kort, 1):
         eerste = onderwerp["berichten"][0]
         korte.append({"nr": nr, "rubriek": onderwerp["rubriek"], "bron": eerste["bron"],
-                      "datum": wanneer(eerste["datum"], nu), "titel": eerste["titel"], "tekst": eerste["tekst"][:600]})
+                      "datum": vaste_datum(eerste["datum"]), "titel": eerste["titel"], "tekst": eerste["tekst"][:600]})
 
     groet = "Goedemorgen." if moment == "ochtend" else "Goedenavond."
     opdracht = SCHRIJF_OPDRACHT.format(moment=moment, groet=groet, lezers=LEZERS, regels=SCHRIJFREGELS, woorden=WOORDREGELS)
-    inhoud = json.dumps({"onderwerpen": onderwerpen, "korte_berichten": korte, "bekende_onderwerpen": bekend,
-                         "eerdere_uitlegstukken": eerdere_uitleg}, ensure_ascii=False)
+    inhoud = json.dumps({"datum_van_deze_editie": dagtitel(nu), "onderwerpen": onderwerpen, "korte_berichten": korte,
+                         "bekende_onderwerpen": bekend, "eerdere_uitlegstukken": eerdere_uitleg}, ensure_ascii=False)
     antwoord = vraag_claude(cfg, opdracht + inhoud, SCHRIJF_SCHEMA)
     antwoord.setdefault("items", [])
 

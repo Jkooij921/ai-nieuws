@@ -115,13 +115,25 @@ def _datum(bron):
     return datetime.fromisoformat(bron["datum"]) if isinstance(bron["datum"], str) else bron["datum"]
 
 
+def datumtijd(datum, ref):
+    """Een vaste datum met tijd: '9 oktober om 23:15', met het jaar erbij als dat niet het jaar van ref is.
+
+    Op de site nooit 'gisteren': een pagina blijft staan, en een week later leest 'gisteren' alsof het van gisteren is.
+    Een bron zonder tijd (middernacht precies) krijgt alleen de dag, anders stond er bijvoorbeeld '02:00'."""
+    datum = datetime.fromisoformat(datum) if isinstance(datum, str) else datum
+    zonder_tijd = (datum.hour, datum.minute, datum.second) == (0, 0, 0)
+    lokaal = datum if zonder_tijd else datum.astimezone()
+    jaar = f" {lokaal.year}" if lokaal.year != ref.year else ""
+    return f"{lokaal.day} {MAANDEN[lokaal.month - 1]}{jaar}" + ("" if zonder_tijd else f" om {lokaal:%H:%M}")
+
+
 def datumregel(bronnen, ref):
     """Wanneer het nieuws verscheen: de vroegste datum van alle bronnen bij dit onderwerp."""
     gedateerd = [b for b in bronnen if b["datum"]]
     if not gedateerd:
         return "nieuw sinds de vorige editie"
     eerste = min(gedateerd, key=_datum)
-    regel = wanneer(eerste["datum"], ref)
+    regel = datumtijd(eerste["datum"], ref)
     # Op Reddit en Hacker News is dit het moment van delen, niet per se van het nieuws zelf.
     if eerste["groep"] == "community":
         regel += f", gedeeld op {eerste['bron']}"

@@ -9,7 +9,7 @@
    "rubriek": "Het grote nieuws",
    "score": 8,
    "kop": "Anthropic laat Claude gratis open-sourcecode op beveiligingslekken controleren",
-   "uitleg": "Open-sourcecode is gratis, gedeelde programmacode waar veel software op bouwt, en die iedereen mag inzien. Anthropic werkte hier al aan met Project Glasswing, een eerder project met partners dat veel kwetsbaarheden vond. Dat project is deze week opgegaan in het Cyber Verification Program.",
+   "uitleg": "Open-sourcecode is gratis, gedeelde programmacode waar veel software op bouwt, en die iedereen mag inzien. Anthropic werkte hier al aan met Project Glasswing, een eerder project met partners dat veel kwetsbaarheden vond. Dat project is begin oktober opgegaan in het Cyber Verification Program.",
    "samenvatting": "Open-sourceprojecten kunnen zich nu gratis aanmelden voor regelmatige beveiligingsscans door de sterkste modellen van Anthropic, waaronder Claude Mythos. De dienst heet OSS Scanner. Daarnaast start Anthropic een programma om de systemen achter stroom, water en vervoer te beveiligen, samen met bedrijven als Accenture, CrowdStrike en Deloitte.",
    "waarom": "Makers van gratis software krijgen mogelijk sneller een seintje over lekken, maar de meldingen zijn niet door mensen gecontroleerd en kunnen dus fout zijn.",
    "artikel": [
