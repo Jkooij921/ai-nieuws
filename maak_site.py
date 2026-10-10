@@ -14,6 +14,7 @@
   site/laatste.json              welke editie de nieuwste is, voor de controle in site.js
   site/deel.png                  het plaatje bij een gedeelde link zonder eigen beeld
   site/manifest.webmanifest      naam en icoon (icoon-*.png) voor op het beginscherm van je telefoon
+  site/sitemap.xml, robots.txt   voor Google: welke pagina's er zijn (alleen de vindbare, zie VINDBAAR)
 """
 import html
 import json
@@ -67,6 +68,10 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6
 # houden wie je bent. count.js staat op de site zelf; alleen de telling gaat naar dit adres.
 TELLER = "https://ainieuwsvandaag.goatcounter.com/count"
 TELLER_SERVER = TELLER.rsplit("/", 1)[0]
+
+# De code van Google Search Console (methode HTML-tag), zodat Google weet dat de site van ons is.
+# Hij staat alleen op de voorpagina en is niet geheim.
+GOOGLE_VERIFICATIE = ""
 
 
 # ---------------------------------------------------------------- datums en bronnen
@@ -242,6 +247,25 @@ def inkorten(tekst, lengte=200):
     if len(tekst) <= lengte:
         return tekst
     return tekst[:lengte].rsplit(" ", 1)[0].rstrip(",.:") + "…"
+
+
+def artikel_gegevens(item, tijd, site_url):
+    """Voor Google: wat voor pagina dit is (schema.org), met kop, tijd en beeld. Een uitlegstuk is achtergrond, geen nieuws.
+
+    Als schrijver staat AI-nieuws zelf, want de tekst is met AI geschreven en niet door een redacteur.
+    """
+    beeld = item.get("beeld") if veilig(item.get("beeld")) != "#" else None
+    gegevens = {
+        "@context": "https://schema.org", "@type": "Article" if item["rubriek"] == "Uitleg" else "NewsArticle",
+        "headline": inkorten(item["kop"], 110), "description": inkorten(item["samenvatting"]),
+        "datePublished": tijd, "dateModified": tijd, "inLanguage": "nl-NL",
+        "mainEntityOfPage": artikel_url(site_url, item), "image": [beeld or f"{site_url}deel.png"],
+        "author": {"@type": "Organization", "name": "AI-nieuws", "url": site_url},
+        "publisher": {"@type": "Organization", "name": "AI-nieuws", "url": site_url,
+                      "logo": {"@type": "ImageObject", "url": f"{site_url}icoon-512.png"}},
+    }
+    # Een JSON-blok wordt niet uitgevoerd, dus de CSP laat het toe. "</" kan het blok niet afsluiten.
+    return '<script type="application/ld+json">' + json.dumps(gegevens, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
 
 def deel_tags(deel, site_url):
@@ -420,8 +444,21 @@ MENUSTREEPJES = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" st
                  'stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>')
 
 
-def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_url="", versie="", voorpagina=False):
-    """`versie` is de nieuwste editie toen de site gemaakt werd. site.js vergelijkt die met laatste.json."""
+def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_url="", versie="", voorpagina=False,
+           vindbaar=False):
+    """`versie` is de nieuwste editie toen de site gemaakt werd. site.js vergelijkt die met laatste.json.
+
+    `vindbaar`: Google mag de pagina opnemen (zie VINDBAAR in schrijf_site). Andere pagina's krijgen noindex,
+    maar Google mag hun links wel volgen naar de artikelen.
+    """
+    if vindbaar:
+        robots = '<meta name="robots" content="index, follow">'
+        if site_url and deel:
+            robots += f'<link rel="canonical" href="{e(deel["url"])}">'
+        if voorpagina and GOOGLE_VERIFICATIE:
+            robots += f'<meta name="google-site-verification" content="{e(GOOGLE_VERIFICATIE)}">'
+    else:
+        robots = '<meta name="robots" content="noindex, follow">'
     huidig = ' aria-current="page"'
     menu = (("Vandaag", "index.html"), ("De week", "week/index.html"), ("Archief", "archief.html"),
             ("Begrippen en tips", "leren.html"), ("Zoeken", "zoeken.html"))
@@ -440,7 +477,7 @@ def pagina(titel, basis, actief, inhoud, bovenregel, extra="", deel=None, site_u
         '<meta name="color-scheme" content="light dark">'
         '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">'
         '<meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">'
-        '<meta name="robots" content="noindex, nofollow">'
+        f'{robots}'
         # Beveiliging: alleen scripts van de site zelf, geen formulieren, geen ingesloten pagina's.
         # De enige verbinding naar buiten is de telling van GoatCounter.
         '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; '
@@ -841,12 +878,20 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         json.dumps({"id": versie, "titel": editietitel(edities[-1]) if edities else ""}, ensure_ascii=False),
         encoding="utf-8")
 
-    def schrijf(pad, titel, basis, actief, inhoud, bovenregel=ALGEMENE_BOVENREGEL, deel=None):
+    vindbaar = []  # (adres, laatst bijgewerkt) van de pagina's die Google mag opnemen, voor sitemap.xml
+
+    def schrijf(pad, titel, basis, actief, inhoud, bovenregel=ALGEMENE_BOVENREGEL, deel=None, extra="", bijgewerkt=None):
         # Wat een app toont bij een gedeelde link. Zonder eigen tekst of beeld: de omschrijving en het plaatje van de site.
         deel = {"titel": titel, "tekst": OMSCHRIJVING, "soort": "website", **(deel or {}),
                 "url": site_url + ("" if pad == "index.html" else pad)}
-        (doel / pad).write_text(pagina(titel, basis, actief, inhoud, bovenregel, deel=deel, site_url=site_url,
-                                       versie=versie, voorpagina=pad == "index.html"),
+        # Google mag alleen de voorpagina, de artikelen (ook de uitlegstukken) en Zo maken we dit opnemen.
+        # Edities, onderwerpen, weken en het archief herhalen dezelfde berichten in lijstjes; die blijven
+        # buiten Google, zodat de site niet lijkt op een stapel automatisch gemaakte pagina's.
+        mag = pad in ("index.html", "zo-maken-we-dit.html") or pad.startswith("artikel/")
+        if mag and site_url:
+            vindbaar.append((deel["url"], bijgewerkt))
+        (doel / pad).write_text(pagina(titel, basis, actief, inhoud, bovenregel, extra=extra, deel=deel, site_url=site_url,
+                                       versie=versie, voorpagina=pad == "index.html", vindbaar=mag),
                                 encoding="utf-8")
 
     for ed in edities:
@@ -854,14 +899,17 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         schrijf(f"edities/{ed['id']}.html", f"AI-nieuws, {editietitel(ed)}", "../", None,
                 editie_html(ed, begrippen, "../", site_url), bovenregel_editie(ed),
                 {"tekst": ed.get("intro") or OMSCHRIJVING, "beeld": beste["beeld"] if beste else None})
+        tijd = datetime.fromisoformat(ed["tijd"]).astimezone().isoformat()
         for item in ed["items"]:
             schrijf(f"artikel/{item['id']}.html", f"{item['kop']} | AI-nieuws", "../", None,
                     artikel_html(item, ed, alle, "../", site_url), bovenregel_editie(ed),
                     {"titel": item["kop"], "tekst": item["samenvatting"], "beeld": item.get("beeld"),
-                     "soort": "article", "tijd": datetime.fromisoformat(ed["tijd"]).astimezone().isoformat()})
+                     "soort": "article", "tijd": tijd},
+                    extra=artikel_gegevens(item, tijd, site_url) if site_url else "", bijgewerkt=tijd)
     if edities:
         laatste = edities[-1]
-        schrijf("index.html", "AI-nieuws", "", "Vandaag", editie_html(laatste, begrippen, "", site_url), bovenregel_editie(laatste))
+        schrijf("index.html", "AI-nieuws", "", "Vandaag", editie_html(laatste, begrippen, "", site_url), bovenregel_editie(laatste),
+                bijgewerkt=datetime.fromisoformat(laatste["tijd"]).astimezone().isoformat())
     else:
         schrijf("index.html", "AI-nieuws", "", "Vandaag", '<div class="binnen"><p class="leeg">De eerste editie verschijnt om 08:00 of 20:00.</p></div>')
 
@@ -897,4 +945,13 @@ def schrijf_site(doel, edities, begrippen, weken=None, site_url="", bronnen=None
         for item, ed in reversed(alle)
     ]
     (doel / "zoek.json").write_text(json.dumps(zoek, ensure_ascii=False), encoding="utf-8")
+
+    # Voor Google: de lijst met vindbare pagina's, en waar die lijst staat.
+    if site_url:
+        regels = "".join(f"<url><loc>{e(adres)}</loc>{f'<lastmod>{tijd}</lastmod>' if tijd else ''}</url>"
+                         for adres, tijd in vindbaar)
+        (doel / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n'
+                                          f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{regels}</urlset>\n',
+                                          encoding="utf-8")
+        (doel / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {site_url}sitemap.xml\n", encoding="utf-8")
     return doel / "index.html"

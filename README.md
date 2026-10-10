@@ -23,7 +23,9 @@ De site staat op https://ainieuwsvandaag.nl. Het domein is geregistreerd bij Mij
 - **Als app:** via "Zet op beginscherm" opent de site met eigen naam en icoon (`manifest.webmanifest`, `icoon-*.png`). Er is bewust geen offline-opslag, zodat je altijd de nieuwste editie ziet.
 - **Toegankelijk:** getest met axe (de meetlat voor de WCAG-richtlijn) op 8 pagina's, licht en donker, telefoon en laptop: geen fouten. Met Tab verschijnt eerst "Naar de inhoud".
 
-Iedereen met de link kan de site lezen. Zoekmachines nemen hem niet op. Wat iemand gelezen heeft, staat alleen in de eigen browser.
+Iedereen kan de site lezen. Wat iemand gelezen heeft, staat alleen in de eigen browser.
+
+Vindbaar in Google: alleen de voorpagina, de artikelen (ook de uitlegstukken) en Zo maken we dit. Edities, onderwerpen, De week, het archief, Begrippen en tips en Zoeken herhalen dezelfde berichten in lijstjes; die krijgen `noindex`, zodat de site niet lijkt op een stapel automatisch gemaakte pagina's. Google mag hun links wel volgen. De vindbare pagina's hebben een vast adres (canonical) en staan in sitemap.xml; robots.txt wijst daarheen. Elk artikel vertelt Google in schema.org wat het is: NewsArticle, of Article voor een uitlegstuk, met AI-nieuws als schrijver. De code van Google Search Console staat in GOOGLE_VERIFICATIE in maak_site.py.
 
 Statistieken: GoatCounter telt hoe vaak elke pagina bekeken wordt, zonder cookies en zonder bij te houden wie iemand is. Je ziet het op https://ainieuwsvandaag.goatcounter.com (inloggen met het Proton-adres). De teller (count.js) staat op de site zelf; vroeg.js zorgt dat een pagina telt zonder ?e= of ?t=, en dat het vanzelf herladen voor een nieuwe editie niet als tweede bezoek telt. Je eigen bezoeken tel je niet mee door op elk apparaat één keer https://ainieuwsvandaag.nl/#toggle-goatcounter te openen; je krijgt dan een melding. Nog een keer openen zet het tellen weer aan. Dat regelt vroeg.js, want site.js haalt het #-stuk weg voordat count.js het ziet.
 
